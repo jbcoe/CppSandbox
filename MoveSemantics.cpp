@@ -33,4 +33,5 @@ int main()
 {
 	Moveable m;
 	Moveable c(m);
+  Moveable m3(Moveable::Instance());
 }
