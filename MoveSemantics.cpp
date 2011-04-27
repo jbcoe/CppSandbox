@@ -27,13 +27,15 @@ class Moveable
     Moveable& operator = (const Moveable& m)
 		{
 			m_iField = m.m_iField;
-			std::cout << "normal assignement" << std::endl;
+			std::cout << "Normal assignement" << std::endl;
+			return *this;
 		}
 
     Moveable& operator = (const Moveable&& m)
 		{
 			m_iField = m.m_iField;
 			std::cout << "rvalue assignement" << std::endl;
+    	return *this;
 		}
 
 		static Moveable Instance()
@@ -49,4 +51,6 @@ int main()
 	Moveable c(m);
   Moveable m3;
 	m3 = c;
+	m3 = Moveable::Instance();
+	Moveable m4(Moveable::Instance());
 }

@@ -4,6 +4,9 @@ SOURCES=MoveSemantics.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE = MoveSemantics
 
+run: all
+	./$(EXECUTABLE)
+
 all: $(SOURCES) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
