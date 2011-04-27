@@ -21,13 +21,13 @@ class Moveable
 
     Moveable& operator = (const Moveable& m)
 		{
-			std::cout << "Normal assignement" << std::endl;
+			std::cout << "Normal assignment" << std::endl;
 			return *this;
 		}
 
     Moveable& operator = (const Moveable&& m)
 		{
-			std::cout << "rvalue assignement" << std::endl;
+			std::cout << "rvalue assignment" << std::endl;
     	return *this;
 		}
 
