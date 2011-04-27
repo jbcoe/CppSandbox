@@ -47,10 +47,25 @@ class Moveable
 
 int main()
 {
+  ///
+	
 	Moveable m;
+	
+	std::cout << std::endl;
+	
+	///
+
 	Moveable c(m);
-  Moveable m3;
-	m3 = c;
-	m3 = Moveable::Instance();
-	Moveable m4(Moveable::Instance());
+	
+	std::cout << std::endl;
+
+	m = c;
+	
+	std::cout << std::endl;
+	
+	m = Moveable::Instance();
+	
+	std::cout << std::endl;
+	
+	Moveable m2(Moveable::Instance());
 }
