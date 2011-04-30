@@ -1,9 +1,8 @@
 CC=g++-mp-4.6
 CFLAGS=-O0 -std=c++0x 
-#-fno-elide-constructors
 SOURCES=MoveSemantics.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE = MoveSemantics
+EXECUTABLE = ../bin/MoveSemantics
 
 run: all
 	./$(EXECUTABLE)

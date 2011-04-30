@@ -3,7 +3,7 @@ CFLAGS=-O0 -std=c++0x
 #-fno-elide-constructors
 SOURCES=ConstExpr.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE = ConstExpr
+EXECUTABLE = ../bin/ConstExpr
 
 run: all
 	./$(EXECUTABLE)
