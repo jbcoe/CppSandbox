@@ -23,3 +23,4 @@ git add ${PROJECT_NAME}/${PROJECT_NAME}.cpp
 
 
 echo Created project ${PROJECT_NAME}
+echo Changes pending but not yet committed
