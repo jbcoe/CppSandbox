@@ -2,7 +2,7 @@
 
 class MyClass
 {
-	int m_iID;
+	int m_iID = -1;
 
 public:
 	MyClass(int iID) : m_iID(iID) 
