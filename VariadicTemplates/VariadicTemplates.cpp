@@ -1,31 +1,25 @@
 #include <iostream>
 
-template <int argumentCount, typename T, typename... Values>
-int _countTemplateArguments()
-{
-	return _countTemplateArguments<argumentCount+1, Values>();
-}
-
-template <int argumentCount, typename T>
-int _countTemplateArguments()
-{
-	return argumentCount + 1;
-}
-
 template <int argumentCount>
 int _countTemplateArguments()
 {
-	return 0;
+	return argumentCount;
 }
 
-template <typename T, typename... Values>
-int countTemplateArguments()
+template <int argumentCount, typename T, typename... Values>
+int _countTemplateArguments()
 {
-	return _countTemplateArguments<0, T, Values>();
+	return _countTemplateArguments<argumentCount+1, Values... >();
+}
+
+template <typename... Values>
+int countTemplateArguments(Values...)
+{
+	return _countTemplateArguments<0, Values...>();
 }
 
 int main(int argc, char* argv[])
 {
-	std::cout << countTemplateArguments<1,2,3,4,5>() << std::endl;
+	std::cout << "Template function was provided with " << countTemplateArguments(1,2,3,4,5,6,7,8,9,10) << " arguments."<< std::endl;
 }
 
