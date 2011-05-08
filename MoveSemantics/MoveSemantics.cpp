@@ -58,4 +58,8 @@ int main()
 	std::cout << std::endl;
 	
 	Moveable m2(Moveable::Instance());
+
+	std::cout << std::endl;
+
+  Moveable m3 = std::move(m2);
 }
