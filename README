@@ -1,0 +1,3 @@
+This project contains multiple directories each of which tests out a 
+feature of C++0x. Not all projects compile as gcc support s incomplete.
+
