@@ -1,9 +1,7 @@
-Numbering
 *.o
 ConstExpr/ConstExpr
 InitializerLists/InitializerLists
 MoveSemantics/MoveSemantics
-
 RandomNumbers/RandomNumbers
 RandomNumbers/RandomNumbers
 VariadicTemplates/VariadicTemplates
@@ -11,3 +9,4 @@ LambdaFunctions/LambdaFunctions
 ConstructionImprovement/ConstructionImprovement
 EnumClass/EnumClass
 Regexp/Regexp
+PlacementNew/PlacementNew
