@@ -1,8 +1,11 @@
 CC=g++-mp-4.6
 CFLAGS=-O0 -std=c++0x 
-SOURCES=puzzle.cpp
+SOURCES=TemplateMetaProgramming.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE = Puzzle
+EXECUTABLE = TemplateMetaProgramming
+
+run: all
+	./$(EXECUTABLE)
 
 all: $(SOURCES) $(EXECUTABLE)
 
