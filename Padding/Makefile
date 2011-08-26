@@ -2,12 +2,9 @@ CC=g++-mp-4.6
 CFLAGS=-O0 -std=c++0x 
 SOURCES=Padding.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE = Padding
 
-run: all
-	./$(EXECUTABLE)
 
-all: $(SOURCES) $(EXECUTABLE)
+all: $(OBJECTS) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $@
