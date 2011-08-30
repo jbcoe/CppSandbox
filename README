@@ -1,3 +1,4 @@
-This project contains multiple directories each of which tests out a feature of C++0x. 
+This project contains multiple directories each of which tests out a feature of C++0x.
+Not all features are new to C++0x.
 Not all projects compile as gcc support is incomplete.
 
