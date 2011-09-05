@@ -1,6 +1,6 @@
-  subroutine jbcDoubler(x,y)
-    real*4 x
-    real*4 y
-    y = 2.0d0 * x
+  subroutine jbcDoubler(input,output)
+    real*4 input
+    real*4 output
+    output = 2.0d0 * input
   end subroutine 
 

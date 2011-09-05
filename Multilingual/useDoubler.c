@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-void jbcdoubler_(float* x, float* y);
+void jbcdoubler_(float* input, float* output);
 
 int main (int argc, char** argv)
 {
