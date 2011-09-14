@@ -5,14 +5,6 @@
 #include <vector>
 #include <numeric>
 
-struct HelloWord
-{                   
-	void operator()() const
-	{
-		std::cout << "Hello World" << std::endl;
-	}
-};
-
 template <typename T>
 void print_all( T first, T last)
 {                           
@@ -31,13 +23,22 @@ void print_sum( T first, T last)
 
 typedef std::vector<double>::const_iterator DVec_it;
 
+
+void Hello(const std::string& name)
+{
+	std::cout << "Hello " << name << std::endl;
+}
+
+
 int main(int argc, char* argv[])
 {
-	boost::signal<void ()> signal;
-	HelloWord hello;
-	signal.connect(hello);
+	auto HelloWorld = boost::bind(Hello,"World");
 
-	signal();
+	boost::signal<void ()> signal;
+	signal.connect(HelloWorld);
+  signal.connect(boost::bind(Hello,"Natalia"));
+
+	signal();                                  
 
 	boost::signal2<void,
 			DVec_it,
