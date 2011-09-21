@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
 	std::stringstream ss;
 
-	std::ostream_iterator<char,char> oi(ss);
+	std::ostream_iterator<char> oi(ss);
 
 	boost::regex_replace(
 			oi, badFilename.begin(), badFilename.end(), 
