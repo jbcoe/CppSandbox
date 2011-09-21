@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS= -Wall -DUSE_BOOST -L/opt/local/lib/ -lboost_regex
+CFLAGS= -Wall -DUSE_BOOST -L$(BOOST_LIB) -lboost_regex
 SOURCES=Regexp.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
 EXECUTABLE = Regexp
