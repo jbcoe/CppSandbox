@@ -1,8 +1,8 @@
 CC=g++-mp-4.6
 CFLAGS=-O0 -std=c++0x 
-SOURCES=BoostRegex.cpp
+SOURCES=BoostRegexReplace.cpp
 OBJECTS=$(SOURCES:.cpp=.o)
-EXECUTABLE = BoostRegex
+EXECUTABLE = BoostRegexReplace
 LDFLAGS = -L$(BOOST_LIB) -lboost_regex
 
 run: all
