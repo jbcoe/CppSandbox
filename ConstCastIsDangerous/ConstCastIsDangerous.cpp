@@ -18,7 +18,8 @@ int main()
 	const MyClass myInstance(9);
 	std::cout << myInstance.m_fixedValue << std::endl;
 	const_cast<int&>(myInstance.m_fixedValue) = 7;
-	const_cast<int&>(myInstance.m_fixedStaticValue) = 7;
 	std::cout << myInstance.m_fixedValue << std::endl;
+	const_cast<int&>(myInstance.m_fixedStaticValue) = 7;
+	std::cout << MyClass::m_fixedStaticValue<< std::endl;
 }
 
