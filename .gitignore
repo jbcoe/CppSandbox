@@ -24,3 +24,4 @@ Iterators/Iterators
 Final/Final
 BitFields/BitFields
 FunctionPointers/FunctionPointers
+ConstCastIsDangerous/ConstCastIsDangerous
