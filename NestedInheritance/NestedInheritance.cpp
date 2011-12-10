@@ -1,30 +1,17 @@
 #include <iostream>
 
-struct DataForBase
-{
-	int m_base;
-};
+struct DataForBase { int m_base; };
 
-struct DataForA
-{
-	int m_a;
-};
+struct DataForA { int m_a; };
 
-struct DataForB
-{
-	int m_b;
-};
+struct DataForB { int m_b; };
 
 class Interface 
 {
 	public:
-
 		virtual ~Interface(){}
-
 		virtual	void DoBase() const = 0 ;
-
 		virtual	void DoA() const = 0;
-
 		virtual	void DoB() const = 0;
 };
 
@@ -98,13 +85,6 @@ class NestedDerived : public VirtualWrapper_A<VirtualWrapper_B<Interface>>
 		virtual void DoBase() const {};
 };
 
-class DelegateBase
-{
-	DataForBase m_base;
-	public:
-	virtual void DoBase() const {}
-};
-
 class DelegateA
 {
 	DataForA m_base;
@@ -122,12 +102,11 @@ class DelegateB
 class DelegatingImpl : public Interface
 {
 	private:
-		DelegateBase m_dBase;
 		DelegateA m_dA;
 		DelegateB m_dB;
 
 	public:
-		virtual void DoBase() const { m_dBase.DoBase(); }
+		virtual void DoBase() const { }
 		virtual void DoA() const { m_dA.DoA(); }
 		virtual void DoB() const { m_dB.DoB(); }
 };
