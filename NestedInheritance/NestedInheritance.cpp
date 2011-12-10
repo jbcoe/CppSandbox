@@ -146,14 +146,20 @@ int main(int argc, char* argv[])
 	ri.DoA();
 	ri.DoB();
 
-	std::cout << "sizeof(DataForBase) " << sizeof(DataForBase) << std::endl;
-	std::cout << "sizeof(DataForA) " << sizeof(DataForA) << std::endl;
-	std::cout << "sizeof(DataForB) " << sizeof(DataForB) << std::endl;
-	std::cout << "sizeof(Interface) " << sizeof(Interface) << std::endl;
-	std::cout << "sizeof(RawImpl) " << sizeof(RawImpl) << std::endl;
-	std::cout << "sizeof(DelegatingImpl) " << sizeof(DelegatingImpl) << std::endl;
-	std::cout << "sizeof(VirtualDerived) " << sizeof(VirtualDerived) << std::endl;
-	std::cout << "sizeof(NestedDerived) " << sizeof(NestedDerived) << std::endl;
-	std::cout << "sizeof(void*) " << sizeof(void*) << std::endl;
+#define PRINT_SIZE_OF(thing) std::cout << "sizeof("#thing") " << sizeof(thing) << std::endl
+
+  PRINT_SIZE_OF(void*);
+  PRINT_SIZE_OF(int);
+  PRINT_SIZE_OF(Interface);
+  PRINT_SIZE_OF(DataForBase);
+  PRINT_SIZE_OF(DataForA);
+  PRINT_SIZE_OF(DataForB);
+  PRINT_SIZE_OF(RawImpl);
+  PRINT_SIZE_OF(VirtualDerived);
+  PRINT_SIZE_OF(NestedDerived);
+  PRINT_SIZE_OF(DelegatingImpl);
+
+#undef PRINT_SIZE_OF
+
 }
 
