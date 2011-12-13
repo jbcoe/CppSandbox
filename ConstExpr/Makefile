@@ -1,4 +1,6 @@
+include ../CompilerSettings.mk
+
 SOURCES=ConstExpr.cpp
-EXECUTABLE = ConstExpr
+EXECUTABLE=ConstExpr
 
 include ../MakeCommon.mk

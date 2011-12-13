@@ -1,4 +1,6 @@
+include ../CompilerSettings.mk
+
 SOURCES=TemplateMetaProgramming.cpp
-EXECUTABLE = TemplateMetaProgramming
+EXECUTABLE=TemplateMetaProgramming
 
 include ../MakeCommon.mk

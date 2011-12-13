@@ -1,3 +1,5 @@
+include ../CompilerSettings.mk
+
 SOURCES=BitFields.cpp
 EXECUTABLE = BitFields
 

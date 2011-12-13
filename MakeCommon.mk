@@ -1,6 +1,3 @@
-CC = g++-mp-4.6
-CFLAGS = -O0 -std=c++0x 
-
 OBJECTS=$(SOURCES:.cpp=.o)
 
 run: all

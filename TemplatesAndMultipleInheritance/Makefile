@@ -1,4 +1,6 @@
+include ../CompilerSettings.mk
+
 SOURCES=TemplatesAndMultipleInheritance.cpp
-EXECUTABLE = TemplatesAndMultipleInheritance
+EXECUTABLE=TemplatesAndMultipleInheritance
 
 include ../MakeCommon.mk

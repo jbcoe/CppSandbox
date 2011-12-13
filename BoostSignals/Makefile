@@ -1,5 +1,8 @@
-LDFLAGS=-L$(BOOST_LIB) -lboost_signals
+include ../CompilerSettings.mk
+
+LDFLAGS:=$(LDFLAGS) -L$(BOOST_LIB) -lboost_signals
+
 SOURCES=BoostSignals.cpp
-EXECUTABLE = BoostSignals
+EXECUTABLE=BoostSignals
 
 include ../MakeCommon.mk

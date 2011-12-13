@@ -1,4 +1,6 @@
+include ../CompilerSettings.mk
+
 SOURCES=PlacementNew.cpp
-EXECUTABLE = PlacementNew
+EXECUTABLE=PlacementNew
 
 include ../MakeCommon.mk

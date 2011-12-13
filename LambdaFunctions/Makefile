@@ -1,4 +1,6 @@
+include ../CompilerSettings.mk
+
 SOURCES=LambdaFunctions.cpp
-EXECUTABLE = LambdaFunctions
+EXECUTABLE=LambdaFunctions
 
 include ../MakeCommon.mk
