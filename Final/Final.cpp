@@ -2,13 +2,16 @@
 
 struct Base 
 {
-	void DoThing() final const 
+	virtual void DoThing() const final 
 	{
 	}
 };
 
 struct Derived final : Base
 {
+	virtual void DoThing() const final 
+	{
+	}
 };
 
 struct FurtherDerived : Derived
