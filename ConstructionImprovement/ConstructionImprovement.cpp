@@ -14,7 +14,7 @@ public:
 
 	MyClass() : MyClass(42) 
 	{
-		std::cout << "Delegated construction" << m_iID << std::endl; 
+		std::cout << "Delegated construction " << m_iID << std::endl; 
 	}
 
 	~MyClass()
