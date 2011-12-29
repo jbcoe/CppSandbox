@@ -28,7 +28,7 @@ const char* illegalCharacters =
 int main(int argc, char* argv[])
 {
 	std::string badFilename = "[]<>*&^%$£@!#()\"':;\\/ \t";
-	std::cout << "FINAL   __" << badFilename << "__"<< std::endl;
+	std::cout << "INITIAL   __" << badFilename << "__"<< std::endl;
 
 	boost::regex exp(illegalCharacters);
 
@@ -43,6 +43,6 @@ int main(int argc, char* argv[])
 
 	std::string corrected(ss.str());
 	
-	std::cout << "INITIAL __" << corrected << "__"<< std::endl;
+	std::cout << "FINAL __" << corrected << "__"<< std::endl;
 }
 
