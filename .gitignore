@@ -27,3 +27,4 @@ FunctionPointers/FunctionPointers
 ConstCastIsDangerous/ConstCastIsDangerous
 NestedInheritance/NestedInheritance
 ExceptionPointers/ExceptionPointers
+TemplatedFunctionRecursion/TemplatedFunctionRecursion
