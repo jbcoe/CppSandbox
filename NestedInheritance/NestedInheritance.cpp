@@ -6,6 +6,23 @@ struct DataForA { int m_a; };
 
 struct DataForB { int m_b; };
 
+template <typename T>
+struct BaseTypeTraits { const static bool HasBaseType = false; };
+
+template <bool hasBaseType, typename T>
+struct BaseTypeImpl;
+
+template <typename T>
+struct BaseTypeImpl <true, T> { typedef typename T::BaseType Type; };
+
+template <typename T>
+struct BaseTypeImpl<false, T> { typedef T Type; };
+
+template <typename T>
+struct BaseType { 
+	typedef typename BaseTypeImpl<BaseTypeTraits<T>::HasBaseType,T>::Type Type; 
+};
+
 class Interface 
 {
 	public:
@@ -26,7 +43,13 @@ class VirtualWrapper_A : public virtual TInterface
 
 	public:
 		virtual void DoA() const {}
+
+		typedef typename BaseType<TInterface>::Type BaseType;
 };
+
+template<typename T>
+struct BaseTypeTraits<VirtualWrapper_A<T>> { static const bool HasBaseType = true; };
+
 
 template <class TInterface>
 class VirtualWrapper_B : public virtual TInterface 
@@ -39,7 +62,13 @@ class VirtualWrapper_B : public virtual TInterface
 
 	public:
 		virtual void DoB() const {}
+
+		typedef typename BaseType<TInterface>::Type BaseType;
 };
+
+template<typename T>
+struct BaseTypeTraits<VirtualWrapper_B<T>> { static const bool HasBaseType = true; };
+
 
 template <class TInterface>
 class Wrapper_A : public TInterface 
@@ -52,7 +81,13 @@ class Wrapper_A : public TInterface
 
 	public:
 		virtual void DoA() const {}
+
+		typedef typename BaseType<TInterface>::Type BaseType;
 };
+
+template<typename T>
+struct BaseTypeTraits<Wrapper_A<T>> { static const bool HasBaseType = true; };
+
 
 template <class TInterface>
 class Wrapper_B : public TInterface 
@@ -65,7 +100,13 @@ class Wrapper_B : public TInterface
 
 	public:
 		virtual void DoB() const {}
+
+		typedef typename BaseType<TInterface>::Type BaseType;
 };
+
+template<typename T>
+struct BaseTypeTraits<Wrapper_B<T>> { static const bool HasBaseType = true; };
+
 
 class VirtualDerived : public VirtualWrapper_A<Interface>, public VirtualWrapper_B<Interface>
 {
@@ -74,7 +115,13 @@ class VirtualDerived : public VirtualWrapper_A<Interface>, public VirtualWrapper
 
 	public:
 		virtual void DoBase() const {};
+		
+		typedef Interface BaseType;
 };
+
+template<>
+struct BaseTypeTraits<VirtualDerived> { static const bool HasBaseType = true; };
+
 
 class NestedDerived : public VirtualWrapper_A<VirtualWrapper_B<Interface>> 
 {
@@ -84,6 +131,10 @@ class NestedDerived : public VirtualWrapper_A<VirtualWrapper_B<Interface>>
 	public:
 		virtual void DoBase() const {};
 };
+
+template<>
+struct BaseTypeTraits<NestedDerived> { static const bool HasBaseType = true; };
+
 
 class DelegateA
 {
@@ -117,12 +168,31 @@ class RawImpl : public Interface
 		DataForBase m_baseData;
 		DataForA m_aData;
 		DataForB m_bData;
-	
+
 	public:
 		virtual void DoBase() const {}
 		virtual void DoA() const {}
 		virtual void DoB() const {}
 };
+
+
+template <typename T> struct TypeName;
+
+#define DEFINE_NAME_FOR_TYPE(X) template <> struct TypeName<X> \
+{ static const char* Name() {return #X;} };
+
+DEFINE_NAME_FOR_TYPE(void*);
+DEFINE_NAME_FOR_TYPE(int);
+DEFINE_NAME_FOR_TYPE(Interface);
+DEFINE_NAME_FOR_TYPE(DataForBase);
+DEFINE_NAME_FOR_TYPE(DataForA);
+DEFINE_NAME_FOR_TYPE(DataForB);
+DEFINE_NAME_FOR_TYPE(RawImpl);
+DEFINE_NAME_FOR_TYPE(VirtualDerived);
+DEFINE_NAME_FOR_TYPE(NestedDerived);
+DEFINE_NAME_FOR_TYPE(DelegatingImpl);
+
+#undef DEFINE_NAME_FOR_TYPE
 
 int main(int argc, char* argv[])
 {
@@ -146,18 +216,20 @@ int main(int argc, char* argv[])
 	ri.DoA();
 	ri.DoB();
 
-#define PRINT_SIZE_OF(thing) std::cout << "sizeof("#thing") " << sizeof(thing) << std::endl
+#define PRINT_SIZE_OF(thing) std::cout <<\
+	"base type of "#thing": " << TypeName<BaseType<thing>::Type>::Name() << ", "<<\
+	"sizeof("#thing"): " << sizeof(thing) << std::endl
 
-  PRINT_SIZE_OF(void*);
-  PRINT_SIZE_OF(int);
-  PRINT_SIZE_OF(Interface);
-  PRINT_SIZE_OF(DataForBase);
-  PRINT_SIZE_OF(DataForA);
-  PRINT_SIZE_OF(DataForB);
-  PRINT_SIZE_OF(RawImpl);
-  PRINT_SIZE_OF(VirtualDerived);
-  PRINT_SIZE_OF(NestedDerived);
-  PRINT_SIZE_OF(DelegatingImpl);
+	PRINT_SIZE_OF(void*);
+	PRINT_SIZE_OF(int);
+	PRINT_SIZE_OF(Interface);
+	PRINT_SIZE_OF(DataForBase);
+	PRINT_SIZE_OF(DataForA);
+	PRINT_SIZE_OF(DataForB);
+	PRINT_SIZE_OF(RawImpl);
+	PRINT_SIZE_OF(VirtualDerived);
+	PRINT_SIZE_OF(NestedDerived);
+	PRINT_SIZE_OF(DelegatingImpl);
 
 #undef PRINT_SIZE_OF
 
