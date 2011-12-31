@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=InitializerLists.cpp
 EXECUTABLE=InitializerLists
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

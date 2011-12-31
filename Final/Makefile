@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=Final.cpp
 EXECUTABLE=Final
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

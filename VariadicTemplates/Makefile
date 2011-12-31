@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=VariadicTemplates.cpp
 EXECUTABLE=VariadicTemplates
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

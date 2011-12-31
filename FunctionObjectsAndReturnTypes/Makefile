@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=FunctionObjectsAndReturnTypes.cpp
 EXECUTABLE=FunctionObjectsAndReturnTypes
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

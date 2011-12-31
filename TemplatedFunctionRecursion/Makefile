@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=TemplatedFunctionRecursion.cpp
 EXECUTABLE=TemplatedFunctionRecursion
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

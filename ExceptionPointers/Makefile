@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=ExceptionPointers.cpp
 EXECUTABLE=ExceptionPointers
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=ConstCastIsDangerous.cpp
 EXECUTABLE=ConstCastIsDangerous
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

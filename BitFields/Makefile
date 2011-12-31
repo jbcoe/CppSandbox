@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=BitFields.cpp
 EXECUTABLE = BitFields
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

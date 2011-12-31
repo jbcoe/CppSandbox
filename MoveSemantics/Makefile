@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=MoveSemantics.cpp
 EXECUTABLE=MoveSemantics
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

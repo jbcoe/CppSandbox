@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=NestedInheritance.cpp
 EXECUTABLE=NestedInheritance
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

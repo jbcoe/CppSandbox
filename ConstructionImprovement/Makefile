@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=ConstructionImprovement.cpp
 EXECUTABLE=ConstructionImprovement
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

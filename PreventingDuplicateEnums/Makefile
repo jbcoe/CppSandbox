@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=PreventingDuplicateEnums.cpp
 EXECUTABLE=PreventingDuplicateEnums
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

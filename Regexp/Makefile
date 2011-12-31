@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=Regexp.cpp
 EXECUTABLE=Regexp
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

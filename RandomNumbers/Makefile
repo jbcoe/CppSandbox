@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=RandomNumbers.cpp
 EXECUTABLE=RandomNumbers
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

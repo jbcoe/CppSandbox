@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=EnumClass.cpp
 EXECUTABLE=EnumClass
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

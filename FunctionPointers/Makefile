@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=FunctionPointers.cpp
 EXECUTABLE=FunctionPointers
 
-include ../MakeCommon.mk
+include ../makeCommon.mk
