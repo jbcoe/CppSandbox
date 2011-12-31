@@ -217,8 +217,8 @@ int main(int argc, char* argv[])
 	ri.DoB();
 
 #define PRINT_SIZE_OF(thing) std::cout <<\
-	"base type of "#thing": " << TypeName<BaseType<thing>::Type>::Name() << ", "<<\
-	"sizeof("#thing"): " << sizeof(thing) << std::endl
+	"base type of " << #thing << ": " << TypeName<BaseType<thing>::Type>::Name() << ", "<<\
+	"sizeof(" << #thing << "): " << sizeof(thing) << std::endl
 
 	PRINT_SIZE_OF(void*);
 	PRINT_SIZE_OF(int);
