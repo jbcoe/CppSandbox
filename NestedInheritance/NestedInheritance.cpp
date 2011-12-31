@@ -6,8 +6,49 @@ struct DataForA { int m_a; };
 
 struct DataForB { int m_b; };
 
+//////////////////////////////////////////////////////
+
 template <typename T>
-struct BaseTypeTraits { const static bool HasBaseType = false; };
+struct NestedInheritanceTraits {
+	const static bool HasNestedInheritance = false;
+};
+
+template <bool hasNestedInheritance, int nestDepth, typename T>
+struct NestedInheritanceImpl;
+
+template <int nestDepth, typename T>
+struct NestedInheritanceImpl <true, nestDepth, T>
+{
+	static constexpr int NestDepth() { 
+		return NestedInheritanceImpl<
+			NestedInheritanceTraits<typename T::NestedType>::HasNestedInheritance, 
+			nestDepth + 1, 
+			typename T::NestedType
+		>::NestDepth();
+	}
+};
+
+template <int nestDepth, typename T>
+struct NestedInheritanceImpl <false, nestDepth, T>
+{
+ 	static constexpr int NestDepth() { return nestDepth; }
+};
+
+template <typename T>
+struct NestedInheritance
+{
+	static constexpr int NestDepth() 
+	{ 
+		return NestedInheritanceImpl<NestedInheritanceTraits<T>::HasNestedInheritance,0,T>::NestDepth(); 
+	}
+};
+
+//////////////////////////////////////////////////////
+
+template <typename T>
+struct BaseTypeTraits { 
+	const static bool HasBaseType = false; 
+};
 
 template <bool hasBaseType, typename T>
 struct BaseTypeImpl;
@@ -22,6 +63,8 @@ template <typename T>
 struct BaseType { 
 	typedef typename BaseTypeImpl<BaseTypeTraits<T>::HasBaseType,T>::Type Type; 
 };
+
+//////////////////////////////////////////////////////
 
 class Interface 
 {
@@ -83,10 +126,14 @@ class Wrapper_A : public TInterface
 		virtual void DoA() const {}
 
 		typedef typename BaseType<TInterface>::Type BaseType;
+		typedef TInterface NestedType;
 };
 
 template<typename T>
 struct BaseTypeTraits<Wrapper_A<T>> { static const bool HasBaseType = true; };
+
+template <typename T>
+struct NestedInheritanceTraits<Wrapper_A<T>> { const static bool HasNestedInheritance = true; };
 
 
 template <class TInterface>
@@ -102,10 +149,14 @@ class Wrapper_B : public TInterface
 		virtual void DoB() const {}
 
 		typedef typename BaseType<TInterface>::Type BaseType;
+		typedef TInterface NestedType;
 };
 
 template<typename T>
 struct BaseTypeTraits<Wrapper_B<T>> { static const bool HasBaseType = true; };
+
+template <typename T>
+struct NestedInheritanceTraits<Wrapper_B<T>> { const static bool HasNestedInheritance = true; };
 
 
 class VirtualDerived : public VirtualWrapper_A<Interface>, public VirtualWrapper_B<Interface>
@@ -123,14 +174,19 @@ template<>
 struct BaseTypeTraits<VirtualDerived> { static const bool HasBaseType = true; };
 
 
-class NestedDerived : public VirtualWrapper_A<VirtualWrapper_B<Interface>> 
+class NestedDerived : public Wrapper_A<Wrapper_B<Interface>> 
 {
 	private:
 		DataForBase m_baseData;
 
 	public:
 		virtual void DoBase() const {};
+
+		typedef Wrapper_A<Wrapper_B<Interface>> NestedType;
 };
+
+template <>
+struct NestedInheritanceTraits<NestedDerived>{ const static bool HasNestedInheritance = true; };
 
 template<>
 struct BaseTypeTraits<NestedDerived> { static const bool HasBaseType = true; };
@@ -217,8 +273,9 @@ int main(int argc, char* argv[])
 	ri.DoB();
 
 #define PRINT_SIZE_OF(thing) std::cout <<\
-	"base type of " << #thing << ": " << TypeName<BaseType<thing>::Type>::Name() << ", "<<\
-	"sizeof(" << #thing << "): " << sizeof(thing) << std::endl
+	#thing << " base type: " << TypeName<BaseType<thing>::Type>::Name() << ", " <<\
+	"nested inheritance depth " << NestedInheritance<thing>::NestDepth() << ", " <<\
+	"size: " << sizeof(thing) << std::endl
 
 	PRINT_SIZE_OF(void*);
 	PRINT_SIZE_OF(int);
@@ -227,10 +284,16 @@ int main(int argc, char* argv[])
 	PRINT_SIZE_OF(DataForA);
 	PRINT_SIZE_OF(DataForB);
 	PRINT_SIZE_OF(RawImpl);
+	PRINT_SIZE_OF(Wrapper_A<Interface>);
+	PRINT_SIZE_OF(Wrapper_B<Interface>);
 	PRINT_SIZE_OF(VirtualDerived);
 	PRINT_SIZE_OF(NestedDerived);
 	PRINT_SIZE_OF(DelegatingImpl);
-
+	PRINT_SIZE_OF(Wrapper_A<Interface>);
+	PRINT_SIZE_OF(Wrapper_A<Wrapper_A<Interface>>);
+	PRINT_SIZE_OF(Wrapper_A<Wrapper_A<Wrapper_A<Interface>>>);
+	PRINT_SIZE_OF(Wrapper_A<Wrapper_A<Wrapper_A<Wrapper_A<Interface>>>>);
+ 
 #undef PRINT_SIZE_OF
 
 }
