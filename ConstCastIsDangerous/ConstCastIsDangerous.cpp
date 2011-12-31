@@ -26,7 +26,9 @@ const int MyClass::m_fixedStaticValue = 9;
 int main()
 {
 	const MyClass myInstance(9);
-	
+
+	// Any of the following const-cast and set operations can cause a crash
+
 	std::cout << "const_cast on member variable of const object " << std::endl;
 	const_cast<int&>(myInstance.m_nonFixedValue) = 7;
 	myInstance.printMe();
