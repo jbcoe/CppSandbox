@@ -1,5 +1,13 @@
 #pragma once
 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// If a class specialises NestedInheritanceTraits with 
+// HasNestedInheritance = true
+// it must provide a public typedef NestedType which gives the type
+// of the nested class.
+// This typedef is used to evaluate nest depth. 
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 template <typename T>
 struct NestedInheritanceTraits {
 	const static bool HasNestedInheritance = false;
