@@ -1,70 +1,12 @@
 #include <iostream>
+#include "NestedInheritanceTraits.h"
+#include "BaseTypeTraits.h"
 
 struct DataForBase { int m_base; };
 
 struct DataForA { int m_a; };
 
 struct DataForB { int m_b; };
-
-//////////////////////////////////////////////////////
-
-template <typename T>
-struct NestedInheritanceTraits {
-	const static bool HasNestedInheritance = false;
-};
-
-template <bool hasNestedInheritance, int nestDepth, typename T>
-struct NestedInheritanceImpl;
-
-template <int nestDepth, typename T>
-struct NestedInheritanceImpl <true, nestDepth, T>
-{
-	static constexpr int NestDepth() { 
-		return NestedInheritanceImpl<
-			NestedInheritanceTraits<typename T::NestedType>::HasNestedInheritance, 
-			nestDepth + 1, 
-			typename T::NestedType
-		>::NestDepth();
-	}
-};
-
-template <int nestDepth, typename T>
-struct NestedInheritanceImpl <false, nestDepth, T>
-{
- 	static constexpr int NestDepth() { return nestDepth; }
-};
-
-template <typename T>
-struct NestedInheritance
-{
-	static constexpr int NestDepth() 
-	{ 
-		return NestedInheritanceImpl<NestedInheritanceTraits<T>::HasNestedInheritance,0,T>::NestDepth(); 
-	}
-};
-
-//////////////////////////////////////////////////////
-
-template <typename T>
-struct BaseTypeTraits { 
-	const static bool HasBaseType = false; 
-};
-
-template <bool hasBaseType, typename T>
-struct BaseTypeImpl;
-
-template <typename T>
-struct BaseTypeImpl <true, T> { typedef typename T::BaseType Type; };
-
-template <typename T>
-struct BaseTypeImpl<false, T> { typedef T Type; };
-
-template <typename T>
-struct BaseType { 
-	typedef typename BaseTypeImpl<BaseTypeTraits<T>::HasBaseType,T>::Type Type; 
-};
-
-//////////////////////////////////////////////////////
 
 class Interface 
 {
