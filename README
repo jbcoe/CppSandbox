@@ -1,4 +1,12 @@
-This project contains multiple directories each of which tests out a feature of C++0x.
-Not all features are new to C++0x.
+This project contains multiple directories each of which tests out a feature of C++.
+Not all features are new to C++11.
 Not all projects compile as gcc support is incomplete.
+Some projects produce executables which crash or do not compile to test of language features.
 
+./newProject <ProjectName> 
+
+will create a new project with Makefile, source file and git additions made.
+
+./buildAndRunAllProjects 
+
+cleans, builds and runs projects in turn
