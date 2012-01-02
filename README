@@ -1,7 +1,8 @@
 This project contains multiple directories each of which tests out a feature of C++.
 Not all features are new to C++11.
 Not all projects compile as gcc support is incomplete.
-Some projects produce executables which crash or do not compile to test of language features.
+Some projects produce executables which crash or have source files which
+do not compile.
 
 ./newProject <ProjectName> 
 
