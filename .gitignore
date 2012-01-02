@@ -11,7 +11,6 @@ EnumClass/EnumClass
 Regexp/Regexp
 PlacementNew/PlacementNew
 Padding/Padding
-TemplateMetaProgramming/TemplateMetaProgramming
 Multilingual/Multilingual
 Multilingual/Doubler
 TemplatesAndMultipleInheritance//TemplatesAndMultipleInheritance/
@@ -28,3 +27,5 @@ ConstCastIsDangerous/ConstCastIsDangerous
 NestedInheritance/NestedInheritance
 ExceptionPointers/ExceptionPointers
 TemplatedFunctionRecursion/TemplatedFunctionRecursion
+TemplatedBinary/TemplateMetaProgramming
+TemplatedBinary/TemplatedBinary
