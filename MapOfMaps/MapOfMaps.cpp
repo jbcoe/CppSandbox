@@ -27,8 +27,8 @@ class non_copyable_map : public std::map<Key_t,Value_t,Predicate_t>
 		}
     
 	private:
-		non_copyable_map(const non_copyable_map&) = delete;
-		non_copyable_map& operator = (const non_copyable_map&) = delete;
+		non_copyable_map(const non_copyable_map&);
+		non_copyable_map& operator = (const non_copyable_map&);
 };
 
 int main(int argc, char* argv[])
