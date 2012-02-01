@@ -5,10 +5,10 @@
 template<
 	typename Key_t, 
 	typename Value_t,
-	typename Predicate_t = std::less<Key_t> >
-class non_copyable_map : public std::map<Key_t,Value_t,Predicate_t>
+	typename Compare_t = std::less<Key_t> >
+class non_copyable_map : public std::map<Key_t,Value_t,Compare_t>
 {
-  typedef std::map<Key_t,Value_t,Predicate_t> BaseType;
+  typedef std::map<Key_t,Value_t,Compare_t> BaseType;
 
 	public:
 		non_copyable_map() { }
