@@ -2,10 +2,7 @@
 #include <iostream>
 #include <map>
 
-template<
-	typename Key_t, 
-	typename Value_t,
-	typename Compare_t = std::less<Key_t> >
+template<typename Key_t, typename Value_t, typename Compare_t = std::less<Key_t> >
 class non_copyable_map : public std::map<Key_t,Value_t,Compare_t>
 {
   typedef std::map<Key_t,Value_t,Compare_t> BaseType;
@@ -21,7 +18,10 @@ class non_copyable_map : public std::map<Key_t,Value_t,Compare_t>
 		{
 			if ( this != &t )
 			{
-				std::swap<BaseType>(*this,t);
+				std::swap(
+						static_cast<BaseType&>(*this),
+						static_cast<BaseType&>(t)
+						);
 			}
 			return *this;
 		}
