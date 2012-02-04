@@ -12,7 +12,7 @@ edit:
 	$(CC) $(CFLAGS) $< -c -o $@
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(OBJECTS) $(LDFLAGS) -o $@
+	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
 
 clean:
 	- rm $(OBJECTS) $(EXECUTABLE)
