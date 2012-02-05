@@ -55,6 +55,7 @@ template <class T> class malloc_allocator
 		void deallocate(pointer p, size_type) 
 		{ 
 			std::free(p); 
+			std::cout << "Freed some memory" << std::endl;
 		}
 
 		size_type max_size() const 
@@ -65,6 +66,12 @@ template <class T> class malloc_allocator
 		void construct(pointer p, const value_type& x) 
 		{
 			std::cout << "Copy constructed an object" << std::endl;
+			new(p) value_type(x); 
+		}
+		
+		void construct(pointer p, value_type&& x) 
+		{
+			std::cout << "Move constructed an object" << std::endl;
 			new(p) value_type(x); 
 		}
 		
@@ -131,7 +138,6 @@ class MyClass
 int main(int argc, char* argv[])
 {
 	std::vector<MyClass,malloc_allocator<MyClass>> myVector;
-	myVector.reserve(32);
-	myVector.push_back(MyClass());
+	myVector.push_back(std::move(MyClass()));
 }
 
