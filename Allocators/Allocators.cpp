@@ -62,11 +62,11 @@ template <class T> class malloc_allocator
 			return static_cast<size_type>(-1) / sizeof(T);
 		}
 
-		void construct(pointer p, const value_type&& x) 
+		/*void construct(pointer p, const value_type&& x) 
 		{
 			std::cout << "Move constructed an object" << std::endl;
 			new(p) value_type(x); 
-		}
+		}*/
 		
 		void construct(pointer p, const value_type& x) 
 		{
@@ -114,7 +114,7 @@ class NonCopyable
 	public:
 		NonCopyable() { }
 
-		NonCopyable(const NonCopyable&& ) { }
+		NonCopyable(NonCopyable&& ) { }
 
 	private:
 		NonCopyable(const NonCopyable&) = delete;
@@ -123,17 +123,7 @@ class NonCopyable
 int main(int argc, char* argv[])
 {
 	std::vector<NonCopyable,malloc_allocator<NonCopyable>> myVector;
-	//myVector.reserve(32);
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
-	myVector.push_back(NonCopyable());
+	myVector.reserve(32);
 	myVector.push_back(NonCopyable());
 }
 
