@@ -72,7 +72,7 @@ template <class T> class malloc_allocator
 		void construct(pointer p, value_type&& x) 
 		{
 			std::cout << "Move constructed an object" << std::endl;
-			new(p) value_type(x); 
+			new(p) value_type(std::move(x)); 
 		}
 		
 		void destroy(pointer p) 
@@ -138,6 +138,12 @@ class MyClass
 int main(int argc, char* argv[])
 {
 	std::vector<MyClass,malloc_allocator<MyClass>> myVector;
-	myVector.push_back(std::move(MyClass()));
+  myVector.reserve(10);
+	std::cout << "============" << std::endl;
+	myVector.push_back(MyClass());
+	std::cout << "============" << std::endl;
+	MyClass classInstance;
+	myVector.push_back(classInstance);
+	std::cout << "============" << std::endl;
 }
 
