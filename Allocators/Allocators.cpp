@@ -62,12 +62,6 @@ template <class T> class malloc_allocator
 			return static_cast<size_type>(-1) / sizeof(T);
 		}
 
-		/*void construct(pointer p, const value_type&& x) 
-		{
-			std::cout << "Move constructed an object" << std::endl;
-			new(p) value_type(x); 
-		}*/
-		
 		void construct(pointer p, const value_type& x) 
 		{
 			std::cout << "Copy constructed an object" << std::endl;
@@ -109,21 +103,35 @@ inline bool operator!=(const malloc_allocator<T>&,
 }
 
 
-class NonCopyable
+class MyClass
 {
 	public:
-		NonCopyable() { }
 
-		NonCopyable(NonCopyable&& ) { }
+		MyClass() 
+		{ 
+			std::cout << "My Class instance constructed" << std::endl;
+		}
+
+		MyClass(const MyClass&) 
+		{
+			std::cout << "My Class instance copy-constructed" << std::endl;
+		}
+
+		MyClass(MyClass&&) 
+		{
+			std::cout << "My Class instance move-constructed" << std::endl;
+		}
 
 	private:
-		NonCopyable(const NonCopyable&) = delete;
+		int m_x;
+		int m_y;
+		int m_z;
 };
 
 int main(int argc, char* argv[])
 {
-	std::vector<NonCopyable,malloc_allocator<NonCopyable>> myVector;
+	std::vector<MyClass,malloc_allocator<MyClass>> myVector;
 	myVector.reserve(32);
-	myVector.push_back(NonCopyable());
+	myVector.push_back(MyClass());
 }
 
