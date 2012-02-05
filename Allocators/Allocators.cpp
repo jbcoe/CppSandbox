@@ -52,10 +52,11 @@ template <class T> class malloc_allocator
 			return static_cast<pointer>(p);
 		}
 
-		void deallocate(pointer p, size_type) 
+		void deallocate(pointer p, size_type n) 
 		{ 
 			std::free(p); 
-			std::cout << "Freed some memory" << std::endl;
+			std::cout << "Freed a block of memory of size "
+				<< n*sizeof(T) << std::endl;
 		}
 
 		size_type max_size() const 
