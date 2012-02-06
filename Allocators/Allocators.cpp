@@ -13,8 +13,11 @@ template <class T> class malloc_allocator
 		typedef std::ptrdiff_t    difference_type;
 
 		template <class U> 
-		struct rebind { typedef malloc_allocator<U> other; };
-
+			struct rebind 
+			{ 
+				typedef malloc_allocator<U> other; 
+			};
+    
 		malloc_allocator() 
 		{
 			std::cout << "Created a malloc_allocator" << std::endl;
@@ -24,17 +27,31 @@ template <class T> class malloc_allocator
 		{
 			std::cout << "Copied a malloc_allocator" << std::endl;
 		}
-		
+
 		template <class U> 
-		malloc_allocator(const malloc_allocator<U>&) {}
-		
+			malloc_allocator(const malloc_allocator<U>&) 
+			{
+				std::cout << "Copy-constructed an allocator" << std::endl;
+			}
+
+		template <class U> 
+			malloc_allocator(malloc_allocator<U>&&) 
+			{
+				std::cout << "Move-constructed an allocator" << std::endl;
+			}
+
 		~malloc_allocator() 
 		{
 			std::cout << "Deleted a malloc_allocator" << std::endl;
 		}
 
-		pointer address(reference x) const { return &x; }
-		
+		pointer address(reference x) const 
+		{ 
+			std::cout << "Request for address of object returned " 
+				<< &x << std::endl;
+			return &x; 
+		}
+
 		const_pointer address(const_reference x) const 
 		{ 
 			return x;
@@ -60,7 +77,9 @@ template <class T> class malloc_allocator
 		}
 
 		size_type max_size() const 
-		{ 
+		{
+			std::cout << "Request for max size returned " 
+				<< static_cast<size_type>(-1)/sizeof(T) << std::endl;
 			return static_cast<size_type>(-1) / sizeof(T);
 		}
 
@@ -69,16 +88,16 @@ template <class T> class malloc_allocator
 			std::cout << "Allocator: Copy constructing an object" << std::endl;
 			new(p) value_type(x); 
 		}
-		
+
 		void construct(pointer p, value_type&& x) 
 		{
 			std::cout << "Allocator: Move constructing an object" << std::endl;
 			new(p) value_type(std::move(x)); 
 		}
-		
+
 		void destroy(pointer p) 
 		{ 
-		  std::cout << "Allocator: Destroying an object" << std::endl;
+			std::cout << "Allocator: Destroying an object" << std::endl;
 			p->~value_type(); 
 		}
 
@@ -96,14 +115,14 @@ template<> class malloc_allocator<void>
 		struct rebind { typedef malloc_allocator<U> other; };
 };
 
-template <class T>
+	template <class T>
 inline bool operator==(const malloc_allocator<T>&, 
 		const malloc_allocator<T>&) 
 {
 	return true;
 }
 
-template <class T>
+	template <class T>
 inline bool operator!=(const malloc_allocator<T>&, 
 		const malloc_allocator<T>&) 
 {
@@ -139,12 +158,11 @@ class MyClass
 int main(int argc, char* argv[])
 {
 	std::vector<MyClass,malloc_allocator<MyClass>> myVector;
-  myVector.reserve(10);
+	myVector.reserve(10);
 	std::cout << "============" << std::endl;
 	myVector.push_back(MyClass());
 	std::cout << "============" << std::endl;
 	MyClass classInstance;
 	myVector.push_back(classInstance);
-	std::cout << "============" << std::endl;
 }
 
