@@ -46,7 +46,7 @@ template <class T> class malloc_allocator
 			if (!p)
 				throw std::bad_alloc();
 
-			std::cout << "Allocated a block of memory of size " 
+			std::cout << "Allocator: Allocated a block of memory of size " 
 				<< n*sizeof(T) << std::endl;
 
 			return static_cast<pointer>(p);
@@ -55,7 +55,7 @@ template <class T> class malloc_allocator
 		void deallocate(pointer p, size_type n) 
 		{ 
 			std::free(p); 
-			std::cout << "Freed a block of memory of size "
+			std::cout << "Allocator: Freed a block of memory of size "
 				<< n*sizeof(T) << std::endl;
 		}
 
@@ -66,19 +66,19 @@ template <class T> class malloc_allocator
 
 		void construct(pointer p, const value_type& x) 
 		{
-			std::cout << "Copy constructed an object" << std::endl;
+			std::cout << "Allocator: Copy constructing an object" << std::endl;
 			new(p) value_type(x); 
 		}
 		
 		void construct(pointer p, value_type&& x) 
 		{
-			std::cout << "Move constructed an object" << std::endl;
+			std::cout << "Allocator: Move constructing an object" << std::endl;
 			new(p) value_type(std::move(x)); 
 		}
 		
 		void destroy(pointer p) 
 		{ 
-		  std::cout << "Destroyed an object" << std::endl;
+		  std::cout << "Allocator: Destroying an object" << std::endl;
 			p->~value_type(); 
 		}
 
