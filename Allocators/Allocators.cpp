@@ -139,7 +139,7 @@ class MyClass
 int main(int argc, char* argv[])
 {
 	std::vector<MyClass,malloc_allocator<MyClass>> myVector;
-  myVector.reserve(10);
+  	myVector.reserve(10);
 	std::cout << "============" << std::endl;
 	myVector.push_back(MyClass());
 	std::cout << "============" << std::endl;
