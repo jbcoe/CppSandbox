@@ -17,7 +17,7 @@ template <class T> class malloc_allocator
 			{ 
 				typedef malloc_allocator<U> other; 
 			};
-    
+
 		malloc_allocator() 
 		{
 			std::cout << "Created a malloc_allocator" << std::endl;
