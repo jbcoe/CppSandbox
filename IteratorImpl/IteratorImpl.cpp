@@ -24,6 +24,7 @@ class TObjectSet
 				virtual bool operator==(const IteratorImpl& it) const = 0;
 				virtual bool operator!=(const IteratorImpl& it) const = 0;
 				virtual T* operator*() = 0;
+        virtual std::unique_ptr<IteratorImpl> Clone() const = 0;
 				virtual ~IteratorImpl(){}
 		};
 
@@ -40,9 +41,17 @@ class TObjectSet
 				typedef std::forward_iterator_tag iterator_category;
 
 				iterator(std::unique_ptr<IteratorImpl>&& ptrImpl) : itImpl(std::move(ptrImpl)) {}
+				
+				iterator(const iterator& it) : itImpl(std::move(it.itImpl->Clone())) {}
+				
+				const iterator& operator = (const iterator& it) { itImpl = (std::move(it.m_itImpl->Clone())); return *this; }
+
 				iterator& operator++() { itImpl->operator++(); return *this; };
+				
 				bool operator==(const iterator& it) const { return itImpl->operator==(*it.itImpl); };
+				
 				bool operator!=(const iterator& it) const { return itImpl->operator!=(*it.itImpl); };
+				
 				T* operator*() {return itImpl->operator*(); };
 
 			private:
@@ -85,6 +94,12 @@ class CObjectSetImpl : public TObjectSetImpl<CObjectImpl,IObjectSet>
 			{
 				m_it++;
 				return *this;
+			}
+
+			virtual std::unique_ptr<IteratorImpl> Clone() const
+			{
+				std::unique_ptr<IteratorImpl> ptr(new concrete_iterator(m_it));
+				return std::move(ptr);
 			}
 
 			virtual bool operator==(const IteratorImpl& it) const
