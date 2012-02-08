@@ -24,7 +24,7 @@ class TObjectSet
 				virtual bool operator==(const IteratorImpl& it) const = 0;
 				virtual bool operator!=(const IteratorImpl& it) const = 0;
 				virtual T* operator*() = 0;
-        virtual std::unique_ptr<IteratorImpl> Clone() const = 0;
+				virtual std::unique_ptr<IteratorImpl> Clone() const = 0;
 				virtual ~IteratorImpl(){}
 		};
 
@@ -41,17 +41,17 @@ class TObjectSet
 				typedef std::forward_iterator_tag iterator_category;
 
 				iterator(std::unique_ptr<IteratorImpl>&& ptrImpl) : itImpl(std::move(ptrImpl)) {}
-				
+
 				iterator(const iterator& it) : itImpl(std::move(it.itImpl->Clone())) {}
-				
+
 				const iterator& operator = (const iterator& it) { itImpl = (std::move(it.m_itImpl->Clone())); return *this; }
 
 				iterator& operator++() { itImpl->operator++(); return *this; };
-				
+
 				bool operator==(const iterator& it) const { return itImpl->operator==(*it.itImpl); };
-				
+
 				bool operator!=(const iterator& it) const { return itImpl->operator!=(*it.itImpl); };
-				
+
 				T* operator*() {return itImpl->operator*(); };
 
 			private:
@@ -77,10 +77,6 @@ class CObjectImpl : public IObject
 
 template <class ObjImpl_t, class SetInterface_t>
 class TObjectSetImpl : public SetInterface_t
-{
-};
-
-class CObjectSetImpl : public TObjectSetImpl<CObjectImpl,IObjectSet>
 {
 	private:
 
@@ -132,31 +128,37 @@ class CObjectSetImpl : public TObjectSetImpl<CObjectImpl,IObjectSet>
 			return IObjectSet::iterator(std::unique_ptr<concrete_iterator>(new concrete_iterator(m_vObjects.end()))); 
 		}
 
-		std::vector<std::unique_ptr<CObjectImpl>> m_vObjects;
+    template <typename... Args>
+    void Add(Args... args)
+		{
+			m_vObjects.push_back(std::unique_ptr<ObjImpl_t>(new ObjImpl_t(args...)));
+		}
+
+	private:
+		std::vector<std::unique_ptr<ObjImpl_t>> m_vObjects;
 };
 
-void Printer(const IObject* pObj)
+class CObjectSetImpl : public TObjectSetImpl<CObjectImpl,IObjectSet>
 {
-	static int i=0;
-	std::cout << "Encountered object " << i++ << " " << pObj->Name() << std::endl;
-}
+};
+
 
 int main(int argc, char* argv[])
 {
 	CObjectSetImpl mySet;
-	mySet.m_vObjects.push_back(std::unique_ptr<CObjectImpl>(new CObjectImpl("Huey")));
-	mySet.m_vObjects.push_back(std::unique_ptr<CObjectImpl>(new CObjectImpl("Duey")));
-	mySet.m_vObjects.push_back(std::unique_ptr<CObjectImpl>(new CObjectImpl("Louie")));
-	mySet.m_vObjects.push_back(std::unique_ptr<CObjectImpl>(new CObjectImpl("Donald")));
-	mySet.m_vObjects.push_back(std::unique_ptr<CObjectImpl>(new CObjectImpl("Mickey")));
-	mySet.m_vObjects.push_back(std::unique_ptr<CObjectImpl>(new CObjectImpl("Minnie")));
+	mySet.Add("Huey");
+	mySet.Add("Duey");
+	mySet.Add("Louie");
+	mySet.Add("Donald");
+	mySet.Add("Mickey");
+	mySet.Add("Minnie");
 
-	std::for_each(mySet.begin(), mySet.end(), &Printer); 
-	/*		[](IObject* pObj)
-			{
-			static int i=0;
-			std::cout << "Encountered object " << i++ << " " << pObj->Name() << std::endl;
-			});
-	*/
+  IObjectSet& setInterface = mySet;
+
+	for(const IObject* pObj : setInterface) 
+	{
+		static int i=0;
+		std::cout << "Encountered object " << i++ << " " << pObj->Name() << std::endl;
+	};
 }
 
