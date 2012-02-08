@@ -1,6 +1,6 @@
 include ../CompilerSettings.mk
 
-SOURCES=ASync.cpp
-EXECUTABLE=ASync
+SOURCES=Futures.cpp
+EXECUTABLE=Futures
 
 include ../MakeCommon.mk
