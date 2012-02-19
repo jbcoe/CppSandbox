@@ -6,10 +6,10 @@ class MyClass
 
 		MyClass(int value) : m_fixedValue(value), m_nonFixedValue(value) {} 
 
-		int m_nonFixedValue;
-
 		const int m_fixedValue;
 
+		int m_nonFixedValue;
+		
 		static const int m_fixedStaticValue; 
 
 		void printMe() const
