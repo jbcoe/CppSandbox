@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=UnorderedMap.cpp
 EXECUTABLE=UnorderedMap
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

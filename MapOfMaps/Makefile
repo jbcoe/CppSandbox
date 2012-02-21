@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=MapOfMaps.cpp
 EXECUTABLE=MapOfMaps
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

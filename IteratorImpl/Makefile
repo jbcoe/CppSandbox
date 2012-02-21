@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=IteratorImpl.cpp
 EXECUTABLE=IteratorImpl
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

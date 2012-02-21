@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=Tuple.cpp
 EXECUTABLE=Tuple
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

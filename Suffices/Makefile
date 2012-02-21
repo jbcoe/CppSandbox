@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=Suffices.cpp
 EXECUTABLE=Suffices
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

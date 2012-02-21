@@ -1,8 +1,8 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 CFLAGS:=$(CFLAGS) -g
 
 SOURCES=Allocators.cpp
 EXECUTABLE=Allocators
 
-include ../MakeCommon.mk
+include ../makeCommon.mk

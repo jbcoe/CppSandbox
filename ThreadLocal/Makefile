@@ -1,6 +1,6 @@
-include ../CompilerSettings.mk
+include ../compilerSettings.mk
 
 SOURCES=ThreadLocal.cpp
 EXECUTABLE=ThreadLocal
 
-include ../MakeCommon.mk
+include ../makeCommon.mk
