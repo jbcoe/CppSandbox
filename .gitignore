@@ -39,3 +39,5 @@ ThreadLocal/ThreadLocal
 UnorderedMap/UnorderedMap
 Tuple/Tuple
 VectorElementRemoval/VectorElementRemoval
+VectorElementRemoval/CheckValues
+VectorElementRemoval/RemoveValues
