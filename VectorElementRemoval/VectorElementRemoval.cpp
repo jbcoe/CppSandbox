@@ -2,14 +2,6 @@
 #include <iostream>                     
 #include <algorithm>                     
 
-int main()
-{
-	std::vector<int> myValues;
-  for ( long int i=0L; i<100000000L; ++i )
-		myValues.push_back(i%3);
-	
-	int iOriginalSize = myValues.size();
-
 #ifndef REMOVE_VALUES
 #ifndef CHECK_VALUES
 #error "define one of REMOVE_VALUES or CHECK_VALUES"
@@ -22,6 +14,13 @@ int main()
 #endif
 #endif
 
+int main()
+{
+	std::vector<int> myValues;
+  for ( long int i=0L; i<100000000L; ++i )
+		myValues.push_back(i%3);
+	
+	int iOriginalSize = myValues.size();
 #ifdef REMOVE_VALUES
 	myValues.erase(std::remove_if(myValues.begin(),myValues.end(),[](int i) { return i == 2; }),myValues.end());
 #endif
