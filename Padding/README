@@ -1,7 +1,0 @@
-This project is an investigation of how
-padding works for layout of structs in memory.
-Compile time assertions check that things do as 
-expected. 
-
-I have tested compilation using the g++-mp-4.6 compiler from
-mac ports on OS X 10.7.1.
