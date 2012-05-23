@@ -6,6 +6,15 @@ template <typename T>
 struct HasFunctionList
 {
 	static const std::function<int& (T*)> fPtrs[]; 
+
+	static void RunFunction(T* t, std::function<void (int)> intFunction)
+	{
+		std::for_each(std::begin(fPtrs),std::end(fPtrs),
+				[&](std::function<int& (T*)> f)
+				{
+					intFunction(f(t));
+				});
+	}
 };
 
 struct CSomeData : HasFunctionList<CSomeData>
@@ -17,6 +26,11 @@ struct CSomeData : HasFunctionList<CSomeData>
 	CSomeData()
 	{
 		static_assert(sizeof(CSomeData)==12,"3 ints");
+	}
+	
+	void RunFunction(std::function<void (int)> intFunction)
+	{
+		return HasFunctionList<CSomeData>::RunFunction(this,intFunction);
 	}
 };
 
@@ -31,10 +45,7 @@ const std::function<int& (CSomeData*)> HasFunctionList<CSomeData>::fPtrs[] =
 int main(int argc, char* argv[])
 {
 	CSomeData myData;
-	std::for_each(std::begin(CSomeData::fPtrs),std::end(CSomeData::fPtrs),
-			[&](std::function<int& (CSomeData*)> f)
-			{
-				std::cout << f(&myData) << std::endl;
-			});
+	auto lambda_printer = [](int theInt){std::cout << theInt << std::endl;};
+	myData.RunFunction(lambda_printer);
 }
 
