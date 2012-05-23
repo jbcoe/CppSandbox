@@ -2,13 +2,17 @@
 #include <algorithm>
 #include <functional>
 
-struct CSomeData
+template <typename T>
+struct HasFunctionList
+{
+	static const std::function<int& (T*)> fPtrs[]; 
+};
+
+struct CSomeData : HasFunctionList<CSomeData>
 {
 	int m_age = 32;
 	int m_number = 4;
 	int m_prime = 5;
-
-	static const std::function<int& (CSomeData*)> fPtrs[]; 
 
 	CSomeData()
 	{
@@ -16,7 +20,8 @@ struct CSomeData
 	}
 };
 
-const std::function<int& (CSomeData*)> CSomeData::fPtrs[] = 
+template<>
+const std::function<int& (CSomeData*)> HasFunctionList<CSomeData>::fPtrs[] = 
 { 
 	&CSomeData::m_age, 
 	&CSomeData::m_number, 
