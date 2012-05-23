@@ -9,6 +9,11 @@ struct CSomeData
 	int m_prime = 5;
 
 	static const std::function<int& (CSomeData*)> fPtrs[]; 
+
+	CSomeData()
+	{
+		static_assert(sizeof(CSomeData)==12,"3 ints");
+	}
 };
 
 const std::function<int& (CSomeData*)> CSomeData::fPtrs[] = 
