@@ -22,14 +22,10 @@ struct CSomeData : HasFunctionList<CSomeData>
 	int m_age = 32;
 	int m_number = 4;
 	int m_prime = 5;
-
-	CSomeData()
-	{
-		static_assert(sizeof(CSomeData)==12,"3 ints");
-	}
 	
 	void RunFunction(std::function<void (int)> intFunction)
 	{
+		static_assert(sizeof(CSomeData)==12,"3 ints");
 		return HasFunctionList<CSomeData>::RunFunction(this,intFunction);
 	}
 };
