@@ -7,10 +7,11 @@ struct Introspector
 {
 	static const std::function<Member_t& (T*)> fPtrs[]; 
 
-	static void RunFunction(T* t, std::function<void (Member_t)> intFunction)
+	template <typename Functor_t>
+	static void RunFunction(T* t, Functor_t& theFunction)
 	{
 		std::for_each(std::begin(fPtrs),std::end(fPtrs),
-				[&](std::function<Member_t& (T*)> f) { intFunction(f(t)); });
+				[&](std::function<Member_t& (T*)> f) { theFunction(f(t)); });
 	}
 };
 
@@ -20,10 +21,11 @@ struct CSomeData : Introspector<CSomeData,int>
 	int m_number = 4;
 	int m_prime = 5;
 	
-	void RunFunction(std::function<void (int)> intFunction)
+	template <typename Functor_t>
+	void RunFunction(Functor_t& theFunction)
 	{
 		static_assert(sizeof(CSomeData)==12,"3 ints");
-		return Introspector<CSomeData,int>::RunFunction(this,intFunction);
+		return Introspector<CSomeData,int>::RunFunction(this,theFunction);
 	}
 };
 
