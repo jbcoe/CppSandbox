@@ -1,7 +1,7 @@
 OBJECTS=$(SOURCES:.cpp=.o)
 
 run: all
-	./$(EXECUTABLE)
+	./$(EXECUTABLE) $(EXECUTABLE_ARGS)
 
 all: $(SOURCES) $(EXECUTABLE)
 

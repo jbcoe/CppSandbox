@@ -41,3 +41,4 @@ VectorElementRemoval/VectorElementRemoval
 VectorElementRemoval/CheckValues
 VectorElementRemoval/RemoveValues
 Introspector/Introspector
+memcmpVsDirectCompare/memcmpVsDirectCompare
