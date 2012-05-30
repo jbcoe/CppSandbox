@@ -51,8 +51,6 @@ int main(int argc, char* argv[])
 		sum_of_cmps += cmp;
 	}
 
-	numbers.assign(size,COMPARED_VALUE);
-	moreNumbers.assign(size,COMPARED_VALUE);
 	{
 		Timer t("explicit compare");
 		int cmp = 0;
@@ -67,8 +65,6 @@ int main(int argc, char* argv[])
 		sum_of_cmps += cmp;
 	}
 
-	numbers.assign(size,COMPARED_VALUE);
-	moreNumbers.assign(size,COMPARED_VALUE);
 	{
 		Timer t("std equals");
 		int cmp = std::equal(numbers.begin(),numbers.end(),moreNumbers.begin());
