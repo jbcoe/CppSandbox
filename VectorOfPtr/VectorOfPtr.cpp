@@ -35,16 +35,16 @@ class Timer
 
 class MySimpleClass
 {
-public:
-	double m_x = 0.0;
-	double m_y = 0.0;
+	public:
+		double m_x = 0.0;
+		double m_y = 0.0;
 };
 
 int main(int argc, char* argv[])
 {                               
-  size_t count = 10000000;
+	size_t count = 10000000;
 
-  if( argc == 2 )
+	if( argc == 2 )
 		count = boost::lexical_cast<size_t>(argv[1]);
 
 	{ 
@@ -60,11 +60,14 @@ int main(int argc, char* argv[])
 	}
 
 	{
-		std::unique_ptr<Timer> ptrBuildTimer(new Timer("Build Object Vector"));
-		std::vector<MySimpleClass> objects(count);
-		ptrBuildTimer.reset();
+		std::vector<MySimpleClass> objects;
+		objects.reserve(count);
+		{
+			Timer t("Build Object Vector");
+			std::generate_n(std::back_inserter(objects), count, [](){return MySimpleClass();});
+		}
 
-	  Timer t("Modify Object Vector");
+		Timer t("Modify Object Vector");
 		std::for_each(objects.begin(), objects.end(), [](MySimpleClass& m){m.m_x = 2.0; m.m_y = 0.78 * m.m_x;});
 	}
 }
