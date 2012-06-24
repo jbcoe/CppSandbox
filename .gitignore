@@ -44,3 +44,4 @@ Introspector/Introspector
 memcmpVsDirectCompare/memcmpVsDirectCompare
 Atomics/Atomics
 TypeTraits/TypeTraits
+VectorOfPtr/VectorOfPtr
