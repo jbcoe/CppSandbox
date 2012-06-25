@@ -8,9 +8,6 @@
 using namespace boost;
 using namespace posix_time;
 
-typedef int COMPARED_TYPE;
-static const COMPARED_TYPE COMPARED_VALUE = 1;
-
 class Timer
 {
 	public:
@@ -39,58 +36,7 @@ class MySimpleClass
 		double m_x = 0.0;
 		double m_y = 0.0;
 		std::string m_name;
-		
-		static size_t g_moveCount;
-    static size_t g_copyCount;
-
-	MySimpleClass() 
-	{
-	}	
-	
-	MySimpleClass(const MySimpleClass& m) : m_x(m.m_x), m_y(m.m_y)
-	{
-		if ( g_copyCount == 0 )
-		{
-			++g_copyCount;
-			std::cout << "Copy" << std::endl;
-		}
-	}
-#ifdef USE_MOVE
-	MySimpleClass(MySimpleClass&& m) : m_x(m.m_x), m_y(m.m_y)
-	{
-		if ( g_moveCount == 0 )
-		{
-			++g_moveCount;
-			std::cout << "Move" << std::endl;
-		}
-	}
-#endif
-	void operator = (const MySimpleClass& m )
-	{
-		if ( g_copyCount == 0 )
-		{
-			++g_copyCount;
-			std::cout << "Copy" << std::endl;
-		}
-		m_x = m.m_x;
-		m_y = m.m_y;
-	}
-#ifdef USE_MOVE
-	void operator = (MySimpleClass&& m )
-	{
-		if ( g_moveCount == 0 )
-		{
-			++g_moveCount;
-			std::cout << "Move" << std::endl;
-		}
-		m_x = m.m_x;
-		m_y = m.m_y;
-	}
-#endif
 };
-
-size_t MySimpleClass::g_copyCount = 0;
-size_t MySimpleClass::g_moveCount = 0;
 
 int main(int argc, char* argv[])
 {                               
@@ -115,9 +61,8 @@ int main(int argc, char* argv[])
 			vptrObjects.resize(0);
 		}
 	}
-  
-	MySimpleClass::g_copyCount = 0;
-	MySimpleClass::g_moveCount = 0;
+
+	std::cout << std::endl;
 
 	{
 		std::vector<MySimpleClass> objects;
