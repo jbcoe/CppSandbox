@@ -38,8 +38,9 @@ class MySimpleClass
 	public:
 		double m_x = 0.0;
 		double m_y = 0.0;
-
-    static size_t g_moveCount;
+		std::string m_name;
+		
+		static size_t g_moveCount;
     static size_t g_copyCount;
 
 	MySimpleClass() 
