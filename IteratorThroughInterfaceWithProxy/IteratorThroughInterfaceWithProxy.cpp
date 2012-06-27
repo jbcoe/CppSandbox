@@ -13,6 +13,17 @@ class IObject
 class IListOfObjects
 {
 	public:
+	
+	class proxy
+	{
+		public:
+			explicit proxy(IObject* pObject) : m_pObject(pObject) {}
+			void operator = (const proxy&) = delete;
+			IObject* operator->() { return m_pObject; }
+		private:
+			IObject* m_pObject;
+	};
+		
 	class iterator
 	{
 		public:
@@ -28,7 +39,7 @@ class IListOfObjects
 			iterator(const iterator& it) : m_list(it.m_list), m_position(it.m_position) {}
 			iterator(IListOfObjects& list, size_t position) : m_list(list), m_position(position) {}
 
-			IObject* operator*() { return m_list.get(m_position);} 
+			proxy operator*() { return proxy(m_list.get(m_position));} 
 
 		private:
 			IListOfObjects& m_list;
@@ -71,7 +82,7 @@ int main(int argc, char* argv[])
 {
 	ListOfObjectsImpl myList(100); 
 
-	std::for_each(myList.begin(), myList.end(), [](IObject* pObject)
+	std::for_each(myList.begin(), myList.end(), [](IListOfObjects::proxy pObject)
 			{
 				pObject->m_value = 3.14159;
 			});
