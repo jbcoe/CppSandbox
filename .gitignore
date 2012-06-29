@@ -47,3 +47,4 @@ TypeTraits/TypeTraits
 VectorOfPtr/VectorOfPtr
 IteratorThroughInterface/IteratorThroughInterface
 IteratorThroughInterfaceWithProxy/IteratorThroughInterfaceWithProxy
+BoostProgramOptions/BoostProgramOptions
