@@ -49,3 +49,4 @@ IteratorThroughInterface/IteratorThroughInterface
 IteratorThroughInterfaceWithProxy/IteratorThroughInterfaceWithProxy
 BoostProgramOptions/BoostProgramOptions
 VectorIteration/VectorIteration
+MemCopyVsStdCopy/MemCopyVsStdCopy
