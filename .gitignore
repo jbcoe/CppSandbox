@@ -51,3 +51,4 @@ BoostProgramOptions/BoostProgramOptions
 VectorIteration/VectorIteration
 MemCopyVsStdCopy/MemCopyVsStdCopy
 CallOnce/CallOnce
+TypeSafeNumber/TypeSafeNumber
