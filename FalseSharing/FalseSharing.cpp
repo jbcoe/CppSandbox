@@ -6,10 +6,7 @@
 #include <vector>
 #include <tbb/task_group.h>
 #include <tbb/task_scheduler_init.h>
-
-#ifndef THREADS
-#define THREADS 4
-#endif
+#include <boost/lexical_cast.hpp>
 
 class SquareMatrix
 {
@@ -30,6 +27,10 @@ class SquareMatrix
 
 int main(int argc, char* argv[])
 {
+  size_t THREADS = 4;
+	if ( argc > 1 )
+		THREADS = boost::lexical_cast<size_t>(argv[1]);
+	
 	std::uniform_real_distribution<double> distribution(-1,1);
 	std::mt19937 engine;
 	auto generator = [&]{return distribution(engine);};
