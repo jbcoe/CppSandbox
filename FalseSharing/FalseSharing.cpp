@@ -7,6 +7,7 @@
 #include <tbb/task_group.h>
 #include <tbb/task_scheduler_init.h>
 #include <boost/lexical_cast.hpp>
+#include <Common/Timer.h>
 
 class SquareMatrix
 {
@@ -46,6 +47,9 @@ int main(int argc, char* argv[])
 	std::vector<size_t> perThreadCount(THREADS,0);
 	tbb::task_scheduler_init tsInit(THREADS);
 	tbb::task_group tg;
+	
+	Timer t("Time count");
+	
 	for ( size_t iTask=0; iTask<THREADS; ++iTask )
 	{
   	tg.run([=,&perThreadCount,&m]
@@ -53,14 +57,19 @@ int main(int argc, char* argv[])
 					size_t taskSize = dim/THREADS;
 					size_t taskStart = iTask*taskSize;
 					size_t taskEnd = std::min(taskStart+taskSize, dim);
-          for (size_t i=taskStart; i<taskEnd; ++i)
+          size_t count = 0;
+					for (size_t i=taskStart; i<taskEnd; ++i)
 					{
 						for (size_t j=0; j<dim; ++j)
 						{
-            	if (m[i][j]>=0.0) 
-								++perThreadCount[iTask];
+            	if (m[i][j]>=0.0)
+							{
+							  ++perThreadCount[iTask];
+								//++count;
+							}
 						}
 					}
+					// perThreadCount[iTask] = count;
 				});
 	}
 	tg.wait();
