@@ -53,3 +53,4 @@ MemCopyVsStdCopy/MemCopyVsStdCopy
 CallOnce/CallOnce
 TypeSafeNumber/TypeSafeNumber
 FalseSharing/FalseSharing
+PrivateVisitor/PrivateVisitor
