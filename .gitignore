@@ -54,3 +54,4 @@ CallOnce/CallOnce
 TypeSafeNumber/TypeSafeNumber
 FalseSharing/FalseSharing
 PrivateVisitor/PrivateVisitor
+TemplatedVisitor/TemplatedVisitor
