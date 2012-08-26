@@ -52,27 +52,47 @@ class BaseVisitor : protected IVisitor
 		}
 };
 
-template <typename Visitable_t>
-class TemplatedVisitor : private BaseVisitor
-{
-	public:
-		TemplatedVisitor(const IVisitable& v)
-		{
-			v.Accept(*this);
-		}
+////////
 
-	private:
-		virtual void Visit(const Visitable_t& v)
+template <typename... VisitableTypes_ts> class VTVisitor;
+
+template <typename T, typename... VisitableTypes_ts>
+class VTVisitor<T, VisitableTypes_ts...> : public VTVisitor<VisitableTypes_ts...>
+{
+	protected:
+		virtual void Visit(const T& v)
 		{
 			std::cout << "I saw a type I knew\n";
 		}
+};
+
+template <typename T>
+class VTVisitor<T> : public T, public BaseVisitor
+{
+	protected:
+		virtual void Visit(const T& v)
+		{
+			std::cout << "I saw a type I knew\n";
+		}
+};
+
+////////
+
+template <typename T1>
+class TemplatedVisitor : public VTVisitor<T1> 
+{
+	public:
+	TemplatedVisitor(IVisitable& v)
+	{
+		v.Accept(*this);
+	}
 };
 
 int main(int argc, char* argv[])
 {
 	VisitableA a;
 	VisitableB b;
-
+  
 	TemplatedVisitor<VisitableA> p_a(a);
 	TemplatedVisitor<VisitableA> p_b(b);
 }
