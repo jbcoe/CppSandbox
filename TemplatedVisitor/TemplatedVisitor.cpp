@@ -25,6 +25,8 @@ class VisitableA : public IVisitable
 		{
 			visitor.Visit(*this);
 		}
+
+		const char* Name() const { return "A"; }
 };
 
 class VisitableB : public IVisitable
@@ -34,6 +36,8 @@ class VisitableB : public IVisitable
 		{
 			visitor.Visit(*this);
 		}
+		
+		const char* Name() const { return "B"; }
 };
 
 class BaseVisitor : protected IVisitor
@@ -54,32 +58,45 @@ class BaseVisitor : protected IVisitor
 
 ////////
 
+struct NameReporter
+{
+	template <typename T>
+	void operator()(const T& t)
+	{
+		std::cout << "I saw " << t.Name() << "\n";
+	}
+};
+
+////////
+
 template <typename... VisitableTypes_ts> class VTVisitor;
 
-template <typename T, typename... VisitableTypes_ts>
-class VTVisitor<T, VisitableTypes_ts...> : public VTVisitor<VisitableTypes_ts...>
+template <typename T, typename F, typename... VisitableTypes_ts>
+class VTVisitor<T, F, VisitableTypes_ts...> : public VTVisitor<VisitableTypes_ts...>
 {
 	protected:
 		virtual void Visit(const T& v)
 		{
-			std::cout << "I saw a type I knew\n";
+			F f;
+			f(v);
 		}
 };
 
-template <typename T>
-class VTVisitor<T> : public T, public BaseVisitor
+template <typename T, typename F>
+class VTVisitor<T,F> : public T, public BaseVisitor
 {
 	protected:
 		virtual void Visit(const T& v)
 		{
-			std::cout << "I saw a type I knew\n";
+			F f;
+			f(v);
 		}
 };
 
 ////////
 
-template <typename T1>
-class TemplatedVisitor : public VTVisitor<T1> 
+template <typename T1, typename F>
+class TemplatedVisitor : public VTVisitor<T1,F> 
 {
 	public:
 	TemplatedVisitor(IVisitable& v)
@@ -93,7 +110,7 @@ int main(int argc, char* argv[])
 	VisitableA a;
 	VisitableB b;
   
-	TemplatedVisitor<VisitableA> p_a(a);
-	TemplatedVisitor<VisitableA> p_b(b);
+	TemplatedVisitor<VisitableA,NameReporter> p_1(a);
+	TemplatedVisitor<VisitableA,NameReporter> p_2(b);
 }
 
