@@ -10,12 +10,14 @@ class IVisitable
 
 class VisitableA;
 class VisitableB;
+class VisitableC;
 
 class IVisitor
 {
 	public:
 		virtual void Visit(const VisitableA& a) = 0;
 		virtual void Visit(const VisitableB& b) = 0;
+		virtual void Visit(const VisitableC& c) = 0;
 };
 
 class VisitableA : public IVisitable
@@ -40,6 +42,17 @@ class VisitableB : public IVisitable
 		const char* Name() const { return "B"; }
 };
 
+class VisitableC : public IVisitable
+{
+	public:
+		virtual void Accept(IVisitor& visitor) const
+		{
+			visitor.Visit(*this);
+		}
+		
+		const char* Name() const { return "C"; }
+};
+
 class BaseVisitor : protected IVisitor
 {
 	protected:
@@ -51,6 +64,11 @@ class BaseVisitor : protected IVisitor
 		}
 
 		virtual void Visit(const VisitableB& b)
+		{
+			std::cout << "I saw nothing\n";
+		}
+		
+		virtual void Visit(const VisitableC& c)
 		{
 			std::cout << "I saw nothing\n";
 		}
@@ -95,8 +113,8 @@ class VTVisitor<T,F> : public T, public BaseVisitor
 
 ////////
 
-template <typename T1, typename F>
-class TemplatedVisitor : public VTVisitor<T1,F> 
+template <typename T1, typename F1, typename T2, typename F2>
+class TemplatedVisitor : public VTVisitor<T1,F1,T2,F2> 
 {
 	public:
 	TemplatedVisitor(IVisitable& v)
@@ -109,8 +127,10 @@ int main(int argc, char* argv[])
 {
 	VisitableA a;
 	VisitableB b;
+	VisitableC c;
   
-	TemplatedVisitor<VisitableA,NameReporter> p_1(a);
-	TemplatedVisitor<VisitableA,NameReporter> p_2(b);
+	TemplatedVisitor<VisitableA,NameReporter,VisitableB,NameReporter> p_1(a);
+	TemplatedVisitor<VisitableA,NameReporter,VisitableB,NameReporter> p_2(b);
+	TemplatedVisitor<VisitableA,NameReporter,VisitableB,NameReporter> p_3(c);
 }
 
