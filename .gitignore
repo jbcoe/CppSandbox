@@ -56,3 +56,4 @@ FalseSharing/FalseSharing
 PrivateVisitor/PrivateVisitor
 TemplatedVisitor/TemplatedVisitor
 SymmetricMatrix/SymmetricMatrix
+OrderingOfConstructorsAndDestructors/OrderingOfConstructorsAndDestructors
