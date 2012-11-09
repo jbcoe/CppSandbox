@@ -51,59 +51,42 @@ using Index_t = Numerical<Object_t,size_t>;
 class Apples {};
 class Oranges {};
 
-//////////////////////////////////////////////
-
-class Distance;
-class Time;
-class Speed;
-
 /////////////////////////////////////////////
 
 class Distance : public Double_t<Distance> 
 {
-	public:
-
-		explicit Distance (double v) : Double_t<Distance>(v) {}
-
-		Speed operator / (const Time& t) const;
+	public: explicit Distance (double v) : Double_t<Distance>(v) {}
 };
 
 /////////////////////////////////////////////
 
 class Time : public Double_t<Time> 
 {
-	public:
-
-		explicit Time (double v) : Double_t<Time>(v) {}
-
-		Distance operator * (const Speed& s) const;
+	public: explicit Time (double v) : Double_t<Time>(v) {}
 };
 
 /////////////////////////////////////////////
 
 class Speed : public Double_t<Speed> 
 {
-	public:
-		explicit Speed (double v) : Double_t<Speed>(v) {}
-
-		Distance operator * (const Time& t) const;
+	public: explicit Speed (double v) : Double_t<Speed>(v) {}
 };
 
 //////////////////////////////////////////////
 
-Speed Distance::operator / (const Time& t) const 
+static Speed operator / (const Distance& d, const Time& t)
 { 
-	return Speed(underlying_value()/t.underlying_value());
+	return Speed(d.underlying_value()/t.underlying_value());
 }
 
-Distance Time::operator * (const Speed& s) const 
+static Distance operator * (const Time& t, const Speed& s)
 { 
-	return Distance(underlying_value()*s.underlying_value());
+	return Distance(t.underlying_value()*s.underlying_value());
 }
 
-Distance Speed::operator * (const Time& t) const 
+static Distance operator * (const Speed& s, const Time& t)
 { 
-	return Distance(underlying_value()*t.underlying_value());
+	return Distance(s.underlying_value()*t.underlying_value());
 }
 
 //////////////////////////////////////////////
