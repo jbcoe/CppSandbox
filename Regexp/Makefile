@@ -1,7 +1,7 @@
 include ../compilerSettings.mk
 
 CFLAGS:=$(CFLAGS) -DUSE_BOOST
-LDFLAGS:=$(LDFLAGS) -L$(BOOST_LIB) -lboost_regex
+LDFLAGS:=$(LDFLAGS)
 
 SOURCES=Regexp.cpp
 EXECUTABLE=Regexp

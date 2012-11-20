@@ -1,29 +1,18 @@
 #include <iostream>
-
-#ifdef USE_BOOST
-
-#include <boost/regex.hpp>
-
-#else
-
 #include <regex>
-
-#endif
-
 #include <string>
-
-#ifdef USE_BOOST
-namespace re = boost;
-#else
-namespace re = std;
-#endif
 
 int main(int argc, char* argv[])
 {
-	re::cmatch res;
-	std::string str = "<h2>Egg prices</h2>";
-	re::regex rx(">([^<]+)");
-	re::regex_search(str.c_str(), res, rx);
-	std::cout << res[1] << "\n";
+	std::string str = "zzxayyzz";
+	std::regex re1(".*(a|xayy)"); // ECMA
+	std::regex re2(".*(a|xayy)", std::regex::extended); // POSIX
+
+	std::cout << "Searching for .*(a|xayy) in zzxayyzz:\n";
+	std::smatch m;
+	std::regex_search(str, m, re1);
+	std::cout << " ECMA (depth first search) match: " << m[0] << '\n';
+	std::regex_search(str, m, re2);
+	std::cout << " POSIX (leftmost longest)  match: " << m[0] << '\n';
 }
 
