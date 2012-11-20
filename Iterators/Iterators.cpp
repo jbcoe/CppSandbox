@@ -41,7 +41,7 @@ int main(int argc, char* argv[])
 	std::vector<double> vrMoreDoubles;
 
 	std::for_each(vrDoubles.begin(),vrDoubles.end(),
-			[](double& rValue)->double
+			[](double& rValue)
 			{
 				static double generatedValue = 1.0;
 				generatedValue *= 2.0;
