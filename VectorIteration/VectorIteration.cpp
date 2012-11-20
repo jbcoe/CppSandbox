@@ -6,6 +6,7 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#include <memory>
 
 class MemBlock
 {
@@ -13,7 +14,7 @@ class MemBlock
 		template <typename Generator_t>
 			MemBlock(size_t size, Generator_t& g) : m_size(size) 
 		{
-			m_rawMemory = malloc(size);
+			m_rawMemory = (char*)malloc(size);
 			for (size_t i=0; i<(size)/sizeof(size_t); ++i )
 			{
 				*(size_t*)(m_rawMemory+i) = g();
@@ -25,14 +26,14 @@ class MemBlock
 			free(m_rawMemory);
 		}
 		size_t m_size;
-		void* m_rawMemory;
+		char* m_rawMemory;
 };
 
 	template <typename Generator_t>
 double* GetDoublePointer(MemBlock& m, size_t length, Generator_t& g)
 {
 	auto position = g();
-	while ( (position + length * (sizeof(double)/(sizeof(void*)) ) ) >= m.m_size )
+	while ( (position + length * (sizeof(double)/(sizeof(char*)) ) ) >= m.m_size )
 		position = g();
 
 	return reinterpret_cast<double*>(m.m_rawMemory+position);
