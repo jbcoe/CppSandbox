@@ -57,3 +57,4 @@ PrivateVisitor/PrivateVisitor
 TemplatedVisitor/TemplatedVisitor
 SymmetricMatrix/SymmetricMatrix
 OrderingOfConstructorsAndDestructors/OrderingOfConstructorsAndDestructors
+VisitorVsType/VisitorVsType
