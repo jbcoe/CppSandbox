@@ -1,4 +1,4 @@
-FORTRAN=gfortran-mp-4.6
+FORTRAN=gfortran-mp-4.7
 CC=gcc
 
 SOURCES=useDoubler.c           
