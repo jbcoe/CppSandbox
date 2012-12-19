@@ -58,3 +58,4 @@ TemplatedVisitor/TemplatedVisitor
 SymmetricMatrix/SymmetricMatrix
 OrderingOfConstructorsAndDestructors/OrderingOfConstructorsAndDestructors
 VisitorVsType/VisitorVsType
+MoveIterator/MoveIterator
