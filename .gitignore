@@ -60,3 +60,4 @@ OrderingOfConstructorsAndDestructors/OrderingOfConstructorsAndDestructors
 VisitorVsType/VisitorVsType
 MoveIterator/MoveIterator
 LazyInitializer/LazyInitializer
+IterableProxy/IterableProxy
