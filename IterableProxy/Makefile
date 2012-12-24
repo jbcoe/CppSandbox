@@ -5,4 +5,4 @@ EXECUTABLE=IterableProxy
 
 include ../makeCommon.mk                  
 
-IterableProxy.o: IterableProxy.cpp Zoo.hpp
+IterableProxy.o: IterableProxy.cpp IterableProxy.hpp Zoo.hpp
