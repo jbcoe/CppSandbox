@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cassert>
 #include <memory>
 #include <vector>
 
@@ -96,8 +95,6 @@ int main(int argc, char* argv[])
 {
 	Zoo myZoo;
 	
-	assert(myZoo.LionCount() == 10);
-	assert(myZoo.GetLion(0));
 
 	auto iterableLions = make_iterable_proxy<Lion>(
 			[&myZoo](size_t index){ return myZoo.GetLion(index); }, 
