@@ -93,8 +93,9 @@ static Distance operator * (const Speed& s, const Time& t)
 
 int main(int argc, char* argv[])
 {            
-	Int_t<Apples> myAppleCount(5);
-	Int_t<Apples> yourAppleCount(8);
+	using Apple_c = Int_t<Apples>;
+	Apple_c myAppleCount(5);
+	Apple_c yourAppleCount(8);
 
 	auto ourAppleCount = myAppleCount + yourAppleCount;
 	std::cout << "My Apples: " << myAppleCount << "\n";
@@ -103,8 +104,9 @@ int main(int argc, char* argv[])
 
 	std::cout << "\n";
 
-	Int_t<Oranges> myOrangeCount(5);
-	Int_t<Oranges> yourOrangeCount(8);
+	using Orange_c = Int_t<Oranges>;
+	Orange_c myOrangeCount(5);
+	Orange_c yourOrangeCount(8);
 
 	auto ourOrangeCount = myOrangeCount + yourOrangeCount;
 	std::cout << "My Oranges: " << myOrangeCount << "\n";
