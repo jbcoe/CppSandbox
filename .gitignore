@@ -60,3 +60,6 @@ OrderingOfConstructorsAndDestructors/OrderingOfConstructorsAndDestructors
 VisitorVsType/VisitorVsType
 MoveIterator/MoveIterator
 LazyInitializer/LazyInitializer
+IterableProxy/IterableProxy
+TemplatedSorting/TemplatedSorting
+WordCanBeMadeWithLetters/WordCanBeMadeWithLetters
