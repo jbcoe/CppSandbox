@@ -21,39 +21,38 @@ struct ApplyImpl<0, Functor_t, Ts...>
 };
 
 template <typename Functor_t, typename... Ts>
-void Apply(Functor_t f, std::tuple<Ts...> t)
+void Apply(Functor_t f, Ts... ts)
 {
-	ApplyImpl<(int)(sizeof...(Ts)), Functor_t, Ts...>()(f,t); 
+	ApplyImpl<(int)(sizeof...(Ts)), Functor_t, Ts...>()(f,std::make_tuple(ts...)); 
 }
 
-struct Greeter
+struct TypeSpotter
 {
 		void operator()(double v)
 		{
-			std::cout << "Hello double" << std::endl;
+			std::cout << "double" << std::endl;
 		}
 		void operator()(float v)
 		{
-			std::cout << "Hello float" << std::endl;
+			std::cout << "float" << std::endl;
 		}
 		void operator()(int v)
 		{
-			std::cout << "Hello int" << std::endl;
+			std::cout << "int" << std::endl;
 		}
 		void operator()(char v)
 		{
-			std::cout << "Hello char" << std::endl;
+			std::cout << "char" << std::endl;
 		}
 		template <typename T>
 		void operator()(const T& t)
 		{
-			std::cout << "Hello unhandled type" << std::endl;
+			std::cout << "Unknown type" << std::endl;
 		}
 };
 
 int main(int argc, char* argv[])
 {
-	auto myTuple = std::make_tuple(1,2.0f,3.0,'a', Greeter());
-	Apply(Greeter(), myTuple);
+	Apply(TypeSpotter{}, 1, 2.0f, 3.0, 'a', TypeSpotter{}, 0x10);
 }
 
