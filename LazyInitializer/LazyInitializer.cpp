@@ -1,6 +1,6 @@
 #include <iostream>
 
-template <typename Value_t, typename Initializer_t>
+template <typename Value_t, typename Initializer_t=std::function<Value_t (void)>>
 class LazyInitialized
 {
 	public:
@@ -27,20 +27,21 @@ make_lazy_initialized(Initializer_t i)
 
 struct ClassWithLazyMembers
 {
-	LazyInitialized<double, std::function<double (void)> > m_baseLazyValue;
-	LazyInitialized<double, std::function<double (void)> > m_lazyValue;
+	LazyInitialized<double> m_baseLazyValue;
+	LazyInitialized<double> m_lazyValue;
   
 	ClassWithLazyMembers() : 
 		m_baseLazyValue{[]()->double{return 2.0;}},
-		m_lazyValue{[this]()->double{std::cout << "Built member variable" << std::endl; return 2.0 * this->m_baseLazyValue;}} {}
+		m_lazyValue{[this]()->double{std::cout << "Built member variable" << std::endl; return 2.0 * m_baseLazyValue;}} {}
 	
 };
 
 int main(int argc, char* argv[])
 {
-	auto x = make_lazy_initialized<double>([]()->double{std::cout << "Built" << std::endl; return 2.0;});
+	auto x = make_lazy_initialized<double>([]()->double{std::cout << "Built variable" << std::endl; return 2.0;});
 	std::cout << x << std::endl;
 	std::cout << x << std::endl;
+	std::cout << std::endl;
 
 	ClassWithLazyMembers c;
 	std::cout << c.m_lazyValue << std::endl;
