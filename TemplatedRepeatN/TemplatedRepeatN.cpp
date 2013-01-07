@@ -10,6 +10,13 @@ struct Repeat
 		f();
 		Repeat<depth-1>::Do(f);
 	}
+	
+	template <typename F>
+	static void DoWithN(F f)
+	{
+		f(depth);
+		Repeat<depth-1>::DoWithN(f);
+	}
 };
 
 template<>
@@ -20,11 +27,18 @@ struct Repeat <0>
 	{
 		return;
 	}
+	
+	template <typename F>
+	static void DoWithN(F f)
+	{
+		return;
+	}
 };
 
 
 int main(int argc, char* argv[])
 {              
 	Repeat<5>::Do([]{std::cout << "Hello" << std::endl; });
+	Repeat<5>::DoWithN([](int N){std::cout << "Goodbye " << N << std::endl; });
 }
 
