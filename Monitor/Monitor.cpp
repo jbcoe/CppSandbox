@@ -1,5 +1,5 @@
 // Based on Herb Sutter's talk at C++ and beyond 2012
-// He made T t; mutable which I think is incorrect
+// He made operator() const which I think is incorrect
 
 #include <iostream>
 #include <algorithm>
