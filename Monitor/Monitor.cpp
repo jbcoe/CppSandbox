@@ -11,7 +11,7 @@ template <typename T>
 class Monitor
 {
 	T t;
-	mutable std::mutex m;
+	std::mutex m;
 public:
 	Monitor(T _t) : t(_t) {}
 
