@@ -31,19 +31,19 @@ int main(int argc, char* argv[])
 	
 	threads.emplace_back([&](){ 
 			async_ios(
-				[](std::ostream& io){ io << "Hello 1" << std::endl;}); 
+				[](std::ostream& io){ io << "Hello 1 : " << std::this_thread::get_id() << std::endl;}); 
 			});
 	threads.emplace_back([&](){ 
 			async_ios(
-				[](std::ostream& io){ io << "Hello 2" << std::endl;}); 
+				[](std::ostream& io){ io << "Hello 2 : " << std::this_thread::get_id() << std::endl;}); 
 			});
 	threads.emplace_back([&](){ 
 			async_ios(
-				[](std::ostream& io){ io << "Hello 3" << std::endl;}); 
+				[](std::ostream& io){ io << "Hello 3 : " << std::this_thread::get_id() << std::endl;}); 
 			});
 	threads.emplace_back([&](){ 
 			async_ios(
-				[](std::ostream& io){ io << "Hello 4" << std::endl;}); 
+				[](std::ostream& io){ io << "Hello 4 : " << std::this_thread::get_id() << std::endl;}); 
 			});
 
 	for(auto& t : threads) { t.join(); }
