@@ -1,13 +1,11 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/lexical_cast.hpp>
 
-
+using namespace boost;
+using namespace posix_time;
 
 class Timer
 {
-	using namespace boost;
-	using namespace posix_time;
-	
 	public:
 
 		Timer(const char* eventName) : m_event(eventName) 
