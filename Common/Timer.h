@@ -16,7 +16,7 @@ class Timer
 		~Timer()
 		{
 			m_end = microsec_clock::local_time();
-			std::cout << m_event << ' ' << m_end - m_start << std::endl;
+			std::cout << m_event << ' ' << (m_end - m_start).total_milliseconds() << std::endl;
 		}
 
 	private:
