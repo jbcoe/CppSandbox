@@ -59,6 +59,17 @@ int main(int argc, char* argv[])
 	std::cout << "build string with stringstream" << std::endl;
 	RunTasks(100000, streamTaskGenerator);
 	
+	auto toStringTaskGenerator = []()
+	{
+		return []()
+		{
+			auto s = std::to_string(66.6);
+			if ( s == "Nicaragua" ) std::cout << "FAIL" << std::endl;
+		};
+	};
+
+	std::cout << "build string with to_string" << std::endl;
+	RunTasks(100000, streamTaskGenerator);
 	std::mutex m;
 
 	auto mutexTaskGenerator = [&m]()
