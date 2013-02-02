@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
 
   async_ios([&](std::ostream& io){naughtyPointerOS = &io;});
 
-	threads.emplace_back([&](){ *naughtyPointerOS << "Bad pointer let's me break the rules" << std::endl; }); 
-	threads.emplace_back([&](){ *naughtyPointerOS << "Bad pointer let's me break the rules" << std::endl; }); 
-	threads.emplace_back([&](){ *naughtyPointerOS << "Bad pointer let's me break the rules" << std::endl; }); 
+	threads.emplace_back([&](){ *naughtyPointerOS << "Bad pointer lets me break the rules" << std::endl; }); 
+	threads.emplace_back([&](){ *naughtyPointerOS << "Bad pointer lets me break the rules" << std::endl; }); 
+	threads.emplace_back([&](){ *naughtyPointerOS << "Bad pointer lets me break the rules" << std::endl; }); 
 	threads.emplace_back([&](){ 
 			async_ios(
 				[](std::ostream& io){ io << "Hello 1 : " << std::this_thread::get_id() << std::endl;}); 
