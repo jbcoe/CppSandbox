@@ -14,11 +14,11 @@ void data_reading()
 	std::cout << "Input: (Empty line exits) ";
 	while ( getline(std::cin, line) )
 	{
-		if ( line.empty() )
-			break;
 		std::lock_guard<std::mutex> lg(m);
 		messages.push(line);
 		data_condition.notify_one();
+		if ( line.empty() )
+			break;
 	}
 }
 
@@ -31,7 +31,10 @@ void data_printing()
 		auto message = std::move(messages.front());
 		messages.pop();
 		l.unlock();
+		if ( message.empty() )
+			break;
 		std::cout << "READ: " << message << std::endl;
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
 }
 
@@ -39,7 +42,7 @@ int main(int argc, char* argv[])
 {
 	std::thread t_read(data_reading);
 	std::thread t_print(data_printing);
-	t_print.detach();
+	t_print.join();
 	t_read.join();
 }
 
