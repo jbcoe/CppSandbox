@@ -8,33 +8,53 @@ class Numerical
 		typedef Numerical<Object_t, Underlying_t> Numerical_t;
 
 		explicit Numerical(const Underlying_t& value) : m_value(value) {}
+
 		Numerical() : m_value() {}
 		Numerical(const Numerical_t& n) : m_value(n.m_value) {}
-		const Numerical& operator = (const Numerical_t& n) { m_value = n.m_value; return *this; }
-
-		bool operator != (const Numerical_t& n) { return m_value != n.m_value; }
-		bool operator == (const Numerical_t& n) { return m_value == n.m_value; }
-		bool operator < (const Numerical_t& n) { return m_value < n.m_value; }
-		bool operator > (const Numerical_t& n) { return m_value > n.m_value; }
-		bool operator <= (const Numerical_t& n) { return m_value <= n.m_value; }
-		bool operator >= (const Numerical_t& n) { return m_value >= n.m_value; }
-
+		Numerical_t& operator = (const Numerical_t& n) { m_value = n.m_value; return *this; }
+		Numerical(Numerical_t&& n) : m_value(n.m_value) {}
+		Numerical_t& operator = (Numerical_t&& n) { m_value = n.m_value; return *this; }
+		
 		Numerical_t& operator ++ () { ++m_value; return *this; }
 
-		Numerical_t operator + ( const Numerical_t& n) const { return Numerical_t(m_value + n.m_value); }
-		Numerical_t operator - ( const Numerical_t& n) const { return Numerical_t(m_value - n.m_value); }
-		Underlying_t operator / ( const Numerical_t& n) const { return m_value / n.m_value; }
-
-		// If you want operator * implementing then add it yourself using inheritance
-
-		Underlying_t underlying_value() const { return m_value; }
+    Underlying_t underlying_value() const { return m_value; }
 
 	private:
 		Underlying_t m_value;
 };
 
 template <typename Object_t, typename Underlying_t>
-std::ostream& operator << ( std::ostream& os, const Numerical<Object_t, Underlying_t>& n)
+bool operator != (const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2) { return n1.underlying_value() != n2.underlying_value(); }
+
+template <typename Object_t, typename Underlying_t>
+bool operator == (const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2) { return n1.underlying_value() == n2.underlying_value(); }
+
+template <typename Object_t, typename Underlying_t>
+bool operator < (const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2) { return n1.underlying_value() < n2.underlying_value(); }
+
+template <typename Object_t, typename Underlying_t>
+bool operator > (const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2) { return n1.underlying_value() > n2.underlying_value(); }
+
+template <typename Object_t, typename Underlying_t>
+bool operator <= (const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2) { return n1.underlying_value() <= n2.underlying_value(); }
+
+template <typename Object_t, typename Underlying_t>
+bool operator >= (const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2) { return n1.underlying_value() >= n2.underlying_value(); }
+
+template <typename Object_t, typename Underlying_t>
+Numerical<Object_t,Underlying_t> operator + ( const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2)
+{ 
+	return Numerical<Object_t,Underlying_t>(n1.underlying_value() + n2.underlying_value()); 
+}
+
+template <typename Object_t, typename Underlying_t>
+Numerical<Object_t,Underlying_t> operator - ( const Numerical<Object_t,Underlying_t>& n1, const Numerical<Object_t,Underlying_t>& n2)
+{ 
+	return Numerical<Object_t,Underlying_t>(n1.underlying_value() - n2.underlying_value()); 
+}
+
+template <typename OS_t, typename Object_t, typename Underlying_t>
+OS_t& operator << ( OS_t& os, const Numerical<Object_t, Underlying_t>& n)
 {
 	return os << n.underlying_value();
 }
