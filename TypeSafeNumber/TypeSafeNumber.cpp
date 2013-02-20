@@ -68,31 +68,14 @@ using Double_t = Numerical<Object_t,double>;
 template <typename Object_t>
 using Index_t = Numerical<Object_t,size_t>;
 
-class Apples {};
-class Oranges {};
+#ifndef DEFINE_NUMERIC_TYPE
+#define DEFINE_NUMERIC_TYPE(x,underlying_type) class t_##x {}; typedef Numerical<t_##x,underlying_type> x
+#endif
 
-/////////////////////////////////////////////
-
-class Distance : public Double_t<Distance> 
-{
-	public: explicit Distance (double v) : Double_t<Distance>(v) {}
-};
-
-/////////////////////////////////////////////
-
-class Time : public Double_t<Time> 
-{
-	public: explicit Time (double v) : Double_t<Time>(v) {}
-};
-
-/////////////////////////////////////////////
-
-class Speed : public Double_t<Speed> 
-{
-	public: explicit Speed (double v) : Double_t<Speed>(v) {}
-};
-
-//////////////////////////////////////////////
+DEFINE_NUMERIC_TYPE(Squirrel,int);
+DEFINE_NUMERIC_TYPE(Speed,double);
+DEFINE_NUMERIC_TYPE(Distance,double);
+DEFINE_NUMERIC_TYPE(Time,double);
 
 static Speed operator / (const Distance& d, const Time& t)
 { 
@@ -113,9 +96,11 @@ static Distance operator * (const Speed& s, const Time& t)
 
 int main(int argc, char* argv[])
 {            
-	using Apple_c = Int_t<Apples>;
-	Apple_c myAppleCount(5);
-	Apple_c yourAppleCount(8);
+	DEFINE_NUMERIC_TYPE(Apple,int);
+	DEFINE_NUMERIC_TYPE(Orange,int);
+	
+	Apple myAppleCount(5);
+	Apple yourAppleCount(8);
 
 	auto ourAppleCount = myAppleCount + yourAppleCount;
 	std::cout << "My Apples: " << myAppleCount << "\n";
@@ -124,9 +109,8 @@ int main(int argc, char* argv[])
 
 	std::cout << "\n";
 
-	using Orange_c = Int_t<Oranges>;
-	Orange_c myOrangeCount(5);
-	Orange_c yourOrangeCount(8);
+	Orange myOrangeCount(5);
+	Orange yourOrangeCount(8);
 
 	auto ourOrangeCount = myOrangeCount + yourOrangeCount;
 	std::cout << "My Oranges: " << myOrangeCount << "\n";
@@ -135,7 +119,7 @@ int main(int argc, char* argv[])
 
 	std::cout << "\n";
 
-	for ( Index_t<Oranges> i(1), five_oranges(5); i<=five_oranges; ++i )
+	for ( Orange i(1), five_oranges(5); i<=five_oranges; ++i )
 	{
 		std::cout << "Orange counter: " << i << "\n";
 	}
@@ -143,7 +127,7 @@ int main(int argc, char* argv[])
 	// One cannot add apples to oranges
 	//auto ourFruitCount = ourAppleCount + ourOrangeCount; 
 	
-  Speed s = Distance(10.0) / Time(8.0);
+  auto s = Distance(10.0) / Time(8.0);
 
 	std::cout << "\n";
 	
