@@ -7,15 +7,15 @@ struct Repeat
 	template <typename F>
 	static void Do(F f)
 	{
-		f();
 		Repeat<depth-1>::Do(f);
+		f();
 	}
 	
 	template <typename F>
 	static void DoWithN(F f)
 	{
-		f(depth);
 		Repeat<depth-1>::DoWithN(f);
+		f(depth);
 	}
 };
 
