@@ -2,38 +2,48 @@
 #include <future>
 #include <vector>
 
+thread_local int instanceCount = 0;
+
 class TaskCommon
 {       
 	public:
-		thread_local static int instanceCount = 0;
 		TaskCommon() { ++instanceCount; }
 };
-                            
+
 int main(int argc, char* argv[])
 {
-	std::vector<std::future<int>> threadTaskCounts;
+  int counts[] = {0,0};
 
-	threadTaskCounts.push_back(
-			std::async([]()->int
+	std::vector<std::thread> threads;
+
+	threads.emplace_back([&]()
 			{
-			TaskCommon a; 
-			TaskCommon b; 
-			TaskCommon c;
-			return TaskCommon::instanceCount;
-			}));
+				TaskCommon a; 
+				TaskCommon b; 
+				TaskCommon c;
+				counts[0] = instanceCount;
+			});
 
-	threadTaskCounts.push_back(
-			std::async([]()->int
+  int count2 = 0;
+
+	threads.emplace_back([&]()
 			{
-			TaskCommon a; 
-			TaskCommon b; 
-			return TaskCommon::instanceCount;
-			}));
+				TaskCommon a; 
+				TaskCommon b; 
+				counts[1] = instanceCount;
+			});
 
-	for ( std::future<int>& result : threadTaskCounts )
+	for ( auto& t : threads ) t.join();
+
+	std::cout << "Thread 1 created " << counts[0] << " objects" << std::endl;
+	std::cout << "Thread 2 created " << counts[1] << " objects" << std::endl;
+
+	/*
+	for ( auto& result : threadTaskCounts )
 	{
 		static int i=0;
 		std::cout << "Thread " << i++ << " used " << result.get() << " task objects" << std::endl;
 	}
+	*/
 }
 

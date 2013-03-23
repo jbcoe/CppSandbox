@@ -1,4 +1,4 @@
-include ../compilerSettings.mk
+include ../compilerSettings_gcc.mk
 
 SOURCES=ThreadLocal.cpp
 EXECUTABLE=ThreadLocal
