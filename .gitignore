@@ -61,7 +61,6 @@ VisitorVsType/VisitorVsType
 MoveIterator/MoveIterator
 LazyInitializer/LazyInitializer
 IterableProxy/IterableProxy
-TemplatedSorting/TemplatedSorting
 WordCanBeMadeWithLetters/WordCanBeMadeWithLetters
 TupleIteration/TupleIteration
 TupleTie/TupleTie
