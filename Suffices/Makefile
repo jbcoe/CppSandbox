@@ -1,4 +1,4 @@
-include ../compilerSettings_gcc.mk
+include ../compilerSettings.mk
 
 SOURCES=Suffices.cpp
 EXECUTABLE=Suffices
