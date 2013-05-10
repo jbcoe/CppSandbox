@@ -74,3 +74,4 @@ ConditionVariable/ConditionVariable
 VirtualFun/VirtualFun
 BoostOptional/BoostOptional
 UnpackTuples/UnpackTuples
+ZipIterator/ZipIterator
