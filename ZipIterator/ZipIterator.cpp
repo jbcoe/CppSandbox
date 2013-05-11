@@ -25,6 +25,7 @@ public:
     return advanced_it;
 	}
 
+
 private:
   struct Increment
 	{
@@ -36,7 +37,18 @@ private:
 	};
 
 	std::tuple<Iterators...> m_iterators;
+	
+public:
+
+	template <int N>
+  static auto Get(ZipIterator<Iterators...>& z) -> decltype(*std::get<N>(z.m_iterators))
+	{
+		return *std::get<N>(z.m_iterators);
+	}
+
 };
+
+#define ZipIterator_Get(N,x) decltype(x)::Get<N>(x)
 
 template <typename ...Iterators>
 ZipIterator<Iterators...> make_zip_iterator(Iterators... iterators)
@@ -50,9 +62,10 @@ int main(int argc, char* argv[])
 	std::vector<std::string> words = {"one","two","three","four","five"};
 
 	auto it_begin = make_zip_iterator(ints.begin(), words.begin());
-	auto it_end = make_zip_iterator(ints.end(), words.end());
 
-	++it_begin;
-	it_begin[3];
+	for (size_t i=0; i<ints.size(); ++i, ++it_begin)
+	{
+		std::cout << ZipIterator_Get(0,it_begin) << " " << ZipIterator_Get(1,it_begin) << std::endl;
+	} 
 }
 
