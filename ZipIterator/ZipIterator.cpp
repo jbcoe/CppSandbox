@@ -46,6 +46,12 @@ public:
 		return *std::get<N>(z.m_iterators);
 	}
 
+	template <int N>
+  static auto Get(ZipIterator<Iterators...>&& z) -> decltype(*std::get<N>(z.m_iterators))
+	{
+		return *std::get<N>(z.m_iterators);
+	}
+
 };
 
 #define ZipIterator_Get(N,x) decltype(x)::Get<N>(x)
@@ -62,6 +68,8 @@ int main(int argc, char* argv[])
 	std::vector<std::string> words = {"one","two","three","four","five"};
 
 	auto it_begin = make_zip_iterator(ints.begin(), words.begin());
+  
+	std::cout << ZipIterator_Get(1,it_begin[3]) << std::endl;
 
 	for (size_t i=0; i<ints.size(); ++i, ++it_begin)
 	{
