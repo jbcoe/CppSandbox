@@ -4,7 +4,7 @@
 
 namespace detail
 {
-	template<int N, bool AtEnd=false>
+	template<int N, bool B=false>
 		struct DerefencedTuplesAreEqual
 		{
 			template <typename ...Ts>
@@ -63,9 +63,6 @@ class ZipIterator
 
 	private:
 
-		template<int N> friend struct Equal;
-
-
 		struct Increment
 		{
 			template <typename T>
@@ -84,10 +81,7 @@ class ZipIterator
 			{
 				return *std::get<N>(m_iterators);
 			}
-
 };
-
-#define ZipIterator_Get(N,x) decltype(x)::Get<N>(x)
 
 template <typename ...Iterators>
 ZipIterator<Iterators...> make_zip_iterator(Iterators... iterators)
