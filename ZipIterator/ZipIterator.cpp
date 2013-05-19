@@ -93,15 +93,16 @@ int main(int argc, char* argv[])
 {
 	std::vector<int> ints = {1,2,3,4,5};
 	std::vector<std::string> words = {"one","two","three","four","five"};
+	std::vector<std::string> romans = {"I","II","III","IV","V"};
 
-	auto it_begin = make_zip_iterator(ints.begin(), words.begin());
-	auto it_end = make_zip_iterator(ints.end(), words.end());
+	auto it_begin = make_zip_iterator(ints.begin(), words.begin(), romans.begin());
+	auto it_end = make_zip_iterator(ints.end(), words.end(), romans.end());
 
 	std::cout << it_begin[3].Get<0>() << std::endl;
 
 	for (; it_begin!=it_end; ++it_begin)
 	{
-		std::cout << it_begin.Get<0>() << " " << it_begin.Get<1>() << std::endl;
+		std::cout << it_begin.Get<0>() << " " << it_begin.Get<1>() << " " << it_begin.Get<2>() << std::endl;
 	} 
 }
 
