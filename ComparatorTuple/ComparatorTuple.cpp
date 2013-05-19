@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
 	auto b2 = std::make_tuple(1,2.0,Badger{});
 
 	std::set<decltype(b1), ComparatorTuple<std::less<int>,std::less<double>,BadgerLessThan>> bs;
-
+	
 	bs.insert(b1);
 	bs.insert(b2);
 }
