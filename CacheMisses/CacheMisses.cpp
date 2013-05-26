@@ -6,42 +6,46 @@
 #include <Common/Timer.h>
 
 
-	template <typename Inserter_t>
-void RandomFill(Inserter_t inserter, size_t count, const size_t max)
+template <typename Collection_t>
+void RandomOrderedFill(Collection_t& collection, const int maxElement, const size_t count)
 {
-	std::uniform_int_distribution<int> distribution(0,99);
+	std::uniform_int_distribution<int> distribution(0,maxElement);
 	std::mt19937 engine;
 	auto generator = std::bind(distribution,engine);
 
-	std::generate_n(inserter,count,generator);
+	for (size_t i{}; i<count; ++i)
+	{
+		auto v = generator();
+		auto find_insertion_point = std::find_if(collection.begin(),collection.end(),[=](int x){return x>= v;});
+		if ( find_insertion_point == collection.end() )
+			collection.push_back(v);
+		else if ( find_insertion_point != collection.begin() )
+			collection.insert(--find_insertion_point, v);
+		else 
+			collection.insert(collection.begin(), v);
+	}
 }
 
 int main(int argc, char* argv[])
 {
-	size_t numbers{100000};
-	size_t repeats{1000};
+	size_t multiplier = 1;
+	if ( argc > 1 )
+	{
+		multiplier = std::stoi(argv[1]);
+	}
+
+	size_t numbers{ 100000 * multiplier };
 	
-	size_t vector_removed5s{};
 	{
-		std::vector<int> ints{numbers};
-		RandomFill(std::back_inserter(ints), numbers, 10);
-
+		std::vector<int> ints;
 		auto t = make_timer("vector");
-
-		for (size_t i{}; i<repeats; ++i )
-			vector_removed5s += std::distance(std::remove_if(ints.begin(),ints.end(), [](int v){return v == 5;}), ints.end());
+		RandomOrderedFill(ints,100,numbers);
 	}
 
-	size_t list_removed5s{};
 	{
-		std::list<int> ints{numbers};
-		RandomFill(std::back_inserter(ints), numbers, 10);
+		std::list<int> ints;
 		auto t = make_timer("list");
-
-		for (size_t i{}; i<repeats; ++i )
-			list_removed5s += std::distance(std::remove_if(ints.begin(),ints.end(), [](int v){return v == 5;}), ints.end());
+		RandomOrderedFill(ints,100,numbers);
 	}
-
-	return !(vector_removed5s == list_removed5s);
 }
 
