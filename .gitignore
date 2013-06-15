@@ -80,3 +80,4 @@ ExtraAlgorithms/ExtraAlgorithms
 BranchPrediction/BranchPrediction
 CacheMisses/CacheMisses
 RValues/RValues
+GlobalObjects/GlobalObjects
