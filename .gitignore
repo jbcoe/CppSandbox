@@ -76,8 +76,11 @@ BoostOptional/BoostOptional
 UnpackTuples/UnpackTuples
 ZipIterator/ZipIterator
 ComparatorTuple/ComparatorTuple
+<<<<<<< HEAD
 ExtraAlgorithms/ExtraAlgorithms
 BranchPrediction/BranchPrediction
 CacheMisses/CacheMisses
 RValues/RValues
 GlobalObjects/GlobalObjects
+=======
+>>>>>>> parent of 35c541e... Algorithm to do foreach_X_if_C(X)_then_f(X)_else_g(X)
