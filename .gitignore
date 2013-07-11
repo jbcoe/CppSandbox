@@ -86,3 +86,4 @@ GlobalObjects/GlobalObjects
 >>>>>>> parent of 35c541e... Algorithm to do foreach_X_if_C(X)_then_f(X)_else_g(X)
 ReturnTypeDeduction/ReturnTypeDeduction
 MemberFunctionOnNullObject/MemberFunctionOnNullObject
+RValueMemberFunctions/RValueMemberFunctions
