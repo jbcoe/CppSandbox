@@ -1,3 +1,5 @@
+// http://stackoverflow.com/questions/17521238/what-are-rvalue-references-for-this-for
+
 #include <iostream>
 
 class MyClass

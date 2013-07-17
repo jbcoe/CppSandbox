@@ -77,9 +77,14 @@ make_conditional_begin_and_end(Iterator_t begin, Iterator_t end, Functor_t condi
 int main(int argc, char* argv[])
 {   
 	std::vector<int> numbers = {1,2,3,5,6,7,5,4,3,2,3,4,5,7,9,2,1,3,4,5,7,3};
-	auto conditional_begin_end = make_conditional_begin_and_end(numbers.begin(), numbers.end(), [](int x){return x==3;});
+
+	auto isThree = [](int x) { return x == 3; };
+
+	auto conditional_begin_end = make_conditional_begin_and_end(numbers.begin(), numbers.end(), isThree);
 	std::ostream_iterator<int> osi(std::cout, " ");
 
+	std::copy(numbers.begin(), numbers.end(), osi);
+	std::cout << "\n3 appears in the list " << std::count_if(numbers.begin(), numbers.end(), isThree) << " times"<< std::endl;
 	std::copy(conditional_begin_end.first, conditional_begin_end.second, osi);
 	std::cout << std::endl;
 }
