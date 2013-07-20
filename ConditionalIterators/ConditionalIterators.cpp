@@ -60,7 +60,7 @@ class ConditionalIterator
 		Functor_t f_;
 
 	public:
-		auto operator * () -> decltype(*iterator_)
+		auto operator * () const -> decltype(*iterator_)
 		{
 			return *iterator_;
 		}
