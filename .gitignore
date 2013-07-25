@@ -90,3 +90,4 @@ RValueMemberFunctions/RValueMemberFunctions
 ConditionalIterators/ConditionalIterators
 TransformIterator/TransformIterator
 CountEvenNumbers/CountEvenNumbers
+LoggingWithStreams/LoggingWithStreams
