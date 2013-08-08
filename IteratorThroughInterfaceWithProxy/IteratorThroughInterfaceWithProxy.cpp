@@ -29,9 +29,9 @@ class IListOfObjects
 		public:
 			typedef size_t difference_type;
 			typedef size_t size_type;
-			typedef IObject value_type;
-			typedef IObject* pointer;
-			typedef IObject& reference;
+			typedef proxy value_type;
+			typedef proxy* pointer;
+			typedef proxy& reference;
 
 			bool operator==(const iterator& that) const {return m_position==that.m_position;}
 			bool operator!=(const iterator& that) const {return m_position!=that.m_position;}
