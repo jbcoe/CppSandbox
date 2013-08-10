@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <Common/ScopedFunction.h>
+#include <boost/optional.hpp>
 
 template <typename Value_t, typename Initializer_t=std::function<Value_t (void)>>
 class LazyInitialized
@@ -14,19 +15,17 @@ class LazyInitialized
 		{
 			m_i = std::move(that.m_i);
 			m_v = std::move(that.m_v);
-			m_initFlag = std::move(that.m_initFlag);
 		}	
 		
-		operator Value_t() 
+		operator Value_t&()
 		{ 
-			std::call_once(m_initFlag, [this]{ m_v = m_i();});
-			return m_v;
+			if ( ! m_v ) m_v = m_i();
+			return *m_v;
 		}
 
 	private:
 		Initializer_t m_i;
-		Value_t m_v;
-		std::once_flag m_initFlag;
+		boost::optional<Value_t> m_v;
 };
 
 template<typename Value_t, typename Initializer_t>
