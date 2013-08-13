@@ -7,7 +7,7 @@ public:
 	ScopedThread(F_t f) : t_(std::thread(f)) {}
 	
 	ScopedThread(ScopedThread&& s) : t_(std::move(s.t_)) {}
-	ScopedThread operator = (ScopedThread&& s) { t_=std::move(s.t_); }
+	ScopedThread& operator = (ScopedThread&& s) { t_=std::move(s.t_); return *this; }
 	~ScopedThread() { if (t_.joinable()) t_.join(); }
 	
 	ScopedThread(const ScopedThread&) = delete;
