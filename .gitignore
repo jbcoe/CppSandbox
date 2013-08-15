@@ -95,3 +95,5 @@ ThreadIDs/ThreadIDs
 VisitorMatcher/VisitorMatcher
 ConcurrentStack_v1/ConcurrentStack_v1
 ThreadLocal_RAII/ThreadLocal_RAII
+ConcurrentStack_v2/ConcurrentStack_v2
+ConcurrentStack_v0/ConcurrentStack_v0
