@@ -40,7 +40,7 @@ private:
 
 //////////////////////////////////////////////////
 
-struct ClassWithArray : public CRefCounted<ClassWithArray>
+class ClassWithArray : public CRefCounted<ClassWithArray>
 {
 public:
   ClassWithArray() { std::fill(std::begin(data_), std::end(data_), 0); }
@@ -50,7 +50,11 @@ private:
 };
 
 //////////////////////////////////////////////////
-	
+
+class CheapClass : public CRefCounted<CheapClass> {}; 
+
+//////////////////////////////////////////////////
+
 template <typename T>
 void RunDefaultConstructableObjectTimings(size_t objectCount, const char* objectName)
 {
@@ -110,5 +114,6 @@ int main(int argc, char* argv[])
 {
   RunDefaultConstructableObjectTimings<ClassWithVector>(1e5, "ClassWithVector");
   RunDefaultConstructableObjectTimings<ClassWithArray>(1e5, "ClassWithArray");
+  RunDefaultConstructableObjectTimings<CheapClass>(2e6, "CheapClass");
 }
 
