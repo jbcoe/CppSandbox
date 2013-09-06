@@ -5,64 +5,60 @@
 
 //////////////////////////////////////////////////
 
-struct ClassWithVector
-{
-  ClassWithVector() : refCount_(0), data_(1024) 
-	{
-	}
-	~ClassWithVector()
-	{
-	}
-
-	std::atomic<int> refCount_;
-	
-	std::vector<double> data_;
-};
-
-void intrusive_ptr_add_ref(ClassWithVector* p) 
+template <typename T>
+void intrusive_ptr_add_ref(T* p) 
 { 
 	++(p->refCount_); 
 }
-
-void intrusive_ptr_release(ClassWithVector* p) 
+       
+template <typename T>
+void intrusive_ptr_release(T* p) 
 { 
 	if ( ! --p->refCount_ ) delete p; 
 }
 
 //////////////////////////////////////////////////
 
-struct ClassWithArray
+template<typename T>
+class CRefCounted
 {
-  ClassWithArray() : refCount_(0)
-	{
-	}
-	~ClassWithArray()
-	{
-	}
-
-	std::atomic<int> refCount_;
-	
-	std::array<double,1024> data_;
+	friend void intrusive_ptr_add_ref<T>(T* p);
+  friend void intrusive_ptr_release<T>(T* p);
+	std::atomic<int> refCount_{0};	
 };
 
-void intrusive_ptr_add_ref(ClassWithArray* p) 
-{ 
-	++(p->refCount_); 
-}
+//////////////////////////////////////////////////
 
-void intrusive_ptr_release(ClassWithArray* p) 
-{ 
-	if ( ! --p->refCount_ ) delete p; 
-}
+class ClassWithVector : public CRefCounted<ClassWithVector>
+{
+public:
+  ClassWithVector() : data_(1024) {}
+
+private:
+	std::vector<double> data_;
+};
+
+//////////////////////////////////////////////////
+
+struct ClassWithArray : public CRefCounted<ClassWithArray>
+{
+public:
+  ClassWithArray() { std::fill(std::begin(data_), std::end(data_), 0); }
+
+private:
+	std::array<double,1024> data_;
+};
 
 //////////////////////////////////////////////////
 	
 template <typename T>
 void RunDefaultConstructableObjectTimings(size_t objectCount, const char* objectName)
 {
+	std::cout << objectName << std::endl;
+
 	{
 		// No timing, warm up the heap
-		for ( int i=0; i<10; ++i )
+		for ( int i=0; i<1; ++i )
 		{
 			std::vector<std::shared_ptr<T>> objects;
 			std::generate_n(std::back_inserter(objects), objectCount, []{return std::shared_ptr<T>(new T());});
@@ -74,8 +70,6 @@ void RunDefaultConstructableObjectTimings(size_t objectCount, const char* object
 		std::vector<std::shared_ptr<T>> objects;
 		std::generate_n(std::back_inserter(objects), objectCount, []{return std::shared_ptr<T>(new T());});
 	}
-	
-	std::cout << std::endl;
 
 	{
 		auto t = make_timer("std::shared_ptr and make_shared : ", objectName, " ", objectCount);
@@ -83,31 +77,23 @@ void RunDefaultConstructableObjectTimings(size_t objectCount, const char* object
 		std::generate_n(std::back_inserter(objects), objectCount, []{return std::make_shared<T>();});
 	}
 	
-	std::cout << std::endl;
-	
 	{
 		auto t = make_timer("std::unique_ptr and new : ", objectName, " ", objectCount);
 		std::vector<std::unique_ptr<T>> objects;
 		std::generate_n(std::back_inserter(objects), objectCount, []{return std::unique_ptr<T>(new T());});
 	}
 
-	std::cout << std::endl;
-	
 	{
 		auto t = make_timer("boost::shared_ptr and new : ", objectName, " ", objectCount);
 		std::vector<boost::shared_ptr<T>> objects;
 		std::generate_n(std::back_inserter(objects), objectCount, []{return boost::shared_ptr<T>(new T());});
 	}
 	
-	std::cout << std::endl;
-
 	{
 		auto t = make_timer("boost::shared_ptr and make_shared : ", objectName, " ", objectCount);
 		std::vector<boost::shared_ptr<T>> objects;
 		std::generate_n(std::back_inserter(objects), objectCount, []{return boost::make_shared<T>();});
 	}
-	
-	std::cout << std::endl;
 	
 	{
 		auto t = make_timer("boost::intrusive_ptr : ", objectName, " ", objectCount);
@@ -122,7 +108,7 @@ void RunDefaultConstructableObjectTimings(size_t objectCount, const char* object
 
 int main(int argc, char* argv[])
 {
-  RunDefaultConstructableObjectTimings<ClassWithVector>(5e5, "ClassWithVector");
-  RunDefaultConstructableObjectTimings<ClassWithArray>(1e6, "ClassWithArray");
+  RunDefaultConstructableObjectTimings<ClassWithVector>(1e5, "ClassWithVector");
+  RunDefaultConstructableObjectTimings<ClassWithArray>(1e5, "ClassWithArray");
 }
 
