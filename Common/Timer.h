@@ -27,10 +27,28 @@ private:
  	ptime start;
 };
 
+template <typename T>
+void AppendToStream(std::ostream& s, T t)
+{
+	s << t;
+}
+
+template <typename T, typename... Ts>
+void AppendToStream(std::ostream& s, T t, Ts... ts)
+{
+	s << t;
+	AppendToStream(s, ts...);
+}
 
 struct TimingReport
 {
-  TimingReport(const std::string& e) : event(e) {}
+	template<typename... Ts>
+  TimingReport(Ts... ts) 
+	{
+		std::stringstream ss;
+    AppendToStream(ss, ts...);
+		event = ss.str();
+	}
 
   void operator()(long t) const { std::cout << event << " (ms) " << t <<std::endl; }
 
@@ -46,6 +64,9 @@ TTimer<F_t> make_timer(F_t f)
 
 TTimer<TimingReport> make_timer(const char* s) { return make_timer(TimingReport(s)); }
 TTimer<TimingReport> make_timer(const std::string& s) { return make_timer(TimingReport(s)); }
+
+template<typename... Ts>
+TTimer<TimingReport> make_timer(Ts... ts) { return make_timer(TimingReport(ts...)); }
 
 class Timer : TTimer<TimingReport>
 {
