@@ -105,6 +105,13 @@ void RunDefaultConstructableObjectTimings(size_t objectCount, const char* object
 		std::generate_n(std::back_inserter(objects), objectCount, []{return boost::intrusive_ptr<T>(new T());});
 	}
 
+	{
+		auto t = make_timer(objectName, "*  ", objectCount);
+		std::vector<T*> objects;
+		std::generate_n(std::back_inserter(objects), objectCount, []{return new T();});
+		for(auto o : objects) delete o;
+	}
+	
 	std::cout << std::endl;
 }
 
@@ -112,8 +119,8 @@ void RunDefaultConstructableObjectTimings(size_t objectCount, const char* object
 
 int main(int argc, char* argv[])
 {
-  RunDefaultConstructableObjectTimings<ClassWithVector>(1e5, "ClassWithVector");
-  RunDefaultConstructableObjectTimings<ClassWithArray>(1e5, "ClassWithArray");
-  RunDefaultConstructableObjectTimings<CheapClass>(2e6, "CheapClass");
+  RunDefaultConstructableObjectTimings<ClassWithVector>(5e5, "ClassWithVector");
+  RunDefaultConstructableObjectTimings<ClassWithArray>(5e5, "ClassWithArray");
+  RunDefaultConstructableObjectTimings<CheapClass>(2e7, "CheapClass");
 }
 
