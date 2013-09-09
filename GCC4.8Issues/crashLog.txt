@@ -1,18 +1,12 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1187\cocoasubrtf390
-{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
-
-\f0\fs24 \cf0 Process:         a.out [64373]
-Path:            /Users/USER/*/a.out
-Identifier:      a.out
+Process:         GCC4.8Issues [3604]
+Path:            /Users/USER/*/GCC4.8Issues
+Identifier:      GCC4.8Issues
 Version:         0
 Code Type:       X86-64 (Native)
-Parent Process:  bash [243]
+Parent Process:  bash [2491]
 User ID:         501
 
-Date/Time:       2013-09-09 20:26:31.375 +0100
+Date/Time:       2013-09-09 23:02:35.114 +0100
 OS Version:      Mac OS X 10.8.4 (12E55)
 Report Version:  10
 
@@ -22,79 +16,48 @@ Exception Type:  EXC_BAD_INSTRUCTION (SIGILL)
 Exception Codes: 0x0000000000000001, 0x0000000000000000
 
 Application Specific Information:
-*** error for object 0x8000000000000000: pointer being freed was not allocated
+*** error for object 0x1000000000000000: pointer being freed was not allocated
  
 
 Thread 0:: Dispatch queue: com.apple.main-thread
 0   libsystem_kernel.dylib        	0x00007fff89e2a9fa __bsdthread_create + 10
 1   libsystem_c.dylib             	0x00007fff8ab986be pthread_create + 762
-2   libstdc++.6.dylib             	0x0000000108321e7f std::thread::_M_start_thread(std::shared_ptr<std::thread::_Impl_base>) + 81
-3   a.out                         	0x00000001082c67d4 _ZNSt6threadC1IZ4mainEUlvE_IEEEOT_DpOT0_ + 120
-4   a.out                         	0x00000001082c662d main + 72
+2   libstdc++.6.dylib             	0x000000010dd56e7f std::thread::_M_start_thread(std::shared_ptr<std::thread::_Impl_base>) + 81
+3   GCC4.8Issues                  	0x000000010dd06a34 _ZNSt6threadC1IZ4mainEUlvE_IEEEOT_DpOT0_ + 120
+4   GCC4.8Issues                  	0x000000010dd0688d main + 80
 5   libdyld.dylib                 	0x00007fff876ff7e1 start + 1
 
 Thread 1 Crashed:
 0   libsystem_c.dylib             	0x00007fff8abdcee5 __abort + 230
 1   libsystem_c.dylib             	0x00007fff8abdcdff abort + 192
 2   libsystem_c.dylib             	0x00007fff8abb09b9 free + 392
-3   a.out                         	0x00000001082c8ce0 std::_Function_base::_Base_manager<std::_Bind<std::uniform_int_distribution<int> (std::mersenne_twister_engine<unsigned int, 32ul, 624ul, 397ul, 31ul, 2567483615u, 11ul, 4294967295u, 7ul, 2636928640u, 15ul, 4022730752u, 18ul, 1812433253u>)> >::_M_destroy(std::_Any_data&, std::integral_constant<bool, false>) + 35
-4   a.out                         	0x00000001082c866b std::_Function_base::_Base_manager<std::_Bind<std::uniform_int_distribution<int> (std::mersenne_twister_engine<unsigned int, 32ul, 624ul, 397ul, 31ul, 2567483615u, 11ul, 4294967295u, 7ul, 2636928640u, 15ul, 4022730752u, 18ul, 1812433253u>)> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) + 147
-5   a.out                         	0x00000001082c77cd std::_Function_base::~_Function_base() + 51
-6   a.out                         	0x00000001082c79d6 std::function<int ()>::~function() + 24
-7   a.out                         	0x00000001082c9864 ThreadLocalGenerator::~ThreadLocalGenerator() + 24
-8   libstdc++.6.dylib             	0x00000001082e7e29 0x1082e6000 + 7721
+3   GCC4.8Issues                  	0x000000010dd08aac std::_Function_base::_Base_manager<std::_Bind<int (* ())()> >::_M_destroy(std::_Any_data&, std::integral_constant<bool, false>) + 35
+4   GCC4.8Issues                  	0x000000010dd08477 std::_Function_base::_Base_manager<std::_Bind<int (* ())()> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation) + 147
+5   GCC4.8Issues                  	0x000000010dd079d9 std::_Function_base::~_Function_base() + 51
+6   GCC4.8Issues                  	0x000000010dd07be2 std::function<int ()>::~function() + 24
+7   GCC4.8Issues                  	0x000000010dd09290 ThreadLocalGenerator::~ThreadLocalGenerator() + 24
+8   libstdc++.6.dylib             	0x000000010dd1ce29 0x10dd1b000 + 7721
 9   libsystem_c.dylib             	0x00007fff8ab9e4e0 _pthread_tsd_cleanup + 114
 10  libsystem_c.dylib             	0x00007fff8ab97a02 _pthread_exit + 146
 11  libsystem_c.dylib             	0x00007fff8ab977ad _pthread_start + 338
 12  libsystem_c.dylib             	0x00007fff8ab841e1 thread_start + 13
 
 Thread 2:
-0   libsystem_kernel.dylib        	0x00007fff89e29686 mach_msg_trap + 10
-1   libsystem_kernel.dylib        	0x00007fff89e28c42 mach_msg + 70
-2   libsystem_kernel.dylib        	0x00007fff89e24578 semaphore_create + 99
-3   libsystem_c.dylib             	0x00007fff8ab993bd new_sem_from_pool + 148
-4   libsystem_c.dylib             	0x00007fff8ab97c8b _pthread_exit + 795
-5   libsystem_c.dylib             	0x00007fff8ab977ad _pthread_start + 338
-6   libsystem_c.dylib             	0x00007fff8ab841e1 thread_start + 13
-
-Thread 3:
-0   libsystem_c.dylib             	0x00007fff8ab85fa9 _spin_lock$VARIANT$mp + 25
-1   libsystem_c.dylib             	0x00007fff8ab99348 new_sem_from_pool + 31
-2   libsystem_c.dylib             	0x00007fff8ab97c8b _pthread_exit + 795
-3   libsystem_c.dylib             	0x00007fff8ab977ad _pthread_start + 338
-4   libsystem_c.dylib             	0x00007fff8ab841e1 thread_start + 13
-
-Thread 4:
-0   a.out                         	0x00000001082c801d std::_Weak_result_type<std::uniform_int_distribution<int> >::_Weak_result_type() + 19
-1   a.out                         	0x00000001082c8256 std::_Bind<std::uniform_int_distribution<int> (std::mersenne_twister_engine<unsigned int, 32ul, 624ul, 397ul, 31ul, 2567483615u, 11ul, 4294967295u, 7ul, 2636928640u, 15ul, 4022730752u, 18ul, 1812433253u>)>::_Bind(std::_Bind<std::uniform_int_distribution<int> (std::mersenne_twister_engine<unsigned int, 32ul, 624ul, 397ul, 31ul, 2567483615u, 11ul, 4294967295u, 7ul, 2636928640u, 15ul, 4022730752u, 18ul, 1812433253u>)>&&) + 28
-2   a.out                         	0x00000001082c7ca1 std::enable_if<std::function<int ()>::_CheckResult<decltype(__callable_functor(declval<std::_Bind<std::uniform_int_distribution<int> (std::mersenne_twister_engine<unsigned int, 32ul, 624ul, 397ul, 31ul, 2567483615u, 11ul, 4294967295u, 7ul, 2636928640u, 15ul, 4022730752u, 18ul, 1812433253u>)>&>())()), int>::value, std::function<int ()>&>::type std::function<int ()>::operator=<std::_Bind<std::uniform_int_distribution<int> (std::mersenne_twister_engine<unsigned int, 32ul, 624ul, 397ul, 31ul, 2567483615u, 11ul, 4294967295u, 7ul, 2636928640u, 15ul, 4022730752u, 18ul, 1812433253u>)> >(std::_Bind<std::uniform_int_distribution<int> (std::mersenne_twister_engine<unsigned int, 32ul, 624ul, 397ul, 31ul, 2567483615u, 11ul, 4294967295u, 7ul, 2636928640u, 15ul, 4022730752u, 18ul, 1812433253u>)>&&&) + 61
-3   a.out                         	0x00000001082c7a70 ThreadLocalGenerator::ThreadLocalGenerator() + 152
-4   a.out                         	0x00000001082c73fd __tls_init + 69
-5   a.out                         	0x00000001082c986f _ZTW9generator + 9
-6   a.out                         	0x00000001082c65a9 main::'lambda'()::operator()() const + 17
-7   a.out                         	0x00000001082c768a _ZNSt12_Bind_simpleIFZ4mainEUlvE_vEE9_M_invokeIIEEEvSt12_Index_tupleIIXspT_EEE + 40
-8   a.out                         	0x00000001082c75d7 std::_Bind_simple<main::'lambda'() ()>::operator()() + 27
-9   a.out                         	0x00000001082c7570 std::thread::_Impl<std::_Bind_simple<main::'lambda'() ()> >::_M_run() + 28
-10  libstdc++.6.dylib             	0x0000000108321de6 0x1082e6000 + 245222
-11  libsystem_c.dylib             	0x00007fff8ab977a2 _pthread_start + 327
-12  libsystem_c.dylib             	0x00007fff8ab841e1 thread_start + 13
-
-Thread 5:
 0   libsystem_c.dylib             	0x00007fff8ab841d4 thread_start + 0
 
 Thread 1 crashed with X86 Thread State (64-bit):
-  rax: 0x0000000000000000  rbx: 0x0000000131090d20  rcx: 0x00007fff89e2c342  rdx: 0x0000000000000000
-  rdi: 0x0000000000000003  rsi: 0x0000000131090cf0  rbp: 0x0000000131090d00  rsp: 0x0000000131090d00
+  rax: 0x0000000000000000  rbx: 0x000000010ded1d20  rcx: 0x00007fff89e2c342  rdx: 0x0000000000000000
+  rdi: 0x0000000000000003  rsi: 0x000000010ded1cf0  rbp: 0x000000010ded1d00  rsp: 0x000000010ded1d00
    r8: 0x0000000000000000   r9: 0x0000000000989680  r10: 0x00000000ffffffff  r11: 0x0000000000000246
-  r12: 0x00000001082df000  r13: 0x00000001082e1000  r14: 0x8000000000000000  r15: 0x0000000000000001
-  rip: 0x00007fff8abdcee5  rfl: 0x0000000000010202  cr2: 0x0000000140b4da58
-Logical CPU: 3
+  r12: 0x000000010dd19000  r13: 0x000000010de0e000  r14: 0x1000000000000000  r15: 0x0000000000000001
+  rip: 0x00007fff8abdcee5  rfl: 0x0000000000010202  cr2: 0x00007f86a4006000
+Logical CPU: 0
 
 Binary Images:
-       0x1082c5000 -        0x1082cdfff +a.out (0) <BA07D09A-28E6-399C-A61A-F2C6D9951B64> /Users/USER/*/a.out
-       0x1082e6000 -        0x10835ffff +libstdc++.6.dylib (0) <B004459E-B751-3697-A8F8-D4711B05973C> /opt/local/lib/*/libstdc++.6.dylib
-       0x1083e0000 -        0x1083efff7 +libgcc_s.1.dylib (0) <F4EA6AD6-06D5-3AC3-B8F5-8C7868FAB033> /opt/local/lib/*/libgcc_s.1.dylib
-    0x7fff67ec5000 -     0x7fff67ef993f  dyld (210.2.3) <A40597AA-5529-3337-8C09-D8A014EB1578> /usr/lib/dyld
+       0x10dd06000 -        0x10dd0cff7 +GCC4.8Issues (0) <412189E8-FB8E-398F-897F-4032F583FF70> /Users/USER/*/GCC4.8Issues
+       0x10dd1b000 -        0x10dd94fff +libstdc++.6.dylib (0) <B004459E-B751-3697-A8F8-D4711B05973C> /opt/local/lib/*/libstdc++.6.dylib
+       0x10de0f000 -        0x10de1eff7 +libgcc_s.1.dylib (0) <F4EA6AD6-06D5-3AC3-B8F5-8C7868FAB033> /opt/local/lib/*/libgcc_s.1.dylib
+    0x7fff6d906000 -     0x7fff6d93a93f  dyld (210.2.3) <A40597AA-5529-3337-8C09-D8A014EB1578> /usr/lib/dyld
     0x7fff858d8000 -     0x7fff858d9ff7  libSystem.B.dylib (169.3) <365477AB-D641-389D-B8F4-A1FAE9657EEE> /usr/lib/libSystem.B.dylib
     0x7fff859ce000 -     0x7fff859cfff7  libremovefile.dylib (23.2) <6763BC8E-18B8-3AD9-8FFA-B43713A7264F> /usr/lib/system/libremovefile.dylib
     0x7fff85ac0000 -     0x7fff85ae5ff7  libc++abi.dylib (26) <D86169F3-9F31-377A-9AF3-DB17142052E4> /usr/lib/libc++abi.dylib
@@ -137,26 +100,25 @@ External Modification Summary:
     thread_create: 0
     thread_set_state: 0
   Calls made by all processes on this machine:
-    task_for_pid: 1869
+    task_for_pid: 2245
     thread_create: 1
     thread_set_state: 0
 
 VM Region Summary:
-ReadOnly portion of Libraries: Total=57.5M resident=37.5M(65%) swapped_out_or_unallocated=20.0M(35%)
-Writable regions: Total=97.0M written=14.4M(15%) resident=14.5M(15%) swapped_out=0K(0%) unallocated=82.5M(85%)
+ReadOnly portion of Libraries: Total=57.5M resident=38.0M(66%) swapped_out_or_unallocated=19.4M(34%)
+Writable regions: Total=56.7M written=7644K(13%) resident=7724K(13%) swapped_out=0K(0%) unallocated=49.2M(87%)
  
 REGION TYPE                      VIRTUAL
 ===========                      =======
-MALLOC                             72.2M
+MALLOC                             40.2M
 MALLOC guard page                    16K
 STACK GUARD                        56.0M
-Stack                              24.5M
+Stack                              16.2M
 VM_ALLOCATE                           4K
 __DATA                              808K
-__LINKEDIT                         52.5M
-__TEXT                             5160K
+__LINKEDIT                         52.4M
+__TEXT                             5152K
 shared memory                        12K
 ===========                      =======
-TOTAL                             211.1M
+TOTAL                             170.7M
 
- }

@@ -1,12 +1,12 @@
 // Submitted as GCC bug http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58366
 
-#include <iostream>
-#include <vector>
-#include <atomic>
-#include <random>
 #include <thread>
+#include <vector>
 
-std::atomic<long> generatorCount{0};
+int GetInteger()
+{
+	return 5;
+}
 
 class ThreadLocalGenerator
 {
@@ -15,9 +15,7 @@ class ThreadLocalGenerator
 	public:
   ThreadLocalGenerator()
 	{
-		std::mt19937 engine(generatorCount++);
-		std::uniform_int_distribution<int> distribution(-5,5);
-		f_ = std::bind(distribution, engine);
+		f_ = std::bind(GetInteger);
 	}
 
 	int operator()()
@@ -28,20 +26,19 @@ class ThreadLocalGenerator
 
 thread_local ThreadLocalGenerator generator{};
 
+enum { BIG_COUNT = 10000 };
+
 int main(int argc, char* argv[])
 {
-  int BIG_COUNT = 10000;
+	int impossible_error_count = 0;
 
 	std::vector<std::thread> generators;
 	for(int i=0; i<BIG_COUNT; ++i)
 	{
 		generators.push_back(std::thread([&] 
 		{ 
-			int local_total = 0;
-			{ 
-				if ( generator() == 42 )
-					std::cout << "Oh no!" << std::endl; //Cannot be hit
-			} 
+			//Prevent dead code optimisation by using the result of generator()
+			if ( generator() == 42 ) ++impossible_error_count; 
 		}));
 	}
 
