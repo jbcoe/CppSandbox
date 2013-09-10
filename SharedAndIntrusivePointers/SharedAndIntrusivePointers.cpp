@@ -23,7 +23,7 @@ template<typename T>
 class CRefCounted
 {
 	friend void intrusive_ptr_add_ref<T>(T* p);
-  friend void intrusive_ptr_release<T>(T* p);
+	friend void intrusive_ptr_release<T>(T* p);
 	std::atomic<int> refCount_{0};	
 };
 
