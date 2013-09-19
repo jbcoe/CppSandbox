@@ -4,32 +4,35 @@
 
 ////////////////////////////////////////////
 
-template<typename T, typename TInterface>
+template <typename T, typename TInterface>
 struct TSetImpl : public TInterface
 {
-	virtual void doThing(){std::cout << "CSetImpl" << std::endl;}
+  virtual void doThing()
+  {
+    std::cout << "CSetImpl" << std::endl;
+  }
 };
 
 ////////////////////////////////////////////
 
-struct IPublic 
+struct IPublic
 {
-	virtual void doThing() = 0;
+  virtual void doThing() = 0;
 };
 
 ////////////////////////////////////////////
 
-struct CPublicImpl : public TSetImpl<int,IPublic>
+struct CPublicImpl : public TSetImpl<int, IPublic>
 {
 };
 
 ////////////////////////////////////////////
 
-int main() 
+int main()
 {
-	CPublicImpl p;
-	p.doThing();
-	return 0;
+  CPublicImpl p;
+  p.doThing();
+  return 0;
 }
 
 ////////////////////////////////////////////

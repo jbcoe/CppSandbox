@@ -1,168 +1,169 @@
 #include <iostream>
 #include <vector>
 
-template <class T> class malloc_allocator
+template <class T>
+class malloc_allocator
 {
-	public:
-		typedef T                 value_type;
-		typedef value_type*       pointer;
-		typedef const value_type* const_pointer;
-		typedef value_type&       reference;
-		typedef const value_type& const_reference;
-		typedef std::size_t       size_type;
-		typedef std::ptrdiff_t    difference_type;
+public:
+  typedef T value_type;
+  typedef value_type* pointer;
+  typedef const value_type* const_pointer;
+  typedef value_type& reference;
+  typedef const value_type& const_reference;
+  typedef std::size_t size_type;
+  typedef std::ptrdiff_t difference_type;
 
-		template <class U> 
-			struct rebind 
-			{ 
-				typedef malloc_allocator<U> other; 
-			};
+  template <class U>
+  struct rebind
+  {
+    typedef malloc_allocator<U> other;
+  };
 
-		malloc_allocator() 
-		{
-			std::cout << "Created a malloc_allocator" << std::endl;
-		}
+  malloc_allocator()
+  {
+    std::cout << "Created a malloc_allocator" << std::endl;
+  }
 
-		malloc_allocator(const malloc_allocator&) 
-		{
-			std::cout << "Copied a malloc_allocator" << std::endl;
-		}
+  malloc_allocator(const malloc_allocator&)
+  {
+    std::cout << "Copied a malloc_allocator" << std::endl;
+  }
 
-		template <class U> 
-			malloc_allocator(const malloc_allocator<U>&) 
-			{
-				std::cout << "Copy-constructed an allocator" << std::endl;
-			}
+  template <class U>
+  malloc_allocator(const malloc_allocator<U>&)
+  {
+    std::cout << "Copy-constructed an allocator" << std::endl;
+  }
 
-		template <class U> 
-			malloc_allocator(malloc_allocator<U>&&) 
-			{
-				std::cout << "Move-constructed an allocator" << std::endl;
-			}
+  template <class U>
+  malloc_allocator(malloc_allocator<U>&&)
+  {
+    std::cout << "Move-constructed an allocator" << std::endl;
+  }
 
-		~malloc_allocator() 
-		{
-			std::cout << "Deleted a malloc_allocator" << std::endl;
-		}
+  ~malloc_allocator()
+  {
+    std::cout << "Deleted a malloc_allocator" << std::endl;
+  }
 
-		pointer address(reference x) const 
-		{ 
-			std::cout << "Request for address of object returned " 
-				<< &x << std::endl;
-			return &x; 
-		}
+  pointer address(reference x) const
+  {
+    std::cout << "Request for address of object returned " << &x << std::endl;
+    return &x;
+  }
 
-		const_pointer address(const_reference x) const 
-		{ 
-			return x;
-		}
+  const_pointer address(const_reference x) const
+  {
+    return x;
+  }
 
-		pointer allocate(size_type n, const_pointer = 0) 
-		{
-			void* p = std::malloc(n * sizeof(T));
-			if (!p)
-				throw std::bad_alloc();
+  pointer allocate(size_type n, const_pointer = 0)
+  {
+    void* p = std::malloc(n * sizeof(T));
+    if (!p)
+      throw std::bad_alloc();
 
-			std::cout << "Allocator: Allocated a block of memory of size " 
-				<< n*sizeof(T) << std::endl;
+    std::cout << "Allocator: Allocated a block of memory of size "
+              << n * sizeof(T) << std::endl;
 
-			return static_cast<pointer>(p);
-		}
+    return static_cast<pointer>(p);
+  }
 
-		void deallocate(pointer p, size_type n) 
-		{ 
-			std::free(p); 
-			std::cout << "Allocator: Freed a block of memory of size "
-				<< n*sizeof(T) << std::endl;
-		}
+  void deallocate(pointer p, size_type n)
+  {
+    std::free(p);
+    std::cout << "Allocator: Freed a block of memory of size " << n * sizeof(T)
+              << std::endl;
+  }
 
-		size_type max_size() const 
-		{
-			std::cout << "Request for max size returned " 
-				<< static_cast<size_type>(-1)/sizeof(T) << std::endl;
-			return static_cast<size_type>(-1) / sizeof(T);
-		}
+  size_type max_size() const
+  {
+    std::cout << "Request for max size returned "
+              << static_cast<size_type>(-1) / sizeof(T) << std::endl;
+    return static_cast<size_type>(-1) / sizeof(T);
+  }
 
-		void construct(pointer p, const value_type& x) 
-		{
-			std::cout << "Allocator: Copy constructing an object" << std::endl;
-			new(p) value_type(x); 
-		}
+  void construct(pointer p, const value_type& x)
+  {
+    std::cout << "Allocator: Copy constructing an object" << std::endl;
+    new (p) value_type(x);
+  }
 
-		void construct(pointer p, value_type&& x) 
-		{
-			std::cout << "Allocator: Move constructing an object" << std::endl;
-			new(p) value_type(std::move(x)); 
-		}
+  void construct(pointer p, value_type&& x)
+  {
+    std::cout << "Allocator: Move constructing an object" << std::endl;
+    new (p) value_type(std::move(x));
+  }
 
-		void destroy(pointer p) 
-		{ 
-			std::cout << "Allocator: Destroying an object" << std::endl;
-			p->~value_type(); 
-		}
+  void destroy(pointer p)
+  {
+    std::cout << "Allocator: Destroying an object" << std::endl;
+    p->~value_type();
+  }
 
-	private:
-		void operator=(const malloc_allocator&);
+private:
+  void operator=(const malloc_allocator&);
 };
 
-template<> class malloc_allocator<void>
+template <>
+class malloc_allocator<void>
 {
-	typedef void        value_type;
-	typedef void*       pointer;
-	typedef const void* const_pointer;
+  typedef void value_type;
+  typedef void* pointer;
+  typedef const void* const_pointer;
 
-	template <class U> 
-		struct rebind { typedef malloc_allocator<U> other; };
+  template <class U>
+  struct rebind
+  {
+    typedef malloc_allocator<U> other;
+  };
 };
 
-	template <class T>
-inline bool operator==(const malloc_allocator<T>&, 
-		const malloc_allocator<T>&) 
+template <class T>
+inline bool operator==(const malloc_allocator<T>&, const malloc_allocator<T>&)
 {
-	return true;
+  return true;
 }
 
-	template <class T>
-inline bool operator!=(const malloc_allocator<T>&, 
-		const malloc_allocator<T>&) 
+template <class T>
+inline bool operator!=(const malloc_allocator<T>&, const malloc_allocator<T>&)
 {
-	return false;
+  return false;
 }
 
 
 class MyClass
 {
-	public:
+public:
 
-		MyClass() 
-		{ 
-			std::cout << "My Class instance constructed" << std::endl;
-		}
+  MyClass()
+  {
+    std::cout << "My Class instance constructed" << std::endl;
+  }
 
-		MyClass(const MyClass&) 
-		{
-			std::cout << "My Class instance copy-constructed" << std::endl;
-		}
+  MyClass(const MyClass&)
+  {
+    std::cout << "My Class instance copy-constructed" << std::endl;
+  }
 
-		MyClass(MyClass&&) 
-		{
-			std::cout << "My Class instance move-constructed" << std::endl;
-		}
+  MyClass(MyClass&&)
+  {
+    std::cout << "My Class instance move-constructed" << std::endl;
+  }
 
-	private:
-		int m_x;
-		int m_y;
-		int m_z;
+private:
+  int m_x;
+  int m_y;
+  int m_z;
 };
 
 int main(int argc, char* argv[])
 {
-	std::vector<MyClass,malloc_allocator<MyClass>> myVector;
-	myVector.reserve(10);
-	std::cout << "============" << std::endl;
-	myVector.push_back(MyClass());
-	std::cout << "============" << std::endl;
-	MyClass classInstance;
-	myVector.push_back(classInstance);
+  std::vector<MyClass, malloc_allocator<MyClass>> myVector;
+  myVector.reserve(10);
+  std::cout << "============" << std::endl;
+  myVector.push_back(MyClass());
+  std::cout << "============" << std::endl;
+  MyClass classInstance;
+  myVector.push_back(classInstance);
 }
-

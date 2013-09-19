@@ -1,17 +1,17 @@
 #include <iostream>
 
-struct Base 
+struct Base
 {
-	virtual void DoThing() const final 
-	{
-	}
+  virtual void DoThing() const final
+  {
+  }
 };
 
 struct Derived final : Base
 {
-	virtual void DoThing() const final 
-	{
-	}
+  virtual void DoThing() const final
+  {
+  }
 };
 
 struct FurtherDerived : Derived
@@ -21,4 +21,3 @@ struct FurtherDerived : Derived
 int main(int argc, char* argv[])
 {
 }
-

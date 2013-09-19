@@ -6,19 +6,19 @@
 #include <numeric>
 
 template <typename T>
-void print_all( T first, T last)
-{                           
-	if ( first == last )
-		return; 
-	while ( first != last )
-		std::cout << *first++ << ' ';
-	std::cout << std::endl;
+void print_all(T first, T last)
+{
+  if (first == last)
+    return;
+  while (first != last)
+    std::cout << *first++ << ' ';
+  std::cout << std::endl;
 }
 
 template <typename T>
-void print_sum( T first, T last)
+void print_sum(T first, T last)
 {
-	std::cout << std::accumulate(first,last,0) << std::endl;
+  std::cout << std::accumulate(first, last, 0) << std::endl;
 }
 
 typedef std::vector<double>::const_iterator DVec_it;
@@ -26,36 +26,30 @@ typedef std::vector<double>::const_iterator DVec_it;
 
 void Hello(const std::string& name)
 {
-	std::cout << "Hello " << name << std::endl;
+  std::cout << "Hello " << name << std::endl;
 }
 
 
 int main(int argc, char* argv[])
 {
-	auto HelloWorld = boost::bind(Hello,"World");
+  auto HelloWorld = boost::bind(Hello, "World");
 
-	boost::signal<void ()> signal;
-	signal.connect(HelloWorld);
-  signal.connect(boost::bind(Hello,"Natalia"));
+  boost::signal<void()> signal;
+  signal.connect(HelloWorld);
+  signal.connect(boost::bind(Hello, "Natalia"));
 
-	signal();                                  
+  signal();
 
-	boost::signal2<void,
-			DVec_it,
-			DVec_it > listSignal;
+  boost::signal2<void, DVec_it, DVec_it> listSignal;
 
-	std::vector<double> myList = {1.0, 2.0, 3.0};
+  std::vector<double> myList = {1.0, 2.0, 3.0};
 
-	listSignal.connect(&print_all<DVec_it>);
-	
-	listSignal.connect(&print_sum<DVec_it>); 
+  listSignal.connect(&print_all<DVec_it>);
 
-	listSignal.connect( boost::bind(
-			std::accumulate<DVec_it, double>, 
-			_1, 
-			_2, 
-			0.0));
+  listSignal.connect(&print_sum<DVec_it>);
 
-	listSignal(myList.begin(),myList.end());
+  listSignal.connect(
+      boost::bind(std::accumulate<DVec_it, double>, _1, _2, 0.0));
+
+  listSignal(myList.begin(), myList.end());
 }
-

@@ -5,45 +5,49 @@
 
 int GetInteger()
 {
-	return 5;
+  return 5;
 }
 
 class ThreadLocalGenerator
 {
-	std::function<int (void)> f_;
+  std::function<int(void)> f_;
 
-	public:
+public:
   ThreadLocalGenerator()
-	{
-		f_ = std::bind(GetInteger);
-	}
+  {
+    f_ = std::bind(GetInteger);
+  }
 
-	int operator()()
-	{ 
-		return f_(); 
-	}
+  int operator()()
+  {
+    return f_();
+  }
 };
 
 thread_local ThreadLocalGenerator generator{};
 
-enum { BIG_COUNT = 10000 };
+enum
+{
+  BIG_COUNT = 10000
+};
 
 int main(int argc, char* argv[])
 {
-	int impossible_error_count = 0;
+  int impossible_error_count = 0;
 
-	std::vector<std::thread> generators;
-	for(int i=0; i<BIG_COUNT; ++i)
-	{
-		generators.push_back(std::thread([&] 
-		{ 
-			//Prevent dead code optimisation by using the result of generator()
-			if ( generator() == 42 ) ++impossible_error_count; 
-		}));
-	}
+  std::vector<std::thread> generators;
+  for (int i = 0; i < BIG_COUNT; ++i)
+  {
+    generators.push_back(std::thread([&]
+    {
+      // Prevent dead code optimisation by using the result of generator()
+      if (generator() == 42)
+        ++impossible_error_count;
+    }));
+  }
 
-	for(auto& t : generators) t.join();
+  for (auto& t : generators)
+    t.join();
 
   return 0;
 }
-
