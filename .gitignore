@@ -102,3 +102,4 @@ GCC4.8Issues/GCC4.8Issues
 CX16/CX16
 SharedAndIntrusivePointers/SharedAndIntrusivePointers
 TemporaryStrings/TemporaryStrings
+LargestSumOfConsecutiveElements/LargestSumOfConsecutiveElements
