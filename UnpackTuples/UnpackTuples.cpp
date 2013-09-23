@@ -68,18 +68,45 @@ struct ToStream
   std::ostream& m_os;
 };
 
+template<int N>
+struct apply_void_impl
+{
+	template <typename Functor, typename... Ts>
+	void operator()(Functor f, const std::tuple<Ts...>& t)
+	{
+		apply_void_impl<N-1>()(f, t);
+		f(std::get<N>(t));
+	}
+};
+
+template<>
+struct apply_void_impl<0>
+{
+	template<typename Functor, typename... Ts>
+	void operator()(Functor f, const std::tuple<Ts...>& t)
+	{
+ 	 f(std::get<0>(t));
+	}
+};
+
+template<typename Functor, typename... Ts>
+static void apply_void(Functor f, const std::tuple<Ts...>& t)
+{
+	apply_void_impl<sizeof...(Ts)-1>()(f,t);
+}
+
 template <typename... Ts>
 std::ostream& operator<<(std::ostream& os, std::tuple<Ts...> t)
 {
   os << '(';
-  apply_f(ToStream(os), t);
+	apply_void(ToStream(os), t);
   os << "\b)";
   return os;
 }
 
 int main()
 {
-  std::tuple<int, double, char> x(5, 1.5, 'a');
+  auto x = std::make_tuple(5, 1.5, -1, ' ');
   auto y = apply_f(MyFunctor(), x);
 
   std::cout << "Before: " << x << " After: " << y << std::endl;
