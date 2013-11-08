@@ -33,8 +33,8 @@ int main(int argc, char* argv[])
         return -1;
     }
   }
-  
-	{
+
+  {
     auto t = make_timer("Big String");
     for (int i = 0; i < repeat; ++i)
     {
@@ -54,4 +54,3 @@ int main(int argc, char* argv[])
   }
   return 0;
 }
-

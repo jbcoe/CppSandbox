@@ -37,7 +37,6 @@ int main(int argc, char* argv[])
   auto returnMyClass = []()->const MyClass
   {
     return MyClass();
-  }
-  ;
+  };
   returnMyClass().DoThing();
 }

@@ -86,8 +86,8 @@ int main(int argc, char** argv)
   std::vector<std::unique_ptr<O>> myObjects;
 
   bool bBuildA = true;
-  std::generate_n(std::back_inserter(myObjects),
-                  count, [&bBuildA]()->std::unique_ptr<O>
+  std::generate_n(std::back_inserter(myObjects), count,
+                  [&bBuildA]()->std::unique_ptr<O>
   {
     std::unique_ptr<O> ptr;
     if (bBuildA)
@@ -99,7 +99,7 @@ int main(int argc, char** argv)
   });
 
   int a_count0 = std::count_if(myObjects.begin(), myObjects.end(),
-                               [&](std::unique_ptr<O> & po)
+                               [&](std::unique_ptr<O>& po)
   { return po == 0; });
 
   int a_count1 = 0;
@@ -107,7 +107,7 @@ int main(int argc, char** argv)
     Timer t("Visitor");
     IsAGetter isAGetter;
     a_count1 = std::count_if(myObjects.begin(), myObjects.end(),
-                             [&](std::unique_ptr<O> & po)
+                             [&](std::unique_ptr<O>& po)
     { return isAGetter.IsA(*po); });
   }
 
@@ -116,7 +116,7 @@ int main(int argc, char** argv)
     Timer t("GetType");
     IsAGetter isAGetter;
     a_count2 = std::count_if(myObjects.begin(), myObjects.end(),
-                             [&](std::unique_ptr<O> & po)
+                             [&](std::unique_ptr<O>& po)
     { return po->GetType() == Type_A; });
   }
 

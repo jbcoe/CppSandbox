@@ -38,7 +38,6 @@ public:
 class IZoo
 {
 public:
-
   virtual ~IZoo()
   {
   }
@@ -56,7 +55,6 @@ public:
 class Zoo : public IZoo
 {
 public:
-
   Zoo()
   {
     std::generate_n(std::back_inserter(m_lions), 10, []()

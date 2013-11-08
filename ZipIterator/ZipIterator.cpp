@@ -67,7 +67,6 @@ public:
   }
 
 private:
-
   struct Increment
   {
     template <typename T>
@@ -80,7 +79,6 @@ private:
   std::tuple<Iterators...> m_iterators;
 
 public:
-
   template <int N>
   auto Get() -> decltype(*std::get<N>(m_iterators))
   {

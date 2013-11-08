@@ -4,7 +4,6 @@ template <typename Object_t, typename Underlying_t>
 class Numerical
 {
 public:
-
   typedef Numerical<Object_t, Underlying_t> Numerical_t;
 
   explicit Numerical(const Underlying_t& value) : m_value(value)

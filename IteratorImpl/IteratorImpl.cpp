@@ -31,11 +31,9 @@ protected:
   };
 
 public:
-
   class iterator
   {
   public:
-
     typedef T value_type;
     typedef std::ptrdiff_t difference_type;
     typedef T* pointer;
@@ -61,26 +59,22 @@ public:
     {
       itImpl->operator++();
       return *this;
-    }
-    ;
+    };
 
     bool operator==(const iterator& it) const
     {
       return itImpl->operator==(*it.itImpl);
-    }
-    ;
+    };
 
     bool operator!=(const iterator& it) const
     {
       return itImpl->operator!=(*it.itImpl);
-    }
-    ;
+    };
 
     T* operator*()
     {
       return itImpl->operator*();
-    }
-    ;
+    };
 
   private:
     std::unique_ptr<IteratorImpl> itImpl;
@@ -113,11 +107,9 @@ template <class ObjImpl_t, class SetInterface_t>
 class TObjectSetImpl : public SetInterface_t
 {
 private:
-
   class concrete_iterator : public IObjectSet::IteratorImpl
   {
   public:
-
     concrete_iterator(std::vector<std::unique_ptr<CObjectImpl>>::iterator it)
         : m_it(it)
     {
@@ -199,6 +191,5 @@ int main(int argc, char* argv[])
     static int i = 0;
     std::cout << "Encountered object " << i++ << " " << pObj->Name()
               << std::endl;
-  }
-  ;
+  };
 }

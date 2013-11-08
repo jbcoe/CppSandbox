@@ -3,7 +3,6 @@
 class Moveable
 {
 public:
-
   Moveable()
   {
     std::cout << " Default constructor" << std::endl;

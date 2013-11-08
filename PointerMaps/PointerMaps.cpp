@@ -47,23 +47,23 @@ void PrintAddedValues(Map_T& map, int N)
     map.clear();
     std::vector<std::unique_ptr<MyData>> vData;
 
-		std::vector<int> v(generator());
+    std::vector<int> v(generator());
     vData.push_back(MyData::Create(1, 2, 3));
-    v.resize(generator()+v.size());
-		vData.push_back(MyData::Create(4, 2, 0));
-    v.resize(generator()+v.size());
+    v.resize(generator() + v.size());
+    vData.push_back(MyData::Create(4, 2, 0));
+    v.resize(generator() + v.size());
     vData.push_back(MyData::Create(6, 7, 3));
-    v.resize(generator()+v.size());
+    v.resize(generator() + v.size());
     vData.push_back(MyData::Create(3, 2, 9));
-    v.resize(generator()+v.size());
+    v.resize(generator() + v.size());
     vData.push_back(MyData::Create(3, 2, 3));
-    v.resize(generator()+v.size());
+    v.resize(generator() + v.size());
     vData.push_back(MyData::Create(0, 2, 0));
-    v.resize(generator()+v.size());
+    v.resize(generator() + v.size());
     vData.push_back(MyData::Create(9, 7, 3));
-    v.resize(generator()+v.size());
+    v.resize(generator() + v.size());
     vData.push_back(MyData::Create(8, 2, 9));
-    v.resize(generator()+v.size());
+    v.resize(generator() + v.size());
 
 
     for (auto& ptr : vData)

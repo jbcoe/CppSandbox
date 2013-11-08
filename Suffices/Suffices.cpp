@@ -3,7 +3,6 @@
 class MyType
 {
 public:
-
   MyType(long double d) : m_d(d)
   {
   }
@@ -11,8 +10,7 @@ public:
   long double value() const
   {
     return m_d;
-  }
-  ;
+  };
 
   MyType operator+(const MyType& m)
   {
@@ -20,7 +18,6 @@ public:
   }
 
 private:
-
   long double m_d;
 };
 

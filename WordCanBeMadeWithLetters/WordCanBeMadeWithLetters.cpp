@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
   auto letter_end = letters.end();
 
-  for_each(is, is_end, [&](const std::string & _s)
+  for_each(is, is_end, [&](const std::string& _s)
   {
     if (_s.size() > letters.size())
       return;
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
   });
 
   sort(results.begin(), results.end(),
-                            [](const string & s1, const string & s2)->bool
+       [](const string & s1, const string & s2)->bool
   {
     if (s1.size() < s2.size())
       return true;

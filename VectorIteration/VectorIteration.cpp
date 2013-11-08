@@ -86,7 +86,7 @@ int main(int argc, char* argv[])
       std::for_each(boost::make_zip_iterator(boost::make_tuple(ws, xs, ys, zs)),
                     boost::make_zip_iterator(boost::make_tuple(
                         ws + length, xs + length, ys + length, zs + length)),
-                    [&](const boost::tuple<double, double, double, double> & t)
+                    [&](const boost::tuple<double, double, double, double>& t)
       { sum2 += theFunction(t.get<0>(), t.get<1>(), t.get<2>(), t.get<3>()); });
     }
   }

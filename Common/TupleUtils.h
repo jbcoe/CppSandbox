@@ -47,7 +47,6 @@ class TupleUtils
 
 
 public:
-
   template <typename Functor, typename... Ts>
   static auto ApplyFunction(Functor f, const std::tuple<Ts...>& t)
       -> decltype(apply_f_impl(f, t, IndicesFor<Ts...>()))

@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
   std::ostream* naughtyPointerOS = nullptr;
 
-  async_ios([&](std::ostream & io)
+  async_ios([&](std::ostream& io)
   { naughtyPointerOS = &io; });
 
   threads.emplace_back([&]()
@@ -45,22 +45,22 @@ int main(int argc, char* argv[])
   { *naughtyPointerOS << "Bad pointer lets me break the rules" << std::endl; });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream & io)
+    async_ios([](std::ostream& io)
     { io << "Hello 1 : " << std::this_thread::get_id() << std::endl; });
   });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream & io)
+    async_ios([](std::ostream& io)
     { io << "Hello 2 : " << std::this_thread::get_id() << std::endl; });
   });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream & io)
+    async_ios([](std::ostream& io)
     { io << "Hello 3 : " << std::this_thread::get_id() << std::endl; });
   });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream & io)
+    async_ios([](std::ostream& io)
     { io << "Hello 4 : " << std::this_thread::get_id() << std::endl; });
   });
 

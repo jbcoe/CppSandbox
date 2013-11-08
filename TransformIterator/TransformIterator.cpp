@@ -10,7 +10,6 @@ template <Iterator Iterator_t, Functor Functor_t>
 class TransformIterator
 {
 public:
-
   TransformIterator(Iterator_t iterator, Functor_t f)
       : iterator_(iterator), f_(f)
   {
@@ -37,7 +36,6 @@ private:
   Iterator_t iterator_;
 
 public:
-
   auto operator*() const -> decltype(f_(*iterator_))
   {
     return f_(*iterator_);

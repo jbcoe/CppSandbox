@@ -13,7 +13,6 @@ Return_t CallMemberFunction(Class_t* pInstance,
 class MyClass
 {
 public:
-
   MyClass(double multiplier) : m_multiplier(multiplier)
   {
   }
@@ -24,7 +23,6 @@ public:
   }
 
 private:
-
   double m_multiplier;
 };
 

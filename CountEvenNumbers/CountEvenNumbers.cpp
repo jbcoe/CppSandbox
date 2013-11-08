@@ -12,7 +12,6 @@ template <Iterator Iterator_t, Functor Functor_t>
 class ConditionalIterator
 {
 public:
-
   bool operator==(ConditionalIterator<Iterator_t, Functor_t> that) const
   {
     return iterator_ == that.iterator_;
@@ -85,7 +84,6 @@ template <Iterator Iterator_t, Functor Functor_t>
 class TransformIterator
 {
 public:
-
   TransformIterator(Iterator_t iterator, Functor_t f)
       : iterator_(iterator), f_(f)
   {
@@ -112,7 +110,6 @@ private:
   Functor_t f_;
 
 public:
-
   auto operator*() const -> decltype(f_(*iterator_))
   {
     return f_(*iterator_);
@@ -146,7 +143,7 @@ int main(int argc, char* argv[])
   int count = 0;
   auto even_number_with_count_iterators = make_transform_iterator_begin_and_end(
       even_number_iterators.first, even_number_iterators.second,
-                                       [&](int x)->std::string
+      [&](int x)->std::string
   {
         std::stringstream ss;
         ss << x << ":" << count++;

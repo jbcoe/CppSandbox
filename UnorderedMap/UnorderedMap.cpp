@@ -7,7 +7,6 @@ class MyClass
   friend std::ostream& operator<<(std::ostream& os, const MyClass& m);
 
 public:
-
   MyClass(double value) : m_value(value)
   {
   }

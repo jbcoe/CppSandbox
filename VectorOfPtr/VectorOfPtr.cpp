@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
     {
       Timer t("Modify Pointer Vector");
       std::for_each(vptrObjects.begin(), vptrObjects.end(),
-                    [](std::unique_ptr<MySimpleClass> & ptr)
+                    [](std::unique_ptr<MySimpleClass>& ptr)
       {
         ptr->m_x = 2.0;
         ptr->m_y = 0.78 * ptr->m_x;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     }
     {
       Timer t("Modify Object Vector");
-      std::for_each(objects.begin(), objects.end(), [](MySimpleClass & m)
+      std::for_each(objects.begin(), objects.end(), [](MySimpleClass& m)
       {
         m.m_x = 2.0;
         m.m_y = 0.78 * m.m_x;

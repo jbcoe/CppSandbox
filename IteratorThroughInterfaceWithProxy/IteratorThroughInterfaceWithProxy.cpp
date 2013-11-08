@@ -13,7 +13,6 @@ public:
 class IListOfObjects
 {
 public:
-
   class proxy
   {
   public:

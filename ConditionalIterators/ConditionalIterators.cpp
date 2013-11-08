@@ -10,7 +10,6 @@ template <Iterator Iterator_t, Functor Functor_t>
 class ConditionalIterator
 {
 public:
-
   bool operator==(ConditionalIterator<Iterator_t, Functor_t> that) const
   {
     return iterator_ == that.iterator_;

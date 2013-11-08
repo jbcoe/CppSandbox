@@ -5,8 +5,7 @@ int myAdd(int iFirst, int iSecond)
 {
   std::cout << iFirst << " " << iSecond << std::endl;
   return iFirst + iSecond;
-}
-;
+};
 
 int main(int argc, char* argv[])
 {

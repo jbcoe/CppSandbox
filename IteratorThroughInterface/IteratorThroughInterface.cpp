@@ -102,6 +102,6 @@ int main(int argc, char* argv[])
 {
   ListOfObjectsImpl myList(100);
 
-  std::for_each(myList.begin(), myList.end(), [](IObject * pObject)
+  std::for_each(myList.begin(), myList.end(), [](IObject* pObject)
   { pObject->m_value = 3.14159; });
 }

@@ -30,7 +30,6 @@ public:
 class A : public IVisitable
 {
 public:
-
   A(int i) : id_(i)
   {
   }
@@ -52,7 +51,6 @@ private:
 class B : public IVisitable
 {
 public:
-
   B(int i) : id_(i)
   {
   }
@@ -74,7 +72,6 @@ private:
 class C : public IVisitable
 {
 public:
-
   C(int i) : id_(i)
   {
   }
@@ -144,7 +141,7 @@ int main(int argc, char* argv[])
   objects.push_back(std::unique_ptr<B>(new B(2)));
   objects.push_back(std::unique_ptr<C>(new C(3)));
 
-  auto b2Matcher = make_matcher<B>([](const B & b)
+  auto b2Matcher = make_matcher<B>([](const B& b)
   { return b.B_ID() == 2; });
   for (auto& p : objects)
   {

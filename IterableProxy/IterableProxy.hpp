@@ -2,7 +2,6 @@ template <typename Object_t, typename Get_f, typename Count_f>
 class IterableProxy
 {
 public:
-
   IterableProxy(Get_f f_get, Count_f f_count)
       : m_f_get{f_get}, m_f_count{f_count}
   {

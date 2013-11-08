@@ -8,7 +8,6 @@
 class MyClass
 {
 public:
-
   int m_iInt;
   double m_dbl;
   MyClass()
@@ -26,7 +25,6 @@ public:
 class MyOtherClass
 {
 public:
-
   double m_dbl;
   int m_iInt;
   MyOtherClass()
@@ -46,7 +44,6 @@ class MyBlock : boost::noncopyable
   void* m_pBlock;
 
 public:
-
   MyBlock(int iSize)
   {
     m_pBlock = malloc(iSize);

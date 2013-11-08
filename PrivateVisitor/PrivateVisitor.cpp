@@ -45,7 +45,6 @@ public:
   }
 
 private:
-
   virtual void Visit(const VisitableA& a)
   {
     std::cout << "I saw A\n";

@@ -9,7 +9,6 @@ template <typename F_t>
 class TTimer
 {
 public:
-
   TTimer(F_t f_) : f(f_)
   {
     start = microsec_clock::local_time();
@@ -22,7 +21,6 @@ public:
   }
 
 private:
-
   F_t f;
   ptime start;
 };

@@ -135,7 +135,6 @@ inline bool operator!=(const malloc_allocator<T>&, const malloc_allocator<T>&)
 class MyClass
 {
 public:
-
   MyClass()
   {
     std::cout << "My Class instance constructed" << std::endl;

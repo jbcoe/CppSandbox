@@ -40,6 +40,6 @@ int main(int argc, char* argv[])
       std::cout << o.Name() << "\n";
     }));
   }
-  std::for_each(threads.begin(), threads.end(), [](std::thread & t)
+  std::for_each(threads.begin(), threads.end(), [](std::thread& t)
   { t.join(); });
 }
