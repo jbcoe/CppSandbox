@@ -22,7 +22,16 @@ class ConditionalIterator
 
 		ConditionalIterator<Iterator_t, Functor_t>& operator++()
 		{
-			while (iterator_ != end_ && ! f_(*(++iterator_))){}; //pre-increment gives one increment if we are not at end
+			if ( iterator_ == end_ )
+				return *this;
+
+			++iterator_;
+
+			while (iterator_ != end_ && ! f_(*(iterator_)))
+			{
+				++iterator_;
+			}
+
 			return *this;
 		}
 
