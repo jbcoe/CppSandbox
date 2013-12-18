@@ -1,3 +1,4 @@
+// Maximum subarray problem : Kadane's algorithm based on http://en.wikipedia.org/wiki/Maximum_subarray_problem
 #include <iostream>
 #include <algorithm>
 #include <iterator>
@@ -13,46 +14,44 @@ int main(int argc, char* argv[])
 
   int count = 10;
 
-  std::vector<int> myInts;
+  std::vector<int> myInts;// = {-7, -7, 8, 9, -1, -7, -5, 1, -7, 5};
   myInts.reserve(count);
 
   std::generate_n(std::back_inserter(myInts), count, generator);
 
-  std::vector<int> myPartialSum;
-  std::partial_sum(begin(myInts), end(myInts), back_inserter(myPartialSum));
-
-  std::vector<int> myReversePartialSum(myInts.size());
-  std::partial_sum(myInts.rbegin(), myInts.rend(),
-                   myReversePartialSum.rbegin());
-
-
   std::ostream_iterator<int> osi(std::cout, " ");
+	
+	std::copy(begin(myInts), end(myInts), osi);
+  std::cout << " [Values]" << std::endl;
+  
+	auto max_so_far = 0;
+	auto max_ending_here = 0;
+	auto it_max_begin = myInts.cbegin();
+	auto it_max_begin_temp = myInts.cbegin();
+	auto it_max_end = myInts.cbegin();
 
-  std::copy(begin(myInts), end(myInts), osi);
-  std::cout << std::endl;
-
-  std::copy(begin(myPartialSum), end(myPartialSum), osi);
-  std::cout << std::endl;
-
-  std::copy(myReversePartialSum.begin(), myReversePartialSum.end(), osi);
-  std::cout << std::endl;
-
-  auto end_offset = std::distance(
-      begin(myPartialSum), max_element(begin(myPartialSum), end(myPartialSum)));
-  auto begin_offset = std::distance(
-      begin(myReversePartialSum),
-      max_element(begin(myReversePartialSum), end(myReversePartialSum)));
-
-  std::cout << begin_offset << " : " << end_offset << std::endl;
-
-  if (begin_offset > end_offset)
-  {
-    return 0;
-  }
-
-  auto begin_max_consecutive = begin(myInts) + begin_offset;
-  auto end_max_consecutive = begin(myInts) + end_offset;
-
-  std::copy(begin_max_consecutive, std::next(end_max_consecutive), osi);
-  std::cout << std::endl;
+  for(auto it=myInts.cbegin(), it_end=myInts.cend(); it!=it_end; ++it)
+	{
+		if ( max_ending_here < 0 )
+		{
+			max_ending_here = *it;
+			it_max_begin_temp = it;
+		}
+		else
+		{
+			max_ending_here += *it;
+		}
+    
+		if (max_ending_here>=max_so_far )
+		{
+			max_so_far = max_ending_here;
+			it_max_begin = it_max_begin_temp;
+			it_max_end = std::next(it);
+		}
+	}
+	
+	std::copy(it_max_begin, it_max_end, osi);
+  std::cout << " [Values with largest consecutive sum [" 
+						<< std::distance(myInts.cbegin(),it_max_begin) 
+						<< ':' << std::distance(myInts.cbegin(),it_max_end) << ") ]" << std::endl;
 }
