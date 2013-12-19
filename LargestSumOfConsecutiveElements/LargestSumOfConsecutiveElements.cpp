@@ -9,7 +9,7 @@
 template<typename Iterator_t>
 std::pair<Iterator_t,	Iterator_t> max_subarray(const Iterator_t begin, const Iterator_t end)
 {
-	typedef typename std::remove_const<typename std::remove_reference<decltype(((Iterator_t*)nullptr)->operator*())>::type>::type Value_t;
+	typedef typename std::remove_const<typename std::remove_reference<decltype(std::declval<Iterator_t&>().operator*())>::type>::type Value_t;
 
 	Value_t max_so_far{};
 	Value_t max_ending_here{};
@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 	std::tie(it_max_begin,it_max_end) = max_subarray(myInts.cbegin(),myInts.cend());
 
 	std::copy(it_max_begin, it_max_end, osi);
-  //std::cout << " [Values with largest consecutive sum [" 
-	//					<< std::distance(myInts.cbegin(),it_max_begin) 
-	//					<< ':' << std::distance(myInts.cbegin(),it_max_end) << ") ]" << std::endl;
+  std::cout << " [Values with largest consecutive sum [" 
+						<< std::distance(myInts.cbegin(),it_max_begin) 
+						<< ':' << std::distance(myInts.cbegin(),it_max_end) << ") ]" << std::endl;
 }
