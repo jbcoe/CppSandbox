@@ -7,15 +7,37 @@ class ScopeExitRunner
   bool run;
 
 public:
-  ScopeExitRunner(F_t f_) : f(f_), run(true)
+  
+	ScopeExitRunner(F_t f_) : f(f_), run(true)
   {
   }
+
   ~ScopeExitRunner()
   {
     if (run)
       f();
   }
-  void Release()
+  
+	ScopeExitRunner(const ScopeExitRunner& s) = delete;
+	ScopeExitRunner(ScopeExitRunner&& s) : f(std::move(s.f)), run(s.run)
+	{
+   s.run = false;
+	}
+	
+	ScopeExitRunner& operator = (const ScopeExitRunner& s) = delete;
+
+	ScopeExitRunner& operator = (ScopeExitRunner&& s)
+	{
+		if (&s==this)
+			return *this;
+
+		f = std::move(s.f);
+		run = s.run;
+		s.run = false;
+		return *this;                                             
+	}
+	
+	void Release()
   {
     run = false;
   }
