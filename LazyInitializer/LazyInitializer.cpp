@@ -1,4 +1,5 @@
 #include <iostream>
+#include <type_traits>
 #include <memory>
 #include <boost/optional.hpp>
 
@@ -36,9 +37,10 @@ private:
   boost::optional<Value_t> m_v;
 };
 
-template <typename Initializer_t>
+template <typename Value_t, typename Initializer_t>
 Lazy<Initializer_t> make_lazy(Initializer_t i)
 {
+	static_assert(std::is_same<decltype(std::declval<Initializer_t>()()), Value_t>::value, "Wrong type in initializer");
   return Lazy<Initializer_t>(std::move(i));
 }
 
@@ -50,7 +52,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-  auto x = make_lazy([]{ std::cout << "Built variable" << std::endl; return 2.0; });
+  auto x = make_lazy<double>([]{ std::cout << "Built variable" << std::endl; return 2.0; });
   
 	std::cout << x << std::endl;
   std::cout << x << std::endl;
