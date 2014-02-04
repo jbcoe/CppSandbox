@@ -1,80 +1,58 @@
 #include <iostream>
-#include <thread>
-#include <Common/ScopedFunction.h>
+#include <memory>
 #include <boost/optional.hpp>
 
-template <typename Value_t,
-          typename Initializer_t = std::function<Value_t(void)>>
-class LazyInitialized
+template <typename Initializer_t>
+class Lazy
 {
 public:
-  LazyInitialized(Initializer_t i) : m_i(i), m_v()
-  {
-  }
+ 
+  typedef decltype(std::declval<Initializer_t>()()) Value_t;
 
-  LazyInitialized(LazyInitialized<Value_t, Initializer_t>&& that)
-      : m_i(std::move(that.m_i)), m_v(std::move(that.m_v))
-  {
-  }
+	Lazy(Initializer_t i) : m_i(std::move(i)) {}
 
-  LazyInitialized<Value_t, Initializer_t>&
-  operator=(LazyInitialized<Value_t, Initializer_t>&& that)
-  {
-    m_i = std::move(that.m_i);
-    m_v = std::move(that.m_v);
-  }
+  Lazy(const Lazy<Initializer_t>& that) = delete;
+  
+	Lazy(Lazy<Initializer_t>&& that) = default;
+
+  Lazy<Initializer_t>& operator=(const Lazy<Initializer_t>& that) = delete;
+  
+	Lazy<Initializer_t>& operator=(Lazy<Initializer_t>&& that) = default;
 
   operator Value_t&()
   {
+		return get();
+  }                                                                                                            
+  
+	Value_t& get() 
+	{
     if (!m_v)
       m_v = m_i();
-    return *m_v;
-  }
+		return *m_v;
+	}
 
 private:
   Initializer_t m_i;
   boost::optional<Value_t> m_v;
 };
 
-template <typename Value_t, typename Initializer_t>
-LazyInitialized<Value_t, Initializer_t> make_lazy_initialized(Initializer_t i)
+template <typename Initializer_t>
+Lazy<Initializer_t> make_lazy(Initializer_t i)
 {
-  return LazyInitialized<Value_t, Initializer_t>(i);
+  return Lazy<Initializer_t>(std::move(i));
 }
 
-struct ClassWithLazyMembers
+class MyClass
 {
-  LazyInitialized<double> m_baseLazyValue;
-  LazyInitialized<double> m_lazyValue;
-
-  ClassWithLazyMembers()
-      : m_baseLazyValue{[]()->double {auto f = make_scoped_function([]
-  { std::cout << "Built base member variable" << std::endl; });
-  return 3.0;
-}
-}
-, m_lazyValue{[this]()->double {auto f = make_scoped_function([]
-{ std::cout << "Built derived member variable" << std::endl; });
-return 2.0 * m_baseLazyValue;
-}
-}
-{
-}
-}
-;
+public:
+	void Foo() const { std::cout << "Foo" << std::endl; }
+};
 
 int main(int argc, char* argv[])
 {
-  auto x = make_lazy_initialized<double>([]()->double
-  {
-    std::cout << "Built variable" << std::endl;
-    return 2.0;
-  });
-  std::cout << x << std::endl;
+  auto x = make_lazy([]{ std::cout << "Built variable" << std::endl; return 2.0; });
+  
+	std::cout << x << std::endl;
   std::cout << x << std::endl;
   std::cout << std::endl;
-
-  ClassWithLazyMembers c;
-  std::cout << c.m_lazyValue << std::endl;
-  std::cout << c.m_lazyValue << std::endl;
 }

@@ -1,4 +1,4 @@
-include ../compilerSettings.mk
+include ../compilerSettings_c++14.mk
 
 SOURCES=LazyInitializer.cpp
 EXECUTABLE=LazyInitializer
