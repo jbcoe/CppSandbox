@@ -19,12 +19,20 @@ public:
   }
 
   template <typename F>
-  auto operator()(F f) -> decltype(f(t))
+  auto operator()(F f)
   {
     std::lock_guard<std::mutex> l(m);
     return f(t);
   }
+  
+	template <typename F>
+  auto operator()(F f) const
+  {
+    std::lock_guard<std::mutex> l(m);
+    return f(const_cast<const T&>(t));
+  }
 };
+
 
 int main(int argc, char* argv[])
 {
@@ -32,35 +40,24 @@ int main(int argc, char* argv[])
 
   std::vector<std::thread> threads;
 
-  std::ostream* naughtyPointerOS = nullptr;
-
-  async_ios([&](std::ostream& io)
-  { naughtyPointerOS = &io; });
-
-  threads.emplace_back([&]()
-  { *naughtyPointerOS << "Bad pointer lets me break the rules" << std::endl; });
-  threads.emplace_back([&]()
-  { *naughtyPointerOS << "Bad pointer lets me break the rules" << std::endl; });
-  threads.emplace_back([&]()
-  { *naughtyPointerOS << "Bad pointer lets me break the rules" << std::endl; });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream& io)
+    async_ios([](auto& io)
     { io << "Hello 1 : " << std::this_thread::get_id() << std::endl; });
   });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream& io)
+    async_ios([](auto& io)
     { io << "Hello 2 : " << std::this_thread::get_id() << std::endl; });
   });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream& io)
+    async_ios([](auto& io)
     { io << "Hello 3 : " << std::this_thread::get_id() << std::endl; });
   });
   threads.emplace_back([&]()
   {
-    async_ios([](std::ostream& io)
+    async_ios([](auto& io)
     { io << "Hello 4 : " << std::this_thread::get_id() << std::endl; });
   });
 
