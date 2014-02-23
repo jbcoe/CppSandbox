@@ -113,3 +113,4 @@ HexFloat/HexFloat
 VariadicFun/VariadicFun
 COMIterators/COMIterators
 IgnoreForLambdaChecks/IgnoreForLambdaChecks
+EarlyExitIterators/EarlyExitIterators
