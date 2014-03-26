@@ -26,7 +26,7 @@ public:
 
   Moveable& operator=(const Moveable&& m)
   {
-    std::cout << " rvalue assignment" << std::endl;
+    std::cout << " Move assignment" << std::endl;
     return *this;
   }
 
