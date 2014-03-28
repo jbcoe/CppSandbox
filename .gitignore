@@ -116,3 +116,4 @@ IgnoreForLambdaChecks/IgnoreForLambdaChecks
 EarlyExitIterators/EarlyExitIterators
 IteratorWithIndex/IteratorWithIndex
 Lazy/Lazy
+ADL/ADL
