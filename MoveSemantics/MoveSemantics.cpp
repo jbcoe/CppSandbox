@@ -14,7 +14,7 @@ public:
     std::cout << " Copy constructor" << std::endl;
   }
 
-  Moveable(const Moveable&& m)
+  Moveable(Moveable&& m) noexcept
   {
     std::cout << " Move constructor" << std::endl;
   }
@@ -25,7 +25,7 @@ public:
     return *this;
   }
 
-  Moveable& operator=(const Moveable&& m)
+  Moveable& operator=(Moveable&& m) noexcept
   {
     std::cout << " Move assignment" << std::endl;
     return *this;
@@ -43,31 +43,31 @@ int main()
   std::cout << "Moveable m" << std::endl;
   Moveable m;
 
-	std::cout << std::endl;
+  std::cout << std::endl;
   std::cout << "Moveable c(m)" << std::endl;
   Moveable c(m);
 
-	std::cout << std::endl;
+  std::cout << std::endl;
   std::cout << "m = c" << std::endl;
   m = c;
 
-	std::cout << std::endl;
+  std::cout << std::endl;
   std::cout << "m = Moveable::Instance()" << std::endl;
   m = Moveable::Instance();
 
-	std::cout << std::endl;
+  std::cout << std::endl;
   std::cout << "Moveable m2(Moveable::Instance())" << std::endl;
   Moveable m2(Moveable::Instance());
 
-	std::cout << std::endl;
+  std::cout << std::endl;
   std::cout << "Moveable m3 = std::move(m2)" << std::endl;
   Moveable m3 = std::move(m2);
 
-	std::cout << std::endl;
-	std::cout << "std::vector<Moveable> vms(4)" << std::endl;
-	std::vector<Moveable> vms(4);
+  std::cout << std::endl;
+  std::cout << "std::vector<Moveable> vms(1)" << std::endl;
+  std::vector<Moveable> vms(1);
 
-	std::cout << std::endl;
-	std::cout << "vms.push_back(Moveable::Instance())" << std::endl;
-	vms.push_back(Moveable::Instance());
+  std::cout << std::endl;
+  std::cout << "vms.push_back(Moveable::Instance())" << std::endl;
+  vms.push_back(Moveable::Instance());
 }

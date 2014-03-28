@@ -24,8 +24,8 @@ public:
     std::lock_guard<std::mutex> l(m);
     return f(t);
   }
-  
-	template <typename F>
+
+  template <typename F>
   auto operator()(F f) const
   {
     std::lock_guard<std::mutex> l(m);
