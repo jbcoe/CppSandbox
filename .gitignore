@@ -117,3 +117,4 @@ EarlyExitIterators/EarlyExitIterators
 IteratorWithIndex/IteratorWithIndex
 Lazy/Lazy
 ADL/ADL
+StreamingToTempObjects/StreamingToTempObjects
