@@ -2,29 +2,37 @@
 
 struct Data
 {
-		void mutateMe() { x = true; }
+  void mutateMe()
+  {
+    x = true;
+  }
 
-		bool x=false;
+  bool x = false;
 };
 
 
 struct DataObserver
 {
-	DataObserver(Data& d_) : d(&d_) {}
+  DataObserver(Data& d_) : d(&d_)
+  {
+  }
 
-	void ThreadSafeConstMethod() const { d->mutateMe(); }
+  void ThreadSafeConstMethod() const
+  {
+    d->mutateMe();
+  }
 
-	Data* d;
+  Data* d;
 };
 
 int main()
 {
-	Data d;
-	const DataObserver o(d);
-	
-	std::cout << std::boolalpha << d.x << std::endl;
-	
-	o.ThreadSafeConstMethod();
-	
-	std::cout << std::boolalpha << d.x << std::endl;
+  Data d;
+  const DataObserver o(d);
+
+  std::cout << std::boolalpha << d.x << std::endl;
+
+  o.ThreadSafeConstMethod();
+
+  std::cout << std::boolalpha << d.x << std::endl;
 }
