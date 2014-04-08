@@ -118,3 +118,5 @@ IteratorWithIndex/IteratorWithIndex
 Lazy/Lazy
 ADL/ADL
 StreamingToTempObjects/StreamingToTempObjects
+MadNew/MadNew
+EvilsOfConstMemberPointers/EvilsOfConstMemberPointers
