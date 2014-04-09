@@ -27,7 +27,7 @@ private:
 
 struct A
 {
-	void foo() const { std::cout << "foo (const)" << std::endl; }
+	void bar() const { std::cout << "bar (const)" << std::endl; }
 	void bar() { std::cout << "bar (non-const)" << std::endl; }
 };
 
