@@ -11,8 +11,7 @@ namespace detail
     bool operator()(const std::tuple<Ts...>& t1,
                     const std::tuple<Ts...>& t2) const
     {
-      if (*std::get<N>(t1) != *std::get<N>(t2))
-        return false;
+      if (*std::get<N>(t1) != *std::get<N>(t2)) return false;
 
       return DerefencedTuplesAreEqual<N + 1, N + 1 == sizeof...(Ts)>()(t1, t2);
     }

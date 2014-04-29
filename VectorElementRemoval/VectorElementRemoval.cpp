@@ -17,8 +17,7 @@
 int main()
 {
   std::vector<int> myValues;
-  for (long int i = 0L; i < 10000000L; ++i)
-    myValues.push_back(i % 3);
+  for (long int i = 0L; i < 10000000L; ++i) myValues.push_back(i % 3);
 
   int iOriginalSize = myValues.size();
 #ifdef REMOVE_VALUES

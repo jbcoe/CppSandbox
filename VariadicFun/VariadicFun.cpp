@@ -3,8 +3,7 @@
 template <typename F, typename... Ts>
 void ApplyToEach(F f, Ts... ts)
 {
-  for (auto x : {ts...})
-    f(x);
+  for (auto x : {ts...}) f(x);
 }
 
 int main(int argc, char* argv[])

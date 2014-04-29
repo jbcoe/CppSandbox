@@ -24,8 +24,7 @@ public:
 
   ConditionalIterator<Iterator_t, Functor_t>& operator++()
   {
-    if (iterator_ == end_)
-      return *this;
+    if (iterator_ == end_) return *this;
 
     ++iterator_;
 

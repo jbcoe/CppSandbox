@@ -17,10 +17,8 @@ int main(int argc, char* argv[])
   std::sort(vWords.rbegin(), vWords.rend(),
             [](const std::string& s1, const std::string& s2)
   {
-    if (s1.size() < s2.size())
-      return true;
-    if (s2.size() < s1.size())
-      return false;
+    if (s1.size() < s2.size()) return true;
+    if (s2.size() < s1.size()) return false;
     return s1 < s2;
   });
 
@@ -31,6 +29,5 @@ int main(int argc, char* argv[])
     return it_uend == s.end();
   });
 
-  if (find_it != vWords.end())
-    std::cout << *find_it << std::endl;
+  if (find_it != vWords.end()) std::cout << *find_it << std::endl;
 }

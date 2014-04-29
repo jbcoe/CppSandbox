@@ -41,13 +41,11 @@ int main(int argc, char* argv[])
     generators.push_back(std::thread([&]
     {
       // Prevent dead code optimisation by using the result of generator()
-      if (generator() == 42)
-        ++impossible_error_count;
+      if (generator() == 42) ++impossible_error_count;
     }));
   }
 
-  for (auto& t : generators)
-    t.join();
+  for (auto& t : generators) t.join();
 
   return 0;
 }

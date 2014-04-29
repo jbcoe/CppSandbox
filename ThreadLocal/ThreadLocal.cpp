@@ -36,8 +36,7 @@ int main(int argc, char* argv[])
     counts[1] = instanceCount;
   });
 
-  for (auto& t : threads)
-    t.join();
+  for (auto& t : threads) t.join();
 
   std::cout << "Thread 1 created " << counts[0] << " objects" << std::endl;
   std::cout << "Thread 2 created " << counts[1] << " objects" << std::endl;

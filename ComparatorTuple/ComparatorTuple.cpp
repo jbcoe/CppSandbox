@@ -12,10 +12,8 @@ struct CompareNthWithN
   {
     auto cn = std::get<N - 1>(c);
 
-    if (cn(std::get<N - 1>(t1), std::get<N - 1>(t2)))
-      return true;
-    if (cn(std::get<N - 1>(t2), std::get<N - 1>(t1)))
-      return false;
+    if (cn(std::get<N - 1>(t1), std::get<N - 1>(t2))) return true;
+    if (cn(std::get<N - 1>(t2), std::get<N - 1>(t1))) return false;
 
     return CompareNthWithN<N - 1>::IsLessThan(t1, t2, c);
   }

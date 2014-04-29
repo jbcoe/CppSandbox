@@ -47,7 +47,6 @@ int main(int argc, char* argv[])
     std::copy(values_a.begin(), values_a.end(), values_d.begin());
   }
 
-  if (values_a == values_b && values_c == values_d)
-    return 0;
+  if (values_a == values_b && values_c == values_d) return 0;
   return -1;
 }

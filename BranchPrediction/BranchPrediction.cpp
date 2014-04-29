@@ -15,8 +15,7 @@ int SumOfBigNumbers(const Ints_t& ints, const size_t iterations,
   {
     std::for_each(ints.begin(), ints.end(), [&](int i)
     {
-      if (i > BIG)
-        bigSum += i;
+      if (i > BIG) bigSum += i;
     });
   }
   return bigSum;

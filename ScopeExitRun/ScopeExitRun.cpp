@@ -29,8 +29,7 @@ public:
 
   ScopeExitRunner& operator=(ScopeExitRunner&& s)
   {
-    if (&s == this)
-      return *this;
+    if (&s == this) return *this;
 
     f = std::move(s.f);
     run = s.run;

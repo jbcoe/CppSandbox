@@ -122,8 +122,7 @@ struct Matcher : public NullVisitor
 
   void Visit(const Matched_T& m)
   {
-    if (f_(m))
-      matched_ = &m;
+    if (f_(m)) matched_ = &m;
   }
 };
 

@@ -78,8 +78,7 @@ struct IsAGetter : Visitor
 int main(int argc, char** argv)
 {
   int count = 100000000;
-  if (argc > 1)
-    count = atoi(argv[1]);
+  if (argc > 1) count = atoi(argv[1]);
 
   int aCount = 0;
   int bCount = 0;

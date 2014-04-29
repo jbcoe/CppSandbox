@@ -28,8 +28,7 @@ public:
 
   Value_t& get()
   {
-    if (!m_v)
-      m_v = m_i();
+    if (!m_v) m_v = m_i();
     return *m_v;
   }
 

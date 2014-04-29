@@ -13,8 +13,7 @@ public:
 
   T& operator()(size_t row, size_t column)
   {
-    if (row < column)
-      std::swap(row, column);
+    if (row < column) std::swap(row, column);
     return m_data[((row * (row + 1)) >> 1) + column];
   }
 

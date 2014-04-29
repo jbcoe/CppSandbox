@@ -18,8 +18,7 @@ int main(int argc, char* argv[])
 {
   size_t count = 10000000;
 
-  if (argc == 2)
-    count = boost::lexical_cast<size_t>(argv[1]);
+  if (argc == 2) count = boost::lexical_cast<size_t>(argv[1]);
 
   {
     std::vector<std::unique_ptr<MySimpleClass>> vptrObjects;

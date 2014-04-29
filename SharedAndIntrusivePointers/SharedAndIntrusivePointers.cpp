@@ -14,8 +14,7 @@ void intrusive_ptr_add_ref(T* p)
 template <typename T>
 void intrusive_ptr_release(T* p)
 {
-  if (!--p->refCount_)
-    delete p;
+  if (!--p->refCount_) delete p;
 }
 
 //////////////////////////////////////////////////
@@ -132,8 +131,7 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
     std::vector<T*> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
     { return new T(); });
-    for (auto o : objects)
-      delete o;
+    for (auto o : objects) delete o;
   }
 
   std::cout << std::endl;

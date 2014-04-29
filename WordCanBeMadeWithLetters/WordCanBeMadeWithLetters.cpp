@@ -15,8 +15,7 @@ int main(int argc, char* argv[])
   }
 
   size_t minLength = 0;
-  if (argc == 3)
-    minLength = atoi(argv[2]);
+  if (argc == 3) minLength = atoi(argv[2]);
 
   string letters = argv[1];
   sort(letters.begin(), letters.end());
@@ -32,10 +31,8 @@ int main(int argc, char* argv[])
 
   for_each(is, is_end, [&](const std::string& _s)
   {
-    if (_s.size() > letters.size())
-      return;
-    if (_s.size() < minLength)
-      return;
+    if (_s.size() > letters.size()) return;
+    if (_s.size() < minLength) return;
 
     auto s(_s);
     sort(s.begin(), s.end());
@@ -47,8 +44,7 @@ int main(int argc, char* argv[])
     for (auto it = s.begin(); it != s.end(); ++it)
     {
       auto find_letter = find(letter_it, letter_end, *it);
-      if (find_letter == letter_end)
-        return;
+      if (find_letter == letter_end) return;
       letter_it = find_letter;
       ++letter_it;
     }
@@ -59,11 +55,9 @@ int main(int argc, char* argv[])
   sort(results.begin(), results.end(),
        [](const string & s1, const string & s2)->bool
   {
-    if (s1.size() < s2.size())
-      return true;
+    if (s1.size() < s2.size()) return true;
 
-    if (s2.size() < s1.size())
-      return false;
+    if (s2.size() < s1.size()) return false;
 
     return s1 < s2;
   });

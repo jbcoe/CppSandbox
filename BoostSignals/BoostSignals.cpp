@@ -8,10 +8,8 @@
 template <typename T>
 void print_all(T first, T last)
 {
-  if (first == last)
-    return;
-  while (first != last)
-    std::cout << *first++ << ' ';
+  if (first == last) return;
+  while (first != last) std::cout << *first++ << ' ';
   std::cout << std::endl;
 }
 

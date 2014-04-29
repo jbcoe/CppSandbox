@@ -29,8 +29,7 @@ public:
   }
   ~ScopedThread()
   {
-    if (t_.joinable())
-      t_.join();
+    if (t_.joinable()) t_.join();
   }
 
   ScopedThread(const ScopedThread&) = delete;

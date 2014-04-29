@@ -15,8 +15,7 @@ void RunTasks(size_t tasks, TaskGenerator_t gen)
   {
     auto t = make_timer([&firstRunTime, i](long t)
     {
-      if (i == 1)
-        firstRunTime = t;
+      if (i == 1) firstRunTime = t;
       std::cout << i << ' ' << (double)firstRunTime / t << std::endl;
     });
 
@@ -44,8 +43,7 @@ int main(int argc, char* argv[])
       {
         x = r * x * (1.0 - x);
       }
-      if (x > 5)
-        std::cout << "FAIL" << std::endl;
+      if (x > 5) std::cout << "FAIL" << std::endl;
     };
   };
 
@@ -58,8 +56,7 @@ int main(int argc, char* argv[])
     {
       std::stringstream ss;
       ss << 5 << 7 << "Hello" << 4.6 << -0.1;
-      if (ss.str() == "Nicaragua")
-        std::cout << "FAIL" << std::endl;
+      if (ss.str() == "Nicaragua") std::cout << "FAIL" << std::endl;
     };
   };
 
@@ -71,8 +68,7 @@ int main(int argc, char* argv[])
     return []()
     {
       auto s = std::to_string(66.6);
-      if (s == "Nicaragua")
-        std::cout << "FAIL" << std::endl;
+      if (s == "Nicaragua") std::cout << "FAIL" << std::endl;
     };
   };
 
