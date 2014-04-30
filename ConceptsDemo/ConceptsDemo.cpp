@@ -1,26 +1,21 @@
 // NO CLANG FORMAT (concepts not yet supported)
 #include <iostream>
+#include <type_traits>
 
 template <typename T>
 concept bool Incrementable()
 {
-	return requires (T t)
-	{
-		++t;
+	return requires (T t) 
+	{ 
+		++t; 
 	};
 }
 
-class MyClass
-{
-};
+struct MyClass {};
 
-class MyIncrementableClass
+struct MyIncrementableClass
 {
-public:
-  MyIncrementableClass& operator++()
-  {
-    return *this;
-  }
+  MyIncrementableClass& operator++() { return *this; }
 };
 
 void foo(Incrementable& i)
@@ -31,7 +26,7 @@ void foo(Incrementable& i)
 int main(int argc, char* argv[])
 {
 	MyClass m;
-	//foo(m); // will not compile
+	foo(m); // will not compile
 
 	MyIncrementableClass im;
 	foo(im);
