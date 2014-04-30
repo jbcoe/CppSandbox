@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.5.mk
+include ../compilerSettings_COMPILER_SETTINGS.mk
 
 SOURCES=PROJECT_NAME.cpp
 EXECUTABLE=PROJECT_NAME
