@@ -5,92 +5,87 @@ template <typename T>
 class logical_const
 {
 public:
-  typedef std::remove_reference_t<decltype(*std::declval<T>())> Value_T;
+  typedef std::remove_reference_t<decltype(*std::declval<T>())> value_type;
 
   ~logical_const()
   {
   }
 
-  logical_const()
+  logical_const() : t{}
   {
   }
 
-  logical_const(const T& t_) : t{t_}
+  template <typename U>
+  logical_const(U&& u)
+      : t{std::forward<U>(u)}
   {
   }
 
-  logical_const(T&& t_) : t{std::move(t_)}
+  template <typename U>
+  logical_const<T>& operator=(U&& u)
   {
-  }
-
-  logical_const(const logical_const<T>& pt_) : t{pt_.t}
-  {
-  }
-
-  logical_const(logical_const<T>&& pt_) : t{std::move(pt_.t)}
-  {
-  }
-
-  logical_const<T>& operator=(const T& t_)
-  {
-    t = t_;
+    t = std::forward<U>(u);
     return *this;
   }
 
-  logical_const<T>& operator=(T&& t_)
+  template <typename U>
+  logical_const(const logical_const<U>& pu)
+      : t{pu.t}
   {
-    t = std::move(t_);
+  }
+
+  template <typename U>
+  logical_const(logical_const<U>&& pu)
+      : t{std::move(pu.t)}
+  {
+  }
+
+
+  template <typename U>
+  logical_const<T>& operator=(const logical_const<U>& pt)
+  {
+    t = pt.t;
     return *this;
   }
 
-  logical_const<T>& operator=(const logical_const<T>& pt_)
+  template <typename U>
+  logical_const<T>& operator=(logical_const<U>&& pt)
   {
-    t = pt_.t;
+    t = std::move(pt.t);
     return *this;
   }
 
-  logical_const<T>& operator=(logical_const<T>&& pt_)
+  value_type* operator->()
   {
-    t = std::move(pt_.t);
-    return *this;
+    return std::addressof(*t);
   }
 
-  Value_T* operator->()
+  const value_type* operator->() const
   {
-    return &*t;
+    return std::addressof(*t);
   }
 
-  const Value_T* operator->() const
+  value_type* get()
   {
-    return &*t;
+    return std::addressof(*t);
   }
 
-  Value_T& operator*()
+  const value_type* get() const
+  {
+    return std::addressof(*t);
+  }
+
+  value_type& operator*()
   {
     return *t;
   }
 
-  const Value_T& operator*() const
+  const value_type& operator*() const
   {
     return *t;
   }
 
-  Value_T* get()
-  {
-    return t.get();
-  }
-
-  const Value_T* get() const
-  {
-    return t.get();
-  }
-
-  operator const T&() const
-  {
-    return t;
-  }
-
-  operator T&()
+  operator bool() const
   {
     return t;
   }
@@ -98,24 +93,6 @@ public:
 private:
   T t;
 };
-
-template <typename T, typename U>
-bool operator==(const logical_const<T>& pt1, const logical_const<U>& pt2)
-{
-  return pt1.t == pt2.t;
-}
-
-template <typename T, typename U>
-bool operator!=(const logical_const<T>& pt1, const logical_const<U>& pt2)
-{
-  return pt1.t != pt2.t;
-}
-
-template <typename T, typename U>
-void swap(logical_const<T>& pt1, logical_const<U>& pt2)
-{
-  swap(pt1.t, pt2.t);
-}
 
 struct A
 {
