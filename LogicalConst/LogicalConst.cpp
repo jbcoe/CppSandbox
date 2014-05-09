@@ -4,8 +4,14 @@
 template <typename T>
 class logical_const
 {
+  
+	typedef decltype(*std::declval<T>()) reference_type;
+	
 public:
-  typedef std::remove_reference_t<decltype(*std::declval<T>())> value_type;
+
+	using value_type = typename std::enable_if<
+		std::is_lvalue_reference<reference_type>::value, 
+		typename std::remove_reference<reference_type>::type>::type;
 
   ~logical_const()
   {
