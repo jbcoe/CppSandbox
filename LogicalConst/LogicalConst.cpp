@@ -97,7 +97,7 @@ class logical_const
 	template<typename U>
 		static value_type* underlying_pointer(U& p)
 		{ 
-			return p.operator->(); 
+			return p.get(); 
 		}
 
 	template<typename U>
@@ -109,7 +109,7 @@ class logical_const
 	template<typename U>
 		static const value_type* underlying_pointer(const U& p)
 		{ 
-			return p.operator->(); 
+			return p.get(); 
 		}
 
 };
