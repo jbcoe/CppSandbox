@@ -73,13 +73,17 @@ struct PackTuple<N,N>
 	}
 };
 
-	template <typename ...Ts>
+//////////////////////////////////////////////////////////
+
+template <typename ...Ts>
 void SortTuple(std::tuple<Ts...>& ts)
 {
 	auto array = tuple_to_array(ts);	
 	std::sort(array.begin(),array.end());
 	PackTuple<sizeof...(Ts)>::Pack(array, ts);
 }
+
+//////////////////////////////////////////////////////////
 
 template<size_t N, size_t I=0>
 struct PrintTuple
@@ -107,6 +111,8 @@ void Print(const std::tuple<Ts...>& t)
 {
 	PrintTuple<sizeof...(Ts)>::Print(t);
 }
+
+//////////////////////////////////////////////////////////
 
 int main(int argc, char* argv[])
 {
