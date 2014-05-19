@@ -2,17 +2,20 @@
 #include <iostream>
 #include <type_traits>
 #include "origin/core/Concepts.hpp"
+#include "origin/sequence/Concepts.hpp"
 
 using namespace origin;
 
+/*
 template <typename T>
-concept bool Incrementable()
+concept bool Advanceable()
 {
 	return requires (T t) 
 	{ 
 		++t; 
 	};
 }
+*/
 
 struct MyClass {};
 struct MyNonCopyableClass
@@ -20,14 +23,20 @@ struct MyNonCopyableClass
 	MyNonCopyableClass(const MyNonCopyableClass&) = delete;
 };
 
-struct MyIncrementableClass
+struct MyAdvanceableClass
 {
-  MyIncrementableClass& operator++() { return *this; }
+  MyAdvanceableClass& operator++() { return *this; }
 };
 
-void foo(Incrementable& i)
+void foo(Advanceable& i)
 {
-	std::cout << "foo" << std::endl;
+	std::cout << "advanceable foo" << std::endl;
+}
+
+template<typename T>
+void foo(T& i)
+{
+	std::cout << "default foo" << std::endl;
 }
 
 #define print_concept(x,y) std::cout << std::boolalpha << #x << " " << #y << " " << x<y>() << std::endl 
@@ -35,9 +44,9 @@ void foo(Incrementable& i)
 int main(int argc, char* argv[])
 {
 	MyClass m;
-	//foo(m); // will not compile
+	foo(m);
 
-	MyIncrementableClass im;
+	MyAdvanceableClass im;
 	foo(im);
 
 	print_concept(Copyable, MyClass);
