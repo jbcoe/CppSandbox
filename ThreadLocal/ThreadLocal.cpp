@@ -7,10 +7,7 @@ thread_local int instanceCount = 0;
 class TaskCommon
 {
 public:
-  TaskCommon()
-  {
-    ++instanceCount;
-  }
+  TaskCommon() { ++instanceCount; }
 };
 
 int main(int argc, char* argv[])
@@ -20,21 +17,21 @@ int main(int argc, char* argv[])
   std::vector<std::thread> threads;
 
   threads.emplace_back([&]()
-  {
-    TaskCommon a;
-    TaskCommon b;
-    TaskCommon c;
-    counts[0] = instanceCount;
-  });
+                       {
+                         TaskCommon a;
+                         TaskCommon b;
+                         TaskCommon c;
+                         counts[0] = instanceCount;
+                       });
 
   int count2 = 0;
 
   threads.emplace_back([&]()
-  {
-    TaskCommon a;
-    TaskCommon b;
-    counts[1] = instanceCount;
-  });
+                       {
+                         TaskCommon a;
+                         TaskCommon b;
+                         counts[1] = instanceCount;
+                       });
 
   for (auto& t : threads) t.join();
 

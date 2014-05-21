@@ -16,14 +16,9 @@ public:
   class proxy
   {
   public:
-    explicit proxy(IObject* pObject) : m_pObject(pObject)
-    {
-    }
+    explicit proxy(IObject* pObject) : m_pObject(pObject) {}
     void operator=(const proxy&) = delete;
-    IObject* operator->()
-    {
-      return m_pObject;
-    }
+    IObject* operator->() { return m_pObject; }
 
   private:
     IObject* m_pObject;
@@ -59,25 +54,16 @@ public:
     {
     }
 
-    proxy operator*()
-    {
-      return proxy(m_list.get(m_position));
-    }
+    proxy operator*() { return proxy(m_list.get(m_position)); }
 
   private:
     IListOfObjects& m_list;
     size_t m_position;
   };
 
-  iterator begin()
-  {
-    return iterator(*this, 0);
-  }
+  iterator begin() { return iterator(*this, 0); }
 
-  iterator end()
-  {
-    return iterator(*this, this->count());
-  }
+  iterator end() { return iterator(*this, this->count()); }
 
   virtual size_t count() const = 0;
 
@@ -92,23 +78,14 @@ public:
   ListOfObjectsImpl(size_t n) : m_ptrObjects(n)
   {
     std::generate(m_ptrObjects.begin(), m_ptrObjects.end(), []()
-    { return std::unique_ptr<IObject>(new IObject()); });
+                  { return std::unique_ptr<IObject>(new IObject()); });
   }
 
-  virtual size_t count() const
-  {
-    return m_ptrObjects.size();
-  }
+  virtual size_t count() const { return m_ptrObjects.size(); }
 
-  virtual const IObject* get(size_t i) const
-  {
-    return m_ptrObjects[i].get();
-  }
+  virtual const IObject* get(size_t i) const { return m_ptrObjects[i].get(); }
 
-  virtual IObject* get(size_t i)
-  {
-    return m_ptrObjects[i].get();
-  }
+  virtual IObject* get(size_t i) { return m_ptrObjects[i].get(); }
 
 private:
   std::vector<std::unique_ptr<IObject>> m_ptrObjects;
@@ -119,5 +96,5 @@ int main(int argc, char* argv[])
   ListOfObjectsImpl myList(100);
 
   std::for_each(myList.begin(), myList.end(), [](IListOfObjects::proxy pObject)
-  { pObject->m_value = 3.14159; });
+                { pObject->m_value = 3.14159; });
 }

@@ -25,9 +25,7 @@ protected:
     virtual bool operator!=(const IteratorImpl& it) const = 0;
     virtual T* operator*() = 0;
     virtual std::unique_ptr<IteratorImpl> Clone() const = 0;
-    virtual ~IteratorImpl()
-    {
-    }
+    virtual ~IteratorImpl() {}
   };
 
 public:
@@ -45,9 +43,7 @@ public:
     {
     }
 
-    iterator(const iterator& it) : itImpl(std::move(it.itImpl->Clone()))
-    {
-    }
+    iterator(const iterator& it) : itImpl(std::move(it.itImpl->Clone())) {}
 
     const iterator& operator=(const iterator& it)
     {
@@ -71,10 +67,7 @@ public:
       return itImpl->operator!=(*it.itImpl);
     };
 
-    T* operator*()
-    {
-      return itImpl->operator*();
-    };
+    T* operator*() { return itImpl->operator*(); };
 
   private:
     std::unique_ptr<IteratorImpl> itImpl;
@@ -91,13 +84,8 @@ class IObjectSet : public TObjectSet<IObject>
 class CObjectImpl : public IObject
 {
 public:
-  CObjectImpl(const char* name) : m_name(name)
-  {
-  }
-  virtual const char* Name() const
-  {
-    return m_name.c_str();
-  }
+  CObjectImpl(const char* name) : m_name(name) {}
+  virtual const char* Name() const { return m_name.c_str(); }
 
 private:
   std::string m_name;
@@ -137,10 +125,7 @@ private:
       return static_cast<const concrete_iterator&>(it).m_it != m_it;
     }
 
-    virtual IObjectSet::Object_t* operator*()
-    {
-      return (*m_it).get();
-    }
+    virtual IObjectSet::Object_t* operator*() { return (*m_it).get(); }
 
   private:
     std::vector<std::unique_ptr<CObjectImpl>>::iterator m_it;

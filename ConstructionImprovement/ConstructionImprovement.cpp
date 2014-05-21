@@ -18,9 +18,7 @@ public:
               << std::endl;
   }
 
-  ~MyClass()
-  {
-  }
+  ~MyClass() {}
 
   static constexpr int s_iFive = 5;
 };

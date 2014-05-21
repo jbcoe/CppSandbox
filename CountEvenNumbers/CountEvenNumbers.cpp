@@ -61,10 +61,7 @@ private:
   Functor_t f_;
 
 public:
-  auto operator*() const -> decltype(*iterator_)
-  {
-    return *iterator_;
-  }
+  auto operator*() const -> decltype(*iterator_) { return *iterator_; }
 };
 
 
@@ -109,10 +106,7 @@ private:
   Functor_t f_;
 
 public:
-  auto operator*() const -> decltype(f_(*iterator_))
-  {
-    return f_(*iterator_);
-  }
+  auto operator*() const -> decltype(f_(*iterator_)) { return f_(*iterator_); }
 };
 
 template <Iterator Iterator_t, Functor Functor_t>
@@ -137,13 +131,13 @@ int main(int argc, char* argv[])
 
   auto even_number_iterators =
       make_conditional_begin_and_end(numbers.begin(), numbers.end(), [](int x)
-  { return x % 2 == 0; });
+                                     { return x % 2 == 0; });
 
   int count = 0;
   auto even_number_with_count_iterators = make_transform_iterator_begin_and_end(
       even_number_iterators.first, even_number_iterators.second,
-      [&](int x)->std::string
-  {
+      [&](int x) -> std::string
+      {
         std::stringstream ss;
         ss << x << ":" << count++;
         return ss.str();

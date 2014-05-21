@@ -3,9 +3,7 @@
 template <typename T, T defaultValue>
 struct TypeWithDefaultValue
 {
-  TypeWithDefaultValue() : m_value(defaultValue)
-  {
-  }
+  TypeWithDefaultValue() : m_value(defaultValue) {}
 
   template <typename U>
   TypeWithDefaultValue(U&& u)
@@ -19,15 +17,9 @@ struct TypeWithDefaultValue
     m_value = std::forward<U>(u);
   }
 
-  operator T&()
-  {
-    return m_value;
-  }
+  operator T&() { return m_value; }
 
-  operator const T&() const
-  {
-    return m_value;
-  }
+  operator const T&() const { return m_value; }
 
   T m_value;
 };

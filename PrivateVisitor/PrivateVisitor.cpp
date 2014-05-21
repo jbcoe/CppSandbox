@@ -21,39 +21,24 @@ public:
 class VisitableA : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const
-  {
-    visitor.Visit(*this);
-  }
+  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
 };
 
 class VisitableB : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const
-  {
-    visitor.Visit(*this);
-  }
+  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
 };
 
 class PrivateVisitor : private IVisitor
 {
 public:
-  PrivateVisitor(IVisitable& v)
-  {
-    v.Accept(*this);
-  }
+  PrivateVisitor(IVisitable& v) { v.Accept(*this); }
 
 private:
-  virtual void Visit(const VisitableA& a)
-  {
-    std::cout << "I saw A\n";
-  }
+  virtual void Visit(const VisitableA& a) { std::cout << "I saw A\n"; }
 
-  virtual void Visit(const VisitableB& b)
-  {
-    std::cout << "I saw B\n";
-  }
+  virtual void Visit(const VisitableB& b) { std::cout << "I saw B\n"; }
 };
 
 int main(int argc, char* argv[])

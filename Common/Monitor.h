@@ -7,12 +7,8 @@ class Monitor
   std::mutex m;
 
 public:
-  Monitor(T _t) : t(_t)
-  {
-  }
-  Monitor()
-  {
-  }
+  Monitor(T _t) : t(_t) {}
+  Monitor() {}
 
   template <typename F>
   auto operator()(F f) -> decltype(f(t))

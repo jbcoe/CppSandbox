@@ -19,10 +19,7 @@ public:
     typedef malloc_allocator<U> other;
   };
 
-  malloc_allocator()
-  {
-    std::cout << "Created a malloc_allocator" << std::endl;
-  }
+  malloc_allocator() { std::cout << "Created a malloc_allocator" << std::endl; }
 
   malloc_allocator(const malloc_allocator&)
   {
@@ -52,10 +49,7 @@ public:
     return &x;
   }
 
-  const_pointer address(const_reference x) const
-  {
-    return x;
-  }
+  const_pointer address(const_reference x) const { return x; }
 
   pointer allocate(size_type n, const_pointer = 0)
   {
@@ -134,10 +128,7 @@ inline bool operator!=(const malloc_allocator<T>&, const malloc_allocator<T>&)
 class MyClass
 {
 public:
-  MyClass()
-  {
-    std::cout << "My Class instance constructed" << std::endl;
-  }
+  MyClass() { std::cout << "My Class instance constructed" << std::endl; }
 
   MyClass(const MyClass&)
   {

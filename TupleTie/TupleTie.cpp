@@ -3,10 +3,7 @@
 
 using namespace std;
 
-tuple<int, int, double> ReturnTuple()
-{
-  return make_tuple(1, 2, 3.14159);
-}
+tuple<int, int, double> ReturnTuple() { return make_tuple(1, 2, 3.14159); }
 
 int main(int argc, char* argv[])
 {

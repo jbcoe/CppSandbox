@@ -7,10 +7,7 @@
 template <typename T, typename TInterface>
 struct TSetImpl : public TInterface
 {
-  virtual void doThing()
-  {
-    std::cout << "CSetImpl" << std::endl;
-  }
+  virtual void doThing() { std::cout << "CSetImpl" << std::endl; }
 };
 
 ////////////////////////////////////////////

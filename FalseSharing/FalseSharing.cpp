@@ -13,22 +13,11 @@
 class SquareMatrix
 {
 public:
-  SquareMatrix(size_t dim) : m_data(dim * dim, 0), m_dim(dim)
-  {
-  }
-  double* operator[](size_t i)
-  {
-    return &m_data[i * m_dim];
-  }
+  SquareMatrix(size_t dim) : m_data(dim * dim, 0), m_dim(dim) {}
+  double* operator[](size_t i) { return &m_data[i * m_dim]; }
 
-  std::vector<double>::iterator begin()
-  {
-    return m_data.begin();
-  }
-  std::vector<double>::iterator end()
-  {
-    return m_data.end();
-  }
+  std::vector<double>::iterator begin() { return m_data.begin(); }
+  std::vector<double>::iterator end() { return m_data.end(); }
 
 private:
   std::vector<double> m_data;
@@ -61,24 +50,24 @@ int main(int argc, char* argv[])
     for (size_t iTask = 0; iTask < THREADS; ++iTask)
     {
       tg.run([=, &perThreadCount, &m]
-      {
-        size_t taskSize = dim / THREADS;
-        size_t taskStart = iTask * taskSize;
-        size_t taskEnd = std::min(taskStart + taskSize, dim);
-        size_t count = 0;
-        for (size_t i = taskStart; i < taskEnd; ++i)
-        {
-          for (size_t j = 0; j < dim; ++j)
-          {
-            if (m[i][j] >= 0.0)
-            {
-              ++perThreadCount[iTask]; // Causes false sharing
-                                       //++count; //This prevents false sharing
-            }
-          }
-        }
-        // perThreadCount[iTask] = count; // This prevents false sharing
-      });
+             {
+               size_t taskSize = dim / THREADS;
+               size_t taskStart = iTask * taskSize;
+               size_t taskEnd = std::min(taskStart + taskSize, dim);
+               size_t count = 0;
+               for (size_t i = taskStart; i < taskEnd; ++i)
+               {
+                 for (size_t j = 0; j < dim; ++j)
+                 {
+                   if (m[i][j] >= 0.0)
+                   {
+                     ++perThreadCount[iTask]; // Causes false sharing
+                     //++count; //This prevents false sharing
+                   }
+                 }
+               }
+               // perThreadCount[iTask] = count; // This prevents false sharing
+             });
     }
     tg.wait();
   }

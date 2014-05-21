@@ -1,14 +1,8 @@
 #include <iostream>
 
-constexpr double GetG()
-{
-  return 9.81;
-}
+constexpr double GetG() { return 9.81; }
 
-constexpr int GetMyAge()
-{
-  return 32;
-}
+constexpr int GetMyAge() { return 32; }
 
 int main(int argc, char* argv[])
 {

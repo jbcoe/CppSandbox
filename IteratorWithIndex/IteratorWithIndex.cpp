@@ -9,9 +9,7 @@ private:
   size_t m_i;
 
 public:
-  IteratorWithIndex(Iterator_T it, size_t i = 0) : m_it(it), m_i(i)
-  {
-  }
+  IteratorWithIndex(Iterator_T it, size_t i = 0) : m_it(it), m_i(i) {}
 
   IteratorWithIndex& operator++()
   {
@@ -20,17 +18,9 @@ public:
     return *this;
   }
 
-  bool operator==(const IteratorWithIndex& i) const
-  {
-    return m_it == i.m_it;
-  }
+  bool operator==(const IteratorWithIndex& i) const { return m_it == i.m_it; }
 
-  auto operator*() const
-  {
-    return std::make_pair(*m_it, m_i);
-  }
+  auto operator*() const { return std::make_pair(*m_it, m_i); }
 };
 
-int main(int argc, char* argv[])
-{
-}
+int main(int argc, char* argv[]) {}

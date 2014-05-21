@@ -15,18 +15,11 @@ bool IsAlignedOnBoundary(const T& t, uintptr_t size)
 template <typename Data_T, size_t N = 0>
 struct alignas(N) AlignedData
 {
-  AlignedData()
-  {
-  }
+  AlignedData() {}
 
-  AlignedData(Data_T data_) : data(std::move(data_))
-  {
-  }
+  AlignedData(Data_T data_) : data(std::move(data_)) {}
 
-  operator Data_T&()
-  {
-    return data;
-  }
+  operator Data_T&() { return data; }
   Data_T data;
 };
 

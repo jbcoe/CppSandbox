@@ -7,13 +7,11 @@
 class MyClassWithLazyInitialization
 {
 public:
-  MyClassWithLazyInitialization()
-  {
-  }
+  MyClassWithLazyInitialization() {}
   const char* Name()
   {
     std::call_once(m_nameInitFlag, [this]()
-    {
+                   {
       this->m_name = "Boris";
       std::cout << "Object has been named\n";
     });
@@ -35,11 +33,11 @@ int main(int argc, char* argv[])
   for (size_t i = 0; i < 10; ++i)
   {
     threads.push_back(std::thread([&]
-    {
-      std::lock_guard<std::mutex> l(coutMutex);
-      std::cout << o.Name() << "\n";
-    }));
+                                  {
+                                    std::lock_guard<std::mutex> l(coutMutex);
+                                    std::cout << o.Name() << "\n";
+                                  }));
   }
   std::for_each(threads.begin(), threads.end(), [](std::thread& t)
-  { t.join(); });
+                { t.join(); });
 }

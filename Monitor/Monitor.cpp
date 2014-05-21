@@ -14,9 +14,7 @@ class Monitor
   std::mutex m;
 
 public:
-  Monitor(T _t) : t(_t)
-  {
-  }
+  Monitor(T _t) : t(_t) {}
 
   template <typename F>
   auto operator()(F f)
@@ -41,25 +39,41 @@ int main(int argc, char* argv[])
   std::vector<std::thread> threads;
 
   threads.emplace_back([&]()
-  {
-    async_ios([](auto& io)
-    { io << "Hello 1 : " << std::this_thread::get_id() << std::endl; });
-  });
+                       {
+                         async_ios([](auto& io)
+                                   {
+                                     io << "Hello 1 : "
+                                        << std::this_thread::get_id()
+                                        << std::endl;
+                                   });
+                       });
   threads.emplace_back([&]()
-  {
-    async_ios([](auto& io)
-    { io << "Hello 2 : " << std::this_thread::get_id() << std::endl; });
-  });
+                       {
+                         async_ios([](auto& io)
+                                   {
+                                     io << "Hello 2 : "
+                                        << std::this_thread::get_id()
+                                        << std::endl;
+                                   });
+                       });
   threads.emplace_back([&]()
-  {
-    async_ios([](auto& io)
-    { io << "Hello 3 : " << std::this_thread::get_id() << std::endl; });
-  });
+                       {
+                         async_ios([](auto& io)
+                                   {
+                                     io << "Hello 3 : "
+                                        << std::this_thread::get_id()
+                                        << std::endl;
+                                   });
+                       });
   threads.emplace_back([&]()
-  {
-    async_ios([](auto& io)
-    { io << "Hello 4 : " << std::this_thread::get_id() << std::endl; });
-  });
+                       {
+                         async_ios([](auto& io)
+                                   {
+                                     io << "Hello 4 : "
+                                        << std::this_thread::get_id()
+                                        << std::endl;
+                                   });
+                       });
 
   for (auto& t : threads)
   {

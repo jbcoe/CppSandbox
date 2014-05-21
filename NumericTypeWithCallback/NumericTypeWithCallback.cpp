@@ -17,9 +17,7 @@ class Numeric
 public:
   typedef Numeric<Object_T> Numeric_T;
 
-  Numeric(double value) : value_{value}
-  {
-  }
+  Numeric(double value) : value_{value} {}
 
   Numeric_T operator+(const Numeric_T& that) const
   {
@@ -65,10 +63,7 @@ public:
     return Numeric_T(value_ / that.value_);
   }
 
-  double raw_value() const
-  {
-    return value_;
-  }
+  double raw_value() const { return value_; }
 
 private:
   double value_;

@@ -7,13 +7,9 @@ class MyClass
   friend std::ostream& operator<<(std::ostream& os, const MyClass& m);
 
 public:
-  MyClass(double value) : m_value(value)
-  {
-  }
+  MyClass(double value) : m_value(value) {}
 
-  MyClass(const MyClass& m) : m_value(m.m_value)
-  {
-  }
+  MyClass(const MyClass& m) : m_value(m.m_value) {}
 
   MyClass& operator=(const MyClass& m)
   {
@@ -21,10 +17,7 @@ public:
     return *this;
   }
 
-  bool operator==(const MyClass& m) const
-  {
-    return m.m_value == m_value;
-  }
+  bool operator==(const MyClass& m) const { return m.m_value == m_value; }
 
 private:
   double m_value;

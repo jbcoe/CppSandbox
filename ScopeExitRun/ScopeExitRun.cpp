@@ -7,9 +7,7 @@ class ScopeExitRunner
   bool run;
 
 public:
-  ScopeExitRunner(F_t f_) : f(f_), run(true)
-  {
-  }
+  ScopeExitRunner(F_t f_) : f(f_), run(true) {}
 
   ~ScopeExitRunner()
   {
@@ -37,10 +35,7 @@ public:
     return *this;
   }
 
-  void Release()
-  {
-    run = false;
-  }
+  void Release() { run = false; }
 };
 
 template <typename F_t>
@@ -57,10 +52,12 @@ void f()
 
 int main(int argc, char* argv[])
 {
-  auto printHelloWorldOnExit = run_on_scope_exit([]
-  { std::cout << "Hello world" << std::endl; });
-  auto printGoodbyeWorldOnExit = run_on_scope_exit([]
-  { std::cout << "Goodbye cruel world" << std::endl; });
+  auto printHelloWorldOnExit =
+      run_on_scope_exit([]
+                        { std::cout << "Hello world" << std::endl; });
+  auto printGoodbyeWorldOnExit =
+      run_on_scope_exit([]
+                        { std::cout << "Goodbye cruel world" << std::endl; });
   auto functionPointerTest = run_on_scope_exit(&f);
   printGoodbyeWorldOnExit.Release();
 }

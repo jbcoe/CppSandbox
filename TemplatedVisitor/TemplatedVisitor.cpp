@@ -23,66 +23,37 @@ public:
 class VisitableA : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const
-  {
-    visitor.Visit(*this);
-  }
+  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
 
-  const char* Name() const
-  {
-    return "A";
-  }
+  const char* Name() const { return "A"; }
 };
 
 class VisitableB : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const
-  {
-    visitor.Visit(*this);
-  }
+  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
 
-  const char* Name() const
-  {
-    return "B";
-  }
+  const char* Name() const { return "B"; }
 };
 
 class VisitableC : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const
-  {
-    visitor.Visit(*this);
-  }
+  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
 
-  const char* Name() const
-  {
-    return "C";
-  }
+  const char* Name() const { return "C"; }
 };
 
 class BaseVisitor : protected IVisitor
 {
 protected:
-  BaseVisitor()
-  {
-  }
+  BaseVisitor() {}
 
-  virtual void Visit(const VisitableA& a)
-  {
-    std::cout << "I saw nothing\n";
-  }
+  virtual void Visit(const VisitableA& a) { std::cout << "I saw nothing\n"; }
 
-  virtual void Visit(const VisitableB& b)
-  {
-    std::cout << "I saw nothing\n";
-  }
+  virtual void Visit(const VisitableB& b) { std::cout << "I saw nothing\n"; }
 
-  virtual void Visit(const VisitableC& c)
-  {
-    std::cout << "I saw nothing\n";
-  }
+  virtual void Visit(const VisitableC& c) { std::cout << "I saw nothing\n"; }
 };
 
 ////////
@@ -102,8 +73,8 @@ template <typename... VisitableTypes_ts>
 class VTVisitor;
 
 template <typename T, typename F, typename... VisitableTypes_ts>
-class VTVisitor<T, F,
-                VisitableTypes_ts...> : public VTVisitor<VisitableTypes_ts...>
+class VTVisitor<T, F, VisitableTypes_ts...>
+    : public VTVisitor<VisitableTypes_ts...>
 {
 protected:
   virtual void Visit(const T& v)
@@ -130,10 +101,7 @@ template <typename T1, typename F1, typename T2, typename F2>
 class TemplatedVisitor : public VTVisitor<T1, F1, T2, F2>
 {
 public:
-  TemplatedVisitor(IVisitable& v)
-  {
-    v.Accept(*this);
-  }
+  TemplatedVisitor(IVisitable& v) { v.Accept(*this); }
 };
 
 int main(int argc, char* argv[])

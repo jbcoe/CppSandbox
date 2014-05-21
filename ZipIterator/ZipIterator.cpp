@@ -8,8 +8,8 @@ namespace detail
   struct DerefencedTuplesAreEqual
   {
     template <typename... Ts>
-    bool operator()(const std::tuple<Ts...>& t1,
-                    const std::tuple<Ts...>& t2) const
+    bool operator()(const std::tuple<Ts...>& t1, const std::tuple<Ts...>& t2)
+        const
     {
       if (*std::get<N>(t1) != *std::get<N>(t2)) return false;
 
@@ -21,8 +21,8 @@ namespace detail
   struct DerefencedTuplesAreEqual<N, true>
   {
     template <typename... Ts>
-    bool operator()(const std::tuple<Ts...>& t1,
-                    const std::tuple<Ts...>& t2) const
+    bool operator()(const std::tuple<Ts...>& t1, const std::tuple<Ts...>& t2)
+        const
     {
       return true;
     }
@@ -33,9 +33,7 @@ template <typename... Iterators>
 class ZipIterator
 {
 public:
-  ZipIterator(Iterators... iterators) : m_iterators(iterators...)
-  {
-  }
+  ZipIterator(Iterators... iterators) : m_iterators(iterators...) {}
 
   ZipIterator<Iterators...>& operator++()
   {

@@ -39,7 +39,7 @@ struct Repeat<0>
 int main(int argc, char* argv[])
 {
   Repeat<5>::Do([]
-  { std::cout << "Hello" << std::endl; });
+                { std::cout << "Hello" << std::endl; });
   Repeat<5>::DoWithN([](int N)
-  { std::cout << "Goodbye " << N << std::endl; });
+                     { std::cout << "Goodbye " << N << std::endl; });
 }

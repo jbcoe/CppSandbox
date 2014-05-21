@@ -6,24 +6,16 @@ class Numerical
 public:
   typedef Numerical<Object_t, Underlying_t> Numerical_t;
 
-  explicit Numerical(const Underlying_t& value) : m_value(value)
-  {
-  }
+  explicit Numerical(const Underlying_t& value) : m_value(value) {}
 
-  Numerical() : m_value()
-  {
-  }
-  Numerical(const Numerical_t& n) : m_value(n.m_value)
-  {
-  }
+  Numerical() : m_value() {}
+  Numerical(const Numerical_t& n) : m_value(n.m_value) {}
   Numerical_t& operator=(const Numerical_t& n)
   {
     m_value = n.m_value;
     return *this;
   }
-  Numerical(Numerical_t&& n) : m_value(n.m_value)
-  {
-  }
+  Numerical(Numerical_t&& n) : m_value(n.m_value) {}
   Numerical_t& operator=(Numerical_t&& n)
   {
     m_value = n.m_value;
@@ -36,10 +28,7 @@ public:
     return *this;
   }
 
-  Underlying_t underlying_value() const
-  {
-    return m_value;
-  }
+  Underlying_t underlying_value() const { return m_value; }
 
 private:
   Underlying_t m_value;

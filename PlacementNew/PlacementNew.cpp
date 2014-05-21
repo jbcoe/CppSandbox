@@ -10,14 +10,9 @@ class MyClass
 public:
   int m_iInt;
   double m_dbl;
-  MyClass()
-  {
-  }
+  MyClass() {}
 
-  static void DeAlloc(MyClass* pC)
-  {
-    pC->~MyClass();
-  }
+  static void DeAlloc(MyClass* pC) { pC->~MyClass(); }
 };
 
 ////////////////////////////////////////////////////////////
@@ -27,14 +22,9 @@ class MyOtherClass
 public:
   double m_dbl;
   int m_iInt;
-  MyOtherClass()
-  {
-  }
+  MyOtherClass() {}
 
-  static void DeAlloc(MyOtherClass* pC)
-  {
-    pC->~MyOtherClass();
-  }
+  static void DeAlloc(MyOtherClass* pC) { pC->~MyOtherClass(); }
 };
 
 ////////////////////////////////////////////////////////////
@@ -44,20 +34,11 @@ class MyBlock : boost::noncopyable
   void* m_pBlock;
 
 public:
-  MyBlock(int iSize)
-  {
-    m_pBlock = malloc(iSize);
-  }
+  MyBlock(int iSize) { m_pBlock = malloc(iSize); }
 
-  ~MyBlock()
-  {
-    free(m_pBlock);
-  }
+  ~MyBlock() { free(m_pBlock); }
 
-  operator void*()
-  {
-    return m_pBlock;
-  }
+  operator void*() { return m_pBlock; }
 };
 
 ////////////////////////////////////////////////////////////

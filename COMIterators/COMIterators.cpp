@@ -6,7 +6,7 @@ template <typename Get_F, typename Count_T = size_t>
 class COMIterableProxy
 {
 public:
-  typedef decltype(((Get_F*) nullptr)->operator()(0)) Object_T;
+  typedef decltype(((Get_F*)nullptr)->operator()(0)) Object_T;
 
   COMIterableProxy(Get_F f, Count_T count)
       : m_f(std::move(f)), m_size(std::move(count))
@@ -28,10 +28,7 @@ public:
       return *this;
     }
 
-    IteratorValue_T operator*()
-    {
-      return m_f(m_index);
-    }
+    IteratorValue_T operator*() { return m_f(m_index); }
 
     FakeIterator<IteratorValue_T>&
     operator=(const FakeIterator<IteratorValue_T>& it) = default;
@@ -95,9 +92,7 @@ public:
   virtual const Object_T* Get(size_t i) const = 0;
   virtual Object_T* GetEditable(size_t i) = 0;
   virtual size_t Count() const = 0;
-  virtual ~ICOMList()
-  {
-  }
+  virtual ~ICOMList() {}
 };
 
 template <typename Object_T>
@@ -110,18 +105,9 @@ public:
     return m_objects.back().get();
   }
 
-  const Object_T* Get(size_t i) const override
-  {
-    return m_objects[i].get();
-  }
-  Object_T* GetEditable(size_t i) override
-  {
-    return m_objects[i].get();
-  }
-  size_t Count() const override
-  {
-    return m_objects.size();
-  }
+  const Object_T* Get(size_t i) const override { return m_objects[i].get(); }
+  Object_T* GetEditable(size_t i) override { return m_objects[i].get(); }
+  size_t Count() const override { return m_objects.size(); }
 
 private:
   std::vector<std::unique_ptr<Object_T>> m_objects;

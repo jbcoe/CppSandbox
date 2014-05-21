@@ -11,9 +11,7 @@ std::mutex g_logMutex;
 class LogLocker
 {
 public:
-  LogLocker() : l(g_logMutex)
-  {
-  }
+  LogLocker() : l(g_logMutex) {}
 
 private:
   std::unique_lock<std::mutex> l;
@@ -26,17 +24,12 @@ std::ostream& operator<<(LogLocker&&, T&& t)
 }
 
 enum class LEVEL
-{
-  INFO = 3,
+{ INFO = 3,
   WARNING = 2,
   ERROR = 1,
-  CRITICAL = 0
-} g_logLevel = LEVEL::CRITICAL;
+  CRITICAL = 0 } g_logLevel = LEVEL::CRITICAL;
 
-void SetLogLevel(LEVEL logLevel)
-{
-  g_logLevel = logLevel;
-}
+void SetLogLevel(LEVEL logLevel) { g_logLevel = logLevel; }
 
 #define LOG(level)                                                             \
   if (g_logLevel < level)                                                      \
@@ -46,8 +39,8 @@ void SetLogLevel(LEVEL logLevel)
 
 int main(int argc, char* argv[])
 {
-  std::vector<LEVEL> logLevels = {LEVEL::INFO,  LEVEL::WARNING,
-                                  LEVEL::ERROR, LEVEL::CRITICAL};
+  std::vector<LEVEL> logLevels = {LEVEL::INFO, LEVEL::WARNING, LEVEL::ERROR,
+                                  LEVEL::CRITICAL};
   for (auto level : logLevels)
   {
     SetLogLevel(level);
@@ -59,22 +52,25 @@ int main(int argc, char* argv[])
   }
 
   std::thread t1([]()
-  {
-    for (int i = 0; i < 50; ++i)
-    {
-      LOG(LEVEL::CRITICAL) << "Are we locked?" << std::endl;
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-  });
+                 {
+                   for (int i = 0; i < 50; ++i)
+                   {
+                     LOG(LEVEL::CRITICAL) << "Are we locked?" << std::endl;
+                     std::this_thread::sleep_for(
+                         std::chrono::milliseconds(100));
+                   }
+                 });
 
   std::thread t2([]()
-  {
-    for (int i = 0; i < 50; ++i)
-    {
-      LOG(LEVEL::CRITICAL) << "Are we really locked?" << std::endl;
-      std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    }
-  });
+                 {
+                   for (int i = 0; i < 50; ++i)
+                   {
+                     LOG(LEVEL::CRITICAL) << "Are we really locked?"
+                                          << std::endl;
+                     std::this_thread::sleep_for(
+                         std::chrono::milliseconds(200));
+                   }
+                 });
 
   t1.join();
   t2.join();

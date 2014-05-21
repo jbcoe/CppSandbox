@@ -1,24 +1,12 @@
 #include <iostream>
 
-void f(const int& i)
-{
-  std::cout << "  const int&\n";
-}
+void f(const int& i) { std::cout << "  const int&\n"; }
 
-void f(int& i)
-{
-  std::cout << "  int&\n";
-}
+void f(int& i) { std::cout << "  int&\n"; }
 
-void f(int&& i)
-{
-  std::cout << "  int&&\n";
-}
+void f(int&& i) { std::cout << "  int&&\n"; }
 
-int GetFive()
-{
-  return 5;
-}
+int GetFive() { return 5; }
 
 int main(int argc, char* argv[])
 {
@@ -31,7 +19,7 @@ int main(int argc, char* argv[])
   std::cout << "f(GetFive());" << std::endl;
   f(GetFive());
   std::cout << "f(int{});" << std::endl;
-  f(int {});
+  f(int{});
   std::cout << "int& rx = x;" << std::endl;
   int& rx = x;
   std::cout << "f(rx);" << std::endl;

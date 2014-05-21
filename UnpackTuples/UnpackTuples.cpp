@@ -55,9 +55,7 @@ struct MyFunctor
 
 struct ToStream
 {
-  ToStream(std::ostream& os) : m_os(os)
-  {
-  }
+  ToStream(std::ostream& os) : m_os(os) {}
   template <typename T>
   T operator()(T t)
   {
@@ -92,7 +90,7 @@ struct apply_void_impl<0>
 template <typename Functor, typename... Ts>
 static void apply_void(Functor f, const std::tuple<Ts...>& t)
 {
-  apply_void_impl<sizeof...(Ts) - 1>()(f, t);
+  apply_void_impl<sizeof...(Ts)-1>()(f, t);
 }
 
 template <typename... Ts>

@@ -4,15 +4,9 @@
 class Moveable
 {
 public:
-  Moveable()
-  {
-    std::cout << " Default constructor" << std::endl;
-  }
+  Moveable() { std::cout << " Default constructor" << std::endl; }
 
-  Moveable(const Moveable& m)
-  {
-    std::cout << " Copy constructor" << std::endl;
-  }
+  Moveable(const Moveable& m) { std::cout << " Copy constructor" << std::endl; }
 
   Moveable(Moveable&& m) noexcept
   {

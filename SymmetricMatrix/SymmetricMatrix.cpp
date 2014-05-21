@@ -6,10 +6,7 @@ template <typename T>
 class SymmetricMatrix
 {
 public:
-  SymmetricMatrix(size_t dim)
-  {
-    m_data.resize((dim * (dim + 1)) >> 1);
-  }
+  SymmetricMatrix(size_t dim) { m_data.resize((dim * (dim + 1)) >> 1); }
 
   T& operator()(size_t row, size_t column)
   {

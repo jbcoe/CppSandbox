@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
   int sum = 0;
 
   std::for_each(some_list.begin(), some_list.end(), [&count, &sum](int x)
-  {
+                {
     sum += x;
     ++count;
   });

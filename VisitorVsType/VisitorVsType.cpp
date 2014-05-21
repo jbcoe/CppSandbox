@@ -29,33 +29,19 @@ struct Visitor
 
 struct A : O
 {
-  virtual void Accept(Visitor& v)
-  {
-    v.Visit(*this);
-  }
-  Type GetType()
-  {
-    return Type_A;
-  }
+  virtual void Accept(Visitor& v) { v.Visit(*this); }
+  Type GetType() { return Type_A; }
 };
 
 struct B : O
 {
-  virtual void Accept(Visitor& v)
-  {
-    v.Visit(*this);
-  }
-  Type GetType()
-  {
-    return Type_B;
-  }
+  virtual void Accept(Visitor& v) { v.Visit(*this); }
+  Type GetType() { return Type_B; }
 };
 
 struct IsAGetter : Visitor
 {
-  IsAGetter() : m_bIsA(false)
-  {
-  }
+  IsAGetter() : m_bIsA(false) {}
 
   bool IsA(O& o)
   {
@@ -63,14 +49,8 @@ struct IsAGetter : Visitor
     return m_bIsA;
   }
 
-  void Visit(A& a)
-  {
-    m_bIsA = true;
-  }
-  void Visit(B& a)
-  {
-    m_bIsA = false;
-  }
+  void Visit(A& a) { m_bIsA = true; }
+  void Visit(B& a) { m_bIsA = false; }
 
   bool m_bIsA;
 };
@@ -86,8 +66,8 @@ int main(int argc, char** argv)
 
   bool bBuildA = true;
   std::generate_n(std::back_inserter(myObjects), count,
-                  [&bBuildA]()->std::unique_ptr<O>
-  {
+                  [&bBuildA]() -> std::unique_ptr<O>
+                  {
     std::unique_ptr<O> ptr;
     if (bBuildA)
       ptr.reset(new A());
@@ -99,7 +79,7 @@ int main(int argc, char** argv)
 
   int a_count0 = std::count_if(myObjects.begin(), myObjects.end(),
                                [&](std::unique_ptr<O>& po)
-  { return po == 0; });
+                               { return po == 0; });
 
   int a_count1 = 0;
   {
@@ -107,7 +87,7 @@ int main(int argc, char** argv)
     IsAGetter isAGetter;
     a_count1 = std::count_if(myObjects.begin(), myObjects.end(),
                              [&](std::unique_ptr<O>& po)
-    { return isAGetter.IsA(*po); });
+                             { return isAGetter.IsA(*po); });
   }
 
   int a_count2 = 0;
@@ -116,7 +96,7 @@ int main(int argc, char** argv)
     IsAGetter isAGetter;
     a_count2 = std::count_if(myObjects.begin(), myObjects.end(),
                              [&](std::unique_ptr<O>& po)
-    { return po->GetType() == Type_A; });
+                             { return po->GetType() == Type_A; });
   }
 
 

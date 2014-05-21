@@ -2,10 +2,7 @@
 
 struct Data
 {
-  void mutateMe()
-  {
-    x = true;
-  }
+  void mutateMe() { x = true; }
 
   bool x = false;
 };
@@ -13,14 +10,9 @@ struct Data
 
 struct DataObserver
 {
-  DataObserver(Data& d_) : d(&d_)
-  {
-  }
+  DataObserver(Data& d_) : d(&d_) {}
 
-  void ThreadSafeConstMethod() const
-  {
-    d->mutateMe();
-  }
+  void ThreadSafeConstMethod() const { d->mutateMe(); }
 
   Data* d;
 };

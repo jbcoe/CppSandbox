@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
   string letters = argv[1];
   sort(letters.begin(), letters.end());
   transform(letters.begin(), letters.end(), letters.begin(), [](char c)
-  { return tolower(c); });
+            { return tolower(c); });
 
   std::vector<string> results;
 
@@ -30,14 +30,14 @@ int main(int argc, char* argv[])
   auto letter_end = letters.end();
 
   for_each(is, is_end, [&](const std::string& _s)
-  {
+           {
     if (_s.size() > letters.size()) return;
     if (_s.size() < minLength) return;
 
     auto s(_s);
     sort(s.begin(), s.end());
     transform(s.begin(), s.end(), s.begin(), [](char c)
-    { return tolower(c); });
+              { return tolower(c); });
 
     auto letter_it = letters.begin();
 
@@ -53,8 +53,8 @@ int main(int argc, char* argv[])
   });
 
   sort(results.begin(), results.end(),
-       [](const string & s1, const string & s2)->bool
-  {
+       [](const string& s1, const string& s2) -> bool
+       {
     if (s1.size() < s2.size()) return true;
 
     if (s2.size() < s1.size()) return false;

@@ -20,13 +20,8 @@ public:
   {
   }
 
-  ScopedThread(ScopedThread&& s) : t_(std::move(s.t_))
-  {
-  }
-  ScopedThread operator=(ScopedThread&& s)
-  {
-    t_ = std::move(s.t_);
-  }
+  ScopedThread(ScopedThread&& s) : t_(std::move(s.t_)) {}
+  ScopedThread operator=(ScopedThread&& s) { t_ = std::move(s.t_); }
   ~ScopedThread()
   {
     if (t_.joinable()) t_.join();
@@ -39,10 +34,10 @@ public:
 int main(int argc, char* argv[])
 {
   ScopedThread myThreadWithLambda([]()
-  {
-    std::lock_guard<std::mutex> l(g_ioMutex);
-    std::cout << "Lambda function" << std::endl;
-  });
+                                  {
+                                    std::lock_guard<std::mutex> l(g_ioMutex);
+                                    std::cout << "Lambda function" << std::endl;
+                                  });
   ScopedThread myThreadWithGlobal(GlobalFunction);
 
   ScopedThread threadWithLambdaMove = std::move(myThreadWithLambda);

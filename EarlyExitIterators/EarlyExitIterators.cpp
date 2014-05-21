@@ -29,20 +29,11 @@ public:
     return *this;
   }
 
-  auto operator*() const
-  {
-    return *m_it;
-  }
+  auto operator*() const { return *m_it; }
 
-  bool operator==(const EarlyExitIterator& i)
-  {
-    return m_it == i.m_it;
-  }
+  bool operator==(const EarlyExitIterator& i) { return m_it == i.m_it; }
 
-  bool operator!=(const EarlyExitIterator& i)
-  {
-    return !(*this == i);
-  }
+  bool operator!=(const EarlyExitIterator& i) { return !(*this == i); }
 };
 
 template <typename Iterable_T, typename Condition_T>
@@ -62,14 +53,8 @@ public:
   {
   }
 
-  auto begin() const
-  {
-    return m_begin;
-  }
-  auto end() const
-  {
-    return m_end;
-  }
+  auto begin() const { return m_begin; }
+  auto end() const { return m_end; }
 };
 
 template <typename Iterable_T, typename Condition_T>
@@ -83,7 +68,7 @@ int main(int argc, char* argv[])
   std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
   for (auto x : make_iterable_until(v, [](auto i)
-  { return i > 5; }))
+                                    { return i > 5; }))
     std::cout << x << ' ';
   std::cout << std::endl;
 }

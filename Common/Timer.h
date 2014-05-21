@@ -9,10 +9,7 @@ template <typename F_t>
 class TTimer
 {
 public:
-  TTimer(F_t f_) : f(f_)
-  {
-    start = microsec_clock::local_time();
-  }
+  TTimer(F_t f_) : f(f_) { start = microsec_clock::local_time(); }
 
   ~TTimer()
   {
@@ -81,10 +78,6 @@ TTimer<TimingReport> make_timer(Ts... ts)
 class Timer : TTimer<TimingReport>
 {
 public:
-  Timer(const char* s) : TTimer(TimingReport(s))
-  {
-  }
-  Timer(const std::string s) : TTimer(TimingReport(s))
-  {
-  }
+  Timer(const char* s) : TTimer(TimingReport(s)) {}
+  Timer(const std::string s) : TTimer(TimingReport(s)) {}
 };

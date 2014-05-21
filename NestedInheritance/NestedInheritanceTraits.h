@@ -31,10 +31,7 @@ struct NestedInheritanceImpl<true, nestDepth, T>
 template <int nestDepth, typename T>
 struct NestedInheritanceImpl<false, nestDepth, T>
 {
-  static constexpr int NestDepth()
-  {
-    return nestDepth;
-  }
+  static constexpr int NestDepth() { return nestDepth; }
 };
 
 template <typename T>

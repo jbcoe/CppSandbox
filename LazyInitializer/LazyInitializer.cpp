@@ -9,9 +9,7 @@ class Lazy
 public:
   typedef decltype(std::declval<Initializer_t>()()) Value_t;
 
-  Lazy(Initializer_t i) : m_i(std::move(i))
-  {
-  }
+  Lazy(Initializer_t i) : m_i(std::move(i)) {}
 
   Lazy(const Lazy<Initializer_t>& that) = delete;
 
@@ -21,10 +19,7 @@ public:
 
   Lazy<Initializer_t>& operator=(Lazy<Initializer_t>&& that) = default;
 
-  operator Value_t&()
-  {
-    return get();
-  }
+  operator Value_t&() { return get(); }
 
   Value_t& get()
   {
@@ -49,19 +44,16 @@ Lazy<Initializer_t> make_lazy(Initializer_t i)
 class MyClass
 {
 public:
-  void Foo() const
-  {
-    std::cout << "Foo" << std::endl;
-  }
+  void Foo() const { std::cout << "Foo" << std::endl; }
 };
 
 int main(int argc, char* argv[])
 {
   auto x = make_lazy<double>([]
-  {
-    std::cout << "Built variable" << std::endl;
-    return 2.0;
-  });
+                             {
+                               std::cout << "Built variable" << std::endl;
+                               return 2.0;
+                             });
 
   std::cout << x << std::endl;
   std::cout << x << std::endl;

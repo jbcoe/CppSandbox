@@ -14,10 +14,11 @@ void RunTasks(size_t tasks, TaskGenerator_t gen)
   for (size_t i = 1; i <= 16; ++i)
   {
     auto t = make_timer([&firstRunTime, i](long t)
-    {
-      if (i == 1) firstRunTime = t;
-      std::cout << i << ' ' << (double)firstRunTime / t << std::endl;
-    });
+                        {
+                          if (i == 1) firstRunTime = t;
+                          std::cout << i << ' ' << (double)firstRunTime / t
+                                    << std::endl;
+                        });
 
     tbb::task_scheduler_init tsInit(i);
     tbb::task_group tg;
