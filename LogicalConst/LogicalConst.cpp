@@ -62,6 +62,10 @@ public:
 
   const value_type* get() const { return underlying_pointer(t); }
 
+  operator value_type*() { return underlying_pointer(t); }
+
+  operator const value_type*() const { return underlying_pointer(t); }
+
   value_type& operator*() { return *t; }
 
   const value_type& operator*() const { return *t; }
@@ -110,8 +114,8 @@ struct B
 
   void operator()() const { m_ptrA->bar(); }
 
-  logical_const<std::unique_ptr<A>> m_ptrA;
-  // std::unique_ptr<A> m_ptrA;
+  //logical_const<std::unique_ptr<A>> m_ptrA;
+  std::unique_ptr<A> m_ptrA;
 };
 
 int main(int argc, char* argv[])
