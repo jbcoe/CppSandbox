@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.5.mk
+include ../compilerSettings_c++14.mk
 
 SOURCES=IteratorWithIndex.cpp
 EXECUTABLE=IteratorWithIndex
