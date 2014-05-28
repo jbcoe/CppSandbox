@@ -11,8 +11,6 @@ public:
   int m_iInt;
   double m_dbl;
   MyClass() {}
-
-  static void DeAlloc(MyClass* pC) { pC->~MyClass(); }
 };
 
 ////////////////////////////////////////////////////////////
@@ -23,8 +21,6 @@ public:
   double m_dbl;
   int m_iInt;
   MyOtherClass() {}
-
-  static void DeAlloc(MyOtherClass* pC) { pC->~MyOtherClass(); }
 };
 
 ////////////////////////////////////////////////////////////
@@ -38,23 +34,30 @@ public:
 
   ~MyBlock() { free(m_pBlock); }
 
-  operator void*() { return m_pBlock; }
+  void* data() { return m_pBlock; }
 };
 
 ////////////////////////////////////////////////////////////
 
+struct Deleter
+{
+	template<typename T>
+	void operator()(T* pT)
+	{
+		pT->~T();
+	}
+};
+
 int main()
 {
-  boost::shared_ptr<MyBlock> pBlock(new MyBlock(sizeof(MyClass)));
+  MyBlock block(sizeof(MyClass));
 
-  boost::shared_ptr<MyClass> pMyInstance(new ((void*)*pBlock) MyClass(),
-                                         &MyClass::DeAlloc);
+  std::unique_ptr<MyClass, Deleter> pMyInstance(new (block.data()) MyClass());
 
   pMyInstance->m_iInt = 8;
   pMyInstance->m_dbl = 9.3;
 
-  boost::shared_ptr<MyOtherClass> pMySecondInstance(
-      new ((void*)*pBlock) MyOtherClass(), &MyOtherClass::DeAlloc);
+	std::unique_ptr<MyOtherClass, Deleter> pMySecondInstance(new (block.data()) MyOtherClass());
 
   std::cout << pMyInstance->m_dbl << std::endl;
   std::cout << pMyInstance->m_iInt << std::endl;
