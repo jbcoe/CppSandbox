@@ -24,9 +24,23 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-template<size_t N>
+template <typename T, typename U, typename... Vs>
+struct MaxSizeOf
+{
+	enum { value = sizeof(T) >= sizeof(U) ? MaxSizeOf<T,Vs...>::value : MaxSizeOf<U,Vs...>::value };
+};
+
+template <typename T, typename U>
+struct MaxSizeOf<T,U>
+{
+	enum { value = sizeof(T) >= sizeof(U) ? sizeof(T) : sizeof(U) };
+};
+
+template<typename... ConstructedTypes>
 class MyBlock 
 {
+	enum { N = MaxSizeOf<char,ConstructedTypes...>::value };
+	
 	std::array<char,N> m_data;
 
   struct Deleter
@@ -51,7 +65,7 @@ public:
 
 int main()
 {
-  MyBlock<sizeof(MyClass)> block;
+  MyBlock<MyClass,MyOtherClass> block;
 
   auto pMyInstance = block.InstanceOf<MyClass>();
 
