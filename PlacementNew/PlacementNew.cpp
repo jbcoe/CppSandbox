@@ -1,7 +1,6 @@
 #include <iostream>
-#include <stdlib.h>
-#include <boost/shared_ptr.hpp>
-#include <boost/noncopyable.hpp>
+#include <array>
+#include <memory>
 
 ////////////////////////////////////////////////////////////
 
@@ -25,39 +24,41 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-class MyBlock : boost::noncopyable
+template<size_t N>
+class MyBlock 
 {
-  void* m_pBlock;
+	std::array<char,N> m_data;
+
+  struct Deleter
+  {
+    template <typename T>
+    void operator()(T* pT)
+    {
+      pT->~T();
+    }
+  };
 
 public:
-  MyBlock(int iSize) { m_pBlock = malloc(iSize); }
-
-  ~MyBlock() { free(m_pBlock); }
-
-  void* data() { return m_pBlock; }
+  template <typename T, typename... Ts>
+  std::unique_ptr<T, Deleter> InstanceOf(Ts... ts)
+  {
+		static_assert(sizeof(T) <= N, "Not enough space in block");
+    return std::unique_ptr<T, Deleter>(new (m_data.data()) T(std::forward(ts)...));
+  }
 };
 
 ////////////////////////////////////////////////////////////
 
-struct Deleter
-{
-	template<typename T>
-	void operator()(T* pT)
-	{
-		pT->~T();
-	}
-};
-
 int main()
 {
-  MyBlock block(sizeof(MyClass));
+  MyBlock<sizeof(MyClass)> block;
 
-  std::unique_ptr<MyClass, Deleter> pMyInstance(new (block.data()) MyClass());
+  auto pMyInstance = block.InstanceOf<MyClass>();
 
   pMyInstance->m_iInt = 8;
   pMyInstance->m_dbl = 9.3;
 
-	std::unique_ptr<MyOtherClass, Deleter> pMySecondInstance(new (block.data()) MyOtherClass());
+  auto pMySecondInstance = block.InstanceOf<MyOtherClass>();
 
   std::cout << pMyInstance->m_dbl << std::endl;
   std::cout << pMyInstance->m_iInt << std::endl;
