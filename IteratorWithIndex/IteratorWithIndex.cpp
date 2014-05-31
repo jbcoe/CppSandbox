@@ -19,10 +19,8 @@ public:
   }
 
   bool operator==(const IteratorWithIndex& i) const { return m_it == i.m_it; }
-  bool operator==(const Iterator_T& i) const { return m_it == i; }
   
 	bool operator!=(const IteratorWithIndex& i) const { return m_it != i.m_it; }
-	bool operator!=(const Iterator_T& i) const { return m_it != i; }
 
   auto index() const { return m_i; }
 
@@ -54,9 +52,7 @@ int main(int argc, char* argv[])
 {
 	std::vector<std::string> v = {"I","II","III","IV","V"};
 
-  auto iv = make_indexed_range(v); 
-
-	for(auto x: iv)
+	for(auto x: make_indexed_range(v))
 	{
 		std::cout << x.first << " : " << x.second << "\n";
 	}
