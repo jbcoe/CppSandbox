@@ -53,23 +53,11 @@ public:
   typedef FakeIterator<Object_T> iterator;
   typedef FakeIterator<const Object_T> const_iterator;
 
-  auto begin()
-  {
-    return iterator(m_f, Count_T{0});
-  }
-  auto end()
-  {
-    return iterator(m_f, Count_T{m_size});
-  }
+  auto begin() { return iterator(m_f, Count_T{0}); }
+  auto end() { return iterator(m_f, Count_T{m_size}); }
 
-  auto begin() const
-  {
-    return const_iterator(m_f, Count_T{0});
-  }
-  auto end() const
-  {
-    return const_iterator(m_f, Count_T{m_size});
-  }
+  auto begin() const { return const_iterator(m_f, Count_T{0}); }
+  auto end() const { return const_iterator(m_f, Count_T{m_size}); }
 
 private:
   Get_F m_f;

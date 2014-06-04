@@ -27,21 +27,25 @@ public:
 template <typename T, typename U, typename... Vs>
 struct MaxSizeOf
 {
-	enum { value = sizeof(T) >= sizeof(U) ? MaxSizeOf<T,Vs...>::value : MaxSizeOf<U,Vs...>::value };
+  enum
+  { value = sizeof(T) >= sizeof(U) ? MaxSizeOf<T, Vs...>::value
+                                   : MaxSizeOf<U, Vs...>::value };
 };
 
 template <typename T, typename U>
-struct MaxSizeOf<T,U>
+struct MaxSizeOf<T, U>
 {
-	enum { value = sizeof(T) >= sizeof(U) ? sizeof(T) : sizeof(U) };
+  enum
+  { value = sizeof(T) >= sizeof(U) ? sizeof(T) : sizeof(U) };
 };
 
-template<typename... ConstructedTypes>
-class MyBlock 
+template <typename... ConstructedTypes>
+class MyBlock
 {
-	enum { N = MaxSizeOf<char,ConstructedTypes...>::value };
-	
-	std::array<char,N> m_data;
+  enum
+  { N = MaxSizeOf<char, ConstructedTypes...>::value };
+
+  std::array<char, N> m_data;
 
   struct Deleter
   {
@@ -56,8 +60,9 @@ public:
   template <typename T, typename... Ts>
   std::unique_ptr<T, Deleter> InstanceOf(Ts... ts)
   {
-		static_assert(sizeof(T) <= N, "Not enough space in block");
-    return std::unique_ptr<T, Deleter>(new (m_data.data()) T(std::forward(ts)...));
+    static_assert(sizeof(T) <= N, "Not enough space in block");
+    return std::unique_ptr<T, Deleter>(new (m_data.data())
+                                       T(std::forward(ts)...));
   }
 };
 
@@ -65,7 +70,7 @@ public:
 
 int main()
 {
-  MyBlock<MyClass,MyOtherClass> block;
+  MyBlock<MyClass, MyOtherClass> block;
 
   auto pMyInstance = block.InstanceOf<MyClass>();
 

@@ -114,7 +114,7 @@ struct B
 
   void operator()() const { m_ptrA->bar(); }
 
-  //logical_const<std::unique_ptr<A>> m_ptrA;
+  // logical_const<std::unique_ptr<A>> m_ptrA;
   std::unique_ptr<A> m_ptrA;
 };
 
