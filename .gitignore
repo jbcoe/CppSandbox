@@ -125,3 +125,4 @@ LogicalConst/LogicalConst
 PreventCallingWithRValues/PreventCallingWithRValues
 ConceptsDemo/ConceptsDemo
 SortTuple/SortTuple
+NoExceptAndMove/NoExceptAndMove
