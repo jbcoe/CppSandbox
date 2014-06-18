@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 template <typename T>
-class logical_const
+class propagate_const
 {
   typedef decltype(*std::declval<T>()) reference_type;
 
@@ -10,45 +10,45 @@ public:
       std::is_lvalue_reference<reference_type>::value,
       typename std::remove_reference<reference_type>::type>::type;
 
-  ~logical_const() = default;
+  ~propagate_const() = default;
 
-  logical_const() : t{} {}
+  propagate_const() : t{} {}
 
   template <typename U>
-  logical_const(U&& u)
+  propagate_const(U&& u)
       : t{std::forward<U>(u)}
   {
   }
 
   template <typename U>
-  logical_const<T>& operator=(U&& u)
+  propagate_const<T>& operator=(U&& u)
   {
     t = std::forward<U>(u);
     return *this;
   }
 
   template <typename U>
-  logical_const(const logical_const<U>& pu)
+  propagate_const(const propagate_const<U>& pu)
       : t{pu.t}
   {
   }
 
   template <typename U>
-  logical_const(logical_const<U>&& pu)
+  propagate_const(propagate_const<U>&& pu)
       : t{std::move(pu.t)}
   {
   }
 
 
   template <typename U>
-  logical_const<T>& operator=(const logical_const<U>& pt)
+  propagate_const<T>& operator=(const propagate_const<U>& pt)
   {
     t = pt.t;
     return *this;
   }
 
   template <typename U>
-  logical_const<T>& operator=(logical_const<U>&& pt)
+  propagate_const<T>& operator=(propagate_const<U>&& pt)
   {
     t = std::move(pt.t);
     return *this;
@@ -114,8 +114,8 @@ struct B
 
   void operator()() const { m_ptrA->bar(); }
 
-  // logical_const<std::unique_ptr<A>> m_ptrA;
-  std::unique_ptr<A> m_ptrA;
+  propagate_const<std::unique_ptr<A>> m_ptrA;
+  //std::unique_ptr<A> m_ptrA;
 };
 
 int main(int argc, char* argv[])
@@ -123,6 +123,6 @@ int main(int argc, char* argv[])
   const B b;
   b();
 
-  logical_const<int*> pNull;
+  propagate_const<int*> pNull;
   std::cout << std::boolalpha << (pNull.get() == nullptr) << std::endl;
 }

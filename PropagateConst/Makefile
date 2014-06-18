@@ -1,6 +1,6 @@
 include ../compilerSettings_c++14.mk
 
-SOURCES=LogicalConst.cpp
-EXECUTABLE=LogicalConst
+SOURCES=PropagateConst.cpp
+EXECUTABLE=PropagateConst
 
 include ../makeCommon.mk
