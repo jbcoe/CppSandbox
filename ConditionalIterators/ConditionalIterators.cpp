@@ -4,27 +4,27 @@
 #include <vector>
 
 #define Iterator typename
-#define Functor typename
+#define FunctionObject typename
 
-template <Iterator Iterator_t, Functor Functor_t>
+template <Iterator Iterator_t, FunctionObject FunctionObject_t>
 class ConditionalIterator
 {
 public:
-  bool operator==(ConditionalIterator<Iterator_t, Functor_t> that) const
+  bool operator==(ConditionalIterator<Iterator_t, FunctionObject_t> that) const
   {
     return iterator_ == that.iterator_;
   }
 
-  bool operator!=(ConditionalIterator<Iterator_t, Functor_t> that) const
+  bool operator!=(ConditionalIterator<Iterator_t, FunctionObject_t> that) const
   {
     return iterator_ != that.iterator_;
   }
 
-  ConditionalIterator<Iterator_t, Functor_t>& operator++()
+  ConditionalIterator<Iterator_t, FunctionObject_t>& operator++()
   {
-    if (iterator_ == end_) return *this;
-
-    ++iterator_;
+    // NB this is unsafe if called when an iterator is already equal to end
+		
+		++iterator_;
 
     while (iterator_ != end_ && !f_(*(iterator_)))
     {
@@ -34,7 +34,7 @@ public:
     return *this;
   }
 
-  ConditionalIterator(Iterator_t iterator, Iterator_t end, Functor_t f)
+  ConditionalIterator(Iterator_t iterator, Iterator_t end, FunctionObject_t f)
       : iterator_(iterator), end_(end), f_(f)
   {
     while (iterator_ != end_ && !f_(*iterator_))
@@ -46,21 +46,21 @@ public:
 private:
   Iterator_t iterator_;
   Iterator_t end_;
-  Functor_t f_;
+  FunctionObject_t f_;
 
 public:
-  auto operator*() const -> decltype(*iterator_) { return *iterator_; }
+  auto operator*() const { return *iterator_; }
 };
 
 
-template <Iterator Iterator_t, Functor Functor_t>
-std::pair<ConditionalIterator<Iterator_t, Functor_t>,
-          ConditionalIterator<Iterator_t, Functor_t>>
+template <Iterator Iterator_t, FunctionObject FunctionObject_t>
+std::pair<ConditionalIterator<Iterator_t, FunctionObject_t>,
+          ConditionalIterator<Iterator_t, FunctionObject_t>>
 make_conditional_begin_and_end(Iterator_t begin, Iterator_t end,
-                               Functor_t condition)
+                               FunctionObject_t condition)
 {
-  return {ConditionalIterator<Iterator_t, Functor_t>(begin, end, condition),
-          ConditionalIterator<Iterator_t, Functor_t>(end, end, condition)};
+  return {ConditionalIterator<Iterator_t, FunctionObject_t>(begin, end, condition),
+          ConditionalIterator<Iterator_t, FunctionObject_t>(end, end, condition)};
 }
 
 int main(int argc, char* argv[])
