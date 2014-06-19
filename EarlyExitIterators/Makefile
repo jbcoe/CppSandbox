@@ -1,4 +1,4 @@
-include ../compilerSettingsclang3.5.mk
+include ../compilerSettings_clang3.5.mk
 
 SOURCES=EarlyExitIterators.cpp
 EXECUTABLE=EarlyExitIterators
