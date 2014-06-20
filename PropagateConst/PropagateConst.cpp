@@ -1,46 +1,36 @@
 #include <iostream>
 #include <memory>
+
 template <typename T>
 class propagate_const
 {
   typedef decltype(*std::declval<T>()) reference_type;
 
 public:
-  using value_type = typename std::enable_if<
+
+	using value_type = typename std::enable_if<
       std::is_lvalue_reference<reference_type>::value,
       typename std::remove_reference<reference_type>::type>::type;
 
-  ~propagate_const() = default;
+  propagate_const() = default;
 
-  propagate_const() : t{} {}
+  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
+  propagate_const(U&& u) : t{std::forward<U>(u)} {}
+	
+  template <typename U>
+  propagate_const(const propagate_const<U>& pu) : t(pu.t) {}
 
   template <typename U>
-  propagate_const(U&& u)
-      : t{std::forward<U>(u)}
-  {
-  }
+  propagate_const(propagate_const<U>&& pu) : t(std::move(pu.t)) {}
 
-  template <typename U>
+  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const<T>& operator=(U&& u)
   {
     t = std::forward<U>(u);
     return *this;
   }
 
-  template <typename U>
-  propagate_const(const propagate_const<U>& pu)
-      : t{pu.t}
-  {
-  }
-
-  template <typename U>
-  propagate_const(propagate_const<U>&& pu)
-      : t{std::move(pu.t)}
-  {
-  }
-
-
-  template <typename U>
+	template <typename U>
   propagate_const<T>& operator=(const propagate_const<U>& pt)
   {
     t = pt.t;
@@ -115,7 +105,6 @@ struct B
   void operator()() const { m_ptrA->bar(); }
 
   propagate_const<std::unique_ptr<A>> m_ptrA;
-  //std::unique_ptr<A> m_ptrA;
 };
 
 int main(int argc, char* argv[])
@@ -123,6 +112,18 @@ int main(int argc, char* argv[])
   const B b;
   b();
 
-  propagate_const<int*> pNull;
-  std::cout << std::boolalpha << (pNull.get() == nullptr) << std::endl;
+	A a;
+	propagate_const<A*> pcA(&a);
+	static_assert(std::is_trivially_destructible<decltype(pcA)>::value, "Not trivially destructible");
+	static_assert(std::is_trivially_move_constructible<decltype(pcA)>::value, "Not trivially move constructible");
+
+	propagate_const<A*> pcA2(pcA);
+
+	auto shptrA = std::make_shared<A>();
+	propagate_const<std::shared_ptr<A>> pcsptrA(shptrA);
+	propagate_const<std::shared_ptr<A>> pcsptrA2(pcsptrA);
+	propagate_const<std::shared_ptr<A>> pcsptrA3(std::move(pcsptrA));
+	
+	propagate_const<std::unique_ptr<A>> pcuptrA(std::make_unique<A>());
+	propagate_const<std::unique_ptr<A>> pcuptrA2(std::move(pcuptrA));
 }
