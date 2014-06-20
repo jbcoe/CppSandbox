@@ -52,9 +52,17 @@ public:
 
   const value_type* get() const { return underlying_pointer(t); }
 
-  operator value_type*() { return underlying_pointer(t); }
+  operator value_type*() 
+	{ 
+		static_assert(std::is_pointer<T>::value,""); 
+		return underlying_pointer(t); 
+	}
 
-  operator const value_type*() const { return underlying_pointer(t); }
+  operator const value_type*() const 
+	{ 
+		static_assert(std::is_pointer<T>::value,""); 
+		return underlying_pointer(t); 
+	}
 
   value_type& operator*() { return *t; }
 
