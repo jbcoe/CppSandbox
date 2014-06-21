@@ -70,24 +70,6 @@ public:
 
   explicit operator bool() const noexcept(noexcept(bool(std::declval<T>()))) { return static_cast<bool>(t); }
 
-  template<typename U, typename V>
-  friend bool operator == (const propagate_const<U>& pt, const propagate_const<V>& pu);
-
-  template<typename U, typename V>
-  friend bool operator != (const propagate_const<U>& pt, const propagate_const<V>& pu);
-  
-  template<typename U, typename V>
-  friend bool operator < (const propagate_const<U>& pt, const propagate_const<V>& pu);
-  
-  template<typename U, typename V>
-  friend bool operator > (const propagate_const<U>& pt, const propagate_const<V>& pu);
-  
-  template<typename U, typename V>
-  friend bool operator <= (const propagate_const<U>& pt, const propagate_const<V>& pu);
-  
-  template<typename U, typename V>
-  friend bool operator >= (const propagate_const<U>& pt, const propagate_const<V>& pu);
-
 private:
   T t;
 
@@ -119,37 +101,37 @@ private:
 template<typename T, typename U>
 bool operator == (const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.t == pu.t;
+  return pt.get() == pu.get();
 }
 
 template<typename T, typename U>
 bool operator != (const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.t != pu.t;
+  return pt.get() != pu.get();
 }
 
 template<typename T, typename U>
 bool operator < (const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.t < pu.t;
+  return pt.get() < pu.get();
 }
 
 template<typename T, typename U>
 bool operator > (const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.t > pu.t;
+  return pt.get() > pu.get();
 }
 
 template<typename T, typename U>
 bool operator <= (const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.t <= pu.t;
+  return pt.get() <= pu.get();
 }
 
 template<typename T, typename U>
 bool operator >= (const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.t >= pu.t;
+  return pt.get() >= pu.get();
 }
 
 struct A
