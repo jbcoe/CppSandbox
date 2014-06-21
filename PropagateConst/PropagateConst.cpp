@@ -14,30 +14,30 @@ public:
 
   propagate_const() = default;
 
-  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
+  template <typename U, typename Dummy = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const(U&& u) : t{std::forward<U>(u)} {}
 	
-  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
+  template <typename U, typename Dummy = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const(const propagate_const<U>& pu) : t(pu.t) {}
 
-  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
+  template <typename U, typename Dummy = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const(propagate_const<U>&& pu) : t(std::move(pu.t)) {}
 
-  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
+  template <typename U, typename Dummy = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const<T>& operator=(U&& u)
   {
     t = std::forward<U>(u);
     return *this;
   }
 
-  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
+  template <typename U, typename Dummy = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const<T>& operator=(const propagate_const<U>& pt)
   {
     t = pt.t;
     return *this;
   }
 
-  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
+  template <typename U, typename Dummy = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const<T>& operator=(propagate_const<U>&& pt)
   {
     t = std::move(pt.t);
@@ -52,15 +52,15 @@ public:
 
   const value_type* get() const { return underlying_pointer(t); }
 
+  template <typename Duplicate=T, typename Dummy = typename std::enable_if<std::is_pointer<Duplicate>::value>::type>
   operator value_type*() 
 	{ 
-		static_assert(std::is_pointer<T>::value,""); 
 		return underlying_pointer(t); 
 	}
 
+  template <typename Duplicate=T, typename Dummy = typename std::enable_if<std::is_pointer<Duplicate>::value>::type>
   operator const value_type*() const 
 	{ 
-		static_assert(std::is_pointer<T>::value,""); 
 		return underlying_pointer(t); 
 	}
 
