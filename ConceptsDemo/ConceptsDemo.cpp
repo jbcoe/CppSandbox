@@ -10,17 +10,17 @@ using namespace origin;
 template <typename T>
 concept bool Advanceable()
 {
-	return requires (T t) 
-	{ 
-		++t; 
-	};
+  return requires (T t) 
+  { 
+    ++t; 
+  };
 }
 */
 
 struct MyClass {};
 struct MyNonCopyableClass
 {
-	MyNonCopyableClass(const MyNonCopyableClass&) = delete;
+  MyNonCopyableClass(const MyNonCopyableClass&) = delete;
 };
 
 struct MyAdvanceableClass
@@ -30,27 +30,27 @@ struct MyAdvanceableClass
 
 void foo(Advanceable& i)
 {
-	std::cout << "advanceable foo" << std::endl;
+  std::cout << "advanceable foo" << std::endl;
 }
 
 template<typename T>
 void foo(T& i)
 {
-	std::cout << "default foo" << std::endl;
+  std::cout << "default foo" << std::endl;
 }
 
 #define print_concept(x,y) std::cout << std::boolalpha << #x << " " << #y << " " << x<y>() << std::endl 
 
 int main(int argc, char* argv[])
 {
-	MyClass m;
-	foo(m);
+  MyClass m;
+  foo(m);
 
-	MyAdvanceableClass im;
-	foo(im);
+  MyAdvanceableClass im;
+  foo(im);
 
-	print_concept(Copyable, MyClass);
-	print_concept(Copyable, MyNonCopyableClass);
+  print_concept(Copyable, MyClass);
+  print_concept(Copyable, MyNonCopyableClass);
 }
 
 
