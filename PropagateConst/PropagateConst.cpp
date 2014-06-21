@@ -159,6 +159,7 @@ struct B
   propagate_const<std::unique_ptr<A>> m_ptrA;
 };
 
+
 int main(int argc, char* argv[])
 {
   B b;
