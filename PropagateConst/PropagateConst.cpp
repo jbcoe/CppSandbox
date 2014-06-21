@@ -7,20 +7,20 @@ class propagate_const
   typedef decltype(*std::declval<T>()) reference_type;
 
 public:
+ 
+	static_assert(std::is_lvalue_reference<reference_type>::value,"");
 
-	using value_type = typename std::enable_if<
-      std::is_lvalue_reference<reference_type>::value,
-      typename std::remove_reference<reference_type>::type>::type;
+	using value_type = std::remove_reference_t<reference_type>;
 
   propagate_const() = default;
 
   template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const(U&& u) : t{std::forward<U>(u)} {}
 	
-  template <typename U>
+  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const(const propagate_const<U>& pu) : t(pu.t) {}
 
-  template <typename U>
+  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const(propagate_const<U>&& pu) : t(std::move(pu.t)) {}
 
   template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
@@ -30,14 +30,14 @@ public:
     return *this;
   }
 
-	template <typename U>
+  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const<T>& operator=(const propagate_const<U>& pt)
   {
     t = pt.t;
     return *this;
   }
 
-  template <typename U>
+  template <typename U, typename V = typename std::enable_if<std::is_convertible<U,T>::value>::type>
   propagate_const<T>& operator=(propagate_const<U>&& pt)
   {
     t = std::move(pt.t);
@@ -68,7 +68,25 @@ public:
 
   const value_type& operator*() const { return *t; }
 
-  explicit operator bool() const { return static_cast<bool>(t); }
+  explicit operator bool() const noexcept(noexcept(bool(std::declval<T>()))) { return static_cast<bool>(t); }
+
+	template<typename U, typename V>
+	friend bool operator == (const propagate_const<U>& pt, const propagate_const<V>& pu);
+
+	template<typename U, typename V>
+	friend bool operator != (const propagate_const<U>& pt, const propagate_const<V>& pu);
+	
+	template<typename U, typename V>
+	friend bool operator < (const propagate_const<U>& pt, const propagate_const<V>& pu);
+	
+	template<typename U, typename V>
+	friend bool operator > (const propagate_const<U>& pt, const propagate_const<V>& pu);
+	
+	template<typename U, typename V>
+	friend bool operator <= (const propagate_const<U>& pt, const propagate_const<V>& pu);
+	
+	template<typename U, typename V>
+	friend bool operator >= (const propagate_const<U>& pt, const propagate_const<V>& pu);
 
 private:
   T t;
@@ -98,6 +116,42 @@ private:
   }
 };
 
+template<typename T, typename U>
+bool operator == (const propagate_const<T>& pt, const propagate_const<U>& pu)
+{
+	return pt.t == pu.t;
+}
+
+template<typename T, typename U>
+bool operator != (const propagate_const<T>& pt, const propagate_const<U>& pu)
+{
+	return pt.t != pu.t;
+}
+
+template<typename T, typename U>
+bool operator < (const propagate_const<T>& pt, const propagate_const<U>& pu)
+{
+	return pt.t < pu.t;
+}
+
+template<typename T, typename U>
+bool operator > (const propagate_const<T>& pt, const propagate_const<U>& pu)
+{
+	return pt.t > pu.t;
+}
+
+template<typename T, typename U>
+bool operator <= (const propagate_const<T>& pt, const propagate_const<U>& pu)
+{
+	return pt.t <= pu.t;
+}
+
+template<typename T, typename U>
+bool operator >= (const propagate_const<T>& pt, const propagate_const<U>& pu)
+{
+	return pt.t >= pu.t;
+}
+
 struct A
 {
   void bar() const { std::cout << "bar (const)" << std::endl; }
@@ -108,24 +162,36 @@ struct B
 {
   B() : m_ptrA(std::make_unique<A>()) {}
 
-  void operator()() { m_ptrA->bar(); }
+  void operator()() 
+	{ 
+	  std::cout << "foo (non-const)" << std::endl;
+		m_ptrA->bar(); 
+	}
 
-  void operator()() const { m_ptrA->bar(); }
+  void operator()() const 
+	{ 
+	  std::cout << "foo (const)" << std::endl;
+		m_ptrA->bar(); 
+	}
 
   propagate_const<std::unique_ptr<A>> m_ptrA;
 };
 
 int main(int argc, char* argv[])
 {
-  const B b;
+  B b;
   b();
+  
+	const B cb;
+  cb();
 
 	A a;
 	propagate_const<A*> pcA(&a);
+	propagate_const<A*> pcA2(pcA);
+	propagate_const<A*> pcA3(std::move(pcA2));
+
 	static_assert(std::is_trivially_destructible<decltype(pcA)>::value, "Not trivially destructible");
 	static_assert(std::is_trivially_move_constructible<decltype(pcA)>::value, "Not trivially move constructible");
-
-	propagate_const<A*> pcA2(pcA);
 
 	auto shptrA = std::make_shared<A>();
 	propagate_const<std::shared_ptr<A>> pcsptrA(shptrA);
