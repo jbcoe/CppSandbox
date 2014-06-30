@@ -128,3 +128,4 @@ SortTuple/SortTuple
 NoExceptAndMove/NoExceptAndMove
 PropagateConst/PropagateConst
 NoExceptAuto/NoExceptAuto
+ReplaceRecursion/ReplaceRecursion
