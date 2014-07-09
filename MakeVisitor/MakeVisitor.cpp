@@ -55,11 +55,14 @@ struct ExtensibleVisitor : public Base_T
       ExtraHandlerFunction_T, 
       ExtensibleVisitor<HandledType_T,HandlerFunction_T,Base_T>>(f, *this);
   }
-  
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Woverloaded-virtual"
   void Visit(const HandledType_T& v) override
   {
     m_f(v);
   }
+#pragma clang diagnostic pop
 
   HandlerFunction_T m_f;
 };

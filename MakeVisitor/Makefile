@@ -1,6 +1,6 @@
 include ../compilerSettings_clang3.5.mk
 
-SOURCES=MakeVisitable.cpp
-EXECUTABLE=MakeVisitable
+SOURCES=MakeVisitor.cpp
+EXECUTABLE=MakeVisitor
 
 include ../makeCommon.mk
