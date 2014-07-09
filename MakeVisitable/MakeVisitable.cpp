@@ -36,10 +36,10 @@ struct Visitable_B : public VisitableBase
   void Accept(VisitorBase& v) override { v.Visit(*this); }
 };
 
-struct NullVisitor : public VisitorBase
+struct Visitor_Throw : public VisitorBase
 {
-    void Visit(const Visitable_A& v) override {}
-    void Visit(const Visitable_B& v) override {}
+    void Visit(const Visitable_A& v) override { throw std::runtime_error("Unhandled type"); }
+    void Visit(const Visitable_B& v) override { throw std::runtime_error("Unhandled type"); }
 };
 
 template <typename HandledType_T, typename HandlerFunction_T, typename Base_T>
@@ -70,7 +70,7 @@ struct BaseExtensibleVisitor : public Base_T
   BaseExtensibleVisitor(Base_T& b) : Base_T(b) {}
 
   template <typename ExtraHandledType_T, typename ExtraHandlerFunction_T>
-  auto on(ExtraHandlerFunction_T f)
+  auto on(ExtraHandlerFunction_T f) &&
   {
     return ExtensibleVisitor<
       ExtraHandledType_T, 
@@ -79,15 +79,12 @@ struct BaseExtensibleVisitor : public Base_T
   }
 };
 
-template<typename Base_T>
-auto make_visitor(Base_T&& b)
-{
-  return BaseExtensibleVisitor<Base_T>(b);
-}
+template <typename Base_T>
+auto make_visitor(Base_T&& b) { return BaseExtensibleVisitor<Base_T>(b); }
 
 int main(int argc, char* argv[])
 {
-  auto v = make_visitor(NullVisitor())
+  auto v = make_visitor(Visitor_Throw())
       .on<Visitable_A>([](auto& x){std::cout << "I saw an A ma!" << std::endl;})
       .on<Visitable_B>([](auto& x){std::cout << "I saw a B ma!" << std::endl;})
   ;
@@ -95,4 +92,3 @@ int main(int argc, char* argv[])
   Visitable_A().Accept(v);
   Visitable_B().Accept(v);
 }
-
