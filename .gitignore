@@ -129,3 +129,4 @@ NoExceptAndMove/NoExceptAndMove
 PropagateConst/PropagateConst
 NoExceptAuto/NoExceptAuto
 ReplaceRecursion/ReplaceRecursion
+MakeVisitable/MakeVisitable
