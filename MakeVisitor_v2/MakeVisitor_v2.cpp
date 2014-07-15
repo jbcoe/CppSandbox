@@ -118,6 +118,32 @@ int main()
 
   int iCounter = 0;
 
+  struct CVisitor : public AbstractVisitor
+  {
+    CVisitor(int& i) : iCounter_(i) {}
+
+    int& iCounter_;
+
+    void Visit(A& a) override final
+    {
+      std::cout << "I'm an A" << std::endl;
+      iCounter_ += 1;
+    }
+
+    void Visit(B& a) override final
+    {
+      std::cout << "I'm a B" << std::endl;
+      iCounter_ += 2;
+    }
+    
+    void Visit(C& a) override final
+    {
+      std::cout << "I'm a C" << std::endl;
+      iCounter_ += 3;
+    }
+  } visitor(iCounter);
+
+  /*
   auto visitor = begin_visitor<AbstractVisitor>()
                      .on<A>([&iCounter](A& a)
                             {
@@ -135,6 +161,7 @@ int main()
                               iCounter += 3;
                             })
                      .end_visitor();
+  */
 
   a.Accept(visitor);
   b.Accept(visitor);
