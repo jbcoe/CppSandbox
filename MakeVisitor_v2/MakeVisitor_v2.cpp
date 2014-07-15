@@ -50,16 +50,16 @@ public:
 };
 
 
-template <typename T, typename F, typename BaseInner, typename ArgsT>
-class AddFunction
+template <typename T, typename F, typename BaseInnerVisitor, typename ArgsT>
+class ComposeVisitor
 {
 public:
-  class Inner : public BaseInner
+  class InnerVisitor : public BaseInnerVisitor
   {
   public:
-    using BaseInner::Visit;
+    using BaseInnerVisitor::Visit;
 
-    Inner(ArgsT&& args) : BaseInner(std::move(args.second)), m_f(std::move(args.first)) {}
+    InnerVisitor(ArgsT&& args) : BaseInnerVisitor(std::move(args.second)), m_f(std::move(args.first)) {}
 
     void Visit(T& t) final override { m_f(t); }
 
@@ -67,16 +67,16 @@ public:
     F m_f;
   };
 
-  AddFunction(ArgsT&& args) : m_args(std::move(args)) {}
+  ComposeVisitor(ArgsT&& args) : m_args(std::move(args)) {}
 
   template <typename Tadd, typename Fadd>
-  AddFunction<Tadd, Fadd, Inner, std::pair<Fadd, ArgsT>> on(Fadd&& f) &&
+  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>> on(Fadd&& f) &&
   {
-    return AddFunction<Tadd, Fadd, Inner, std::pair<Fadd, ArgsT>>(
+    return ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>>(
         std::make_pair(std::move(f), std::move(m_args)));
   }
 
-  Inner end_visitor() && { return Inner(std::move(m_args)); }
+  InnerVisitor end_visitor() && { return InnerVisitor(std::move(m_args)); }
 
   ArgsT m_args;
 };
@@ -86,18 +86,18 @@ template <typename TVisitorBase>
 class EmptyVisitor
 {
 public:
-  class Inner : public TVisitorBase
+  class InnerVisitor : public TVisitorBase
   {
   public:
     using TVisitorBase::Visit;
 
-    Inner(std::nullptr_t) {}
+    InnerVisitor(std::nullptr_t) {}
   };
 
   template <typename Tadd, typename Fadd>
-  AddFunction<Tadd, Fadd, Inner, std::pair<Fadd, std::nullptr_t>> on(Fadd&& f) &&
+  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>> on(Fadd&& f) &&
   {
-    return AddFunction<Tadd, Fadd, Inner, std::pair<Fadd, std::nullptr_t>>(
+    return ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>>(
         std::make_pair(std::move(f), nullptr));
   }
 };
@@ -160,7 +160,7 @@ int main()
                             {
                               std::cout << "I'm a C" << std::endl;
                               iCounter += 3;
-                            })
+                           })
                      .end_visitor();
 
 #endif                     
