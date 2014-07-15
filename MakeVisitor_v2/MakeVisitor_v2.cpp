@@ -118,6 +118,8 @@ int main()
 
   int iCounter = 0;
 
+#ifdef USE_CLASS
+
   struct CVisitor : public AbstractVisitor
   {
     CVisitor(int& i) : iCounter_(i) {}
@@ -142,8 +144,7 @@ int main()
       iCounter_ += 3;
     }
   } visitor(iCounter);
-
-  /*
+#else
   auto visitor = begin_visitor<AbstractVisitor>()
                      .on<A>([&iCounter](A& a)
                             {
@@ -161,7 +162,8 @@ int main()
                               iCounter += 3;
                             })
                      .end_visitor();
-  */
+
+#endif                     
 
   a.Accept(visitor);
   b.Accept(visitor);
