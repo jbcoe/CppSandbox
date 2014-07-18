@@ -1,25 +1,29 @@
 #include <iostream>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/lexical_cast.hpp>
+#include <chrono>
+#include <sstream>
 
-using namespace boost;
-using namespace posix_time;
+
 
 template <typename F_t>
 class TTimer
 {
+  using clock = std::chrono::high_resolution_clock;
+
 public:
-  TTimer(F_t f_) : f(f_) { start = microsec_clock::local_time(); }
+  TTimer(F_t f_) : f(f_) 
+  { 
+    start_ = clock::now();
+  }
 
   ~TTimer()
   {
-    auto end = microsec_clock::local_time();
-    f((end - start).total_milliseconds());
+    auto end = clock::now();
+    f(std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count());
   }
 
 private:
   F_t f;
-  ptime start;
+  clock::time_point start_;
 };
 
 template <typename T>
@@ -45,9 +49,10 @@ struct TimingReport
     event = ss.str();
   }
 
-  void operator()(long t) const
+  template<typename T>
+  void operator()(T t) const
   {
-    std::cout << event << " (ms) " << t << std::endl;
+    std::cout << event << " " << t << " us" << std::endl;
   }
 
 private:

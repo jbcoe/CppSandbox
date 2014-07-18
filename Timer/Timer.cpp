@@ -1,4 +1,7 @@
 #include <Common/Timer.h>
+#include <vector>
+#include <iostream>
+#include <cassert>
 
 int main(int argc, char* argv[])
 {
