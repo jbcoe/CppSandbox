@@ -1,5 +1,6 @@
 // Based on a sub-set of https://isocpp.org/files/papers/n4109.pdf
 #include <iostream>
+#include <sstream>
 #include <exception>
 #include <stdexcept>
 
@@ -111,7 +112,9 @@ Expected<int> ToInt(const std::string& s) noexcept
   }
   catch(...)
   {
-    return make_unexpected<int>(std::runtime_error("Failed to convert value to int"));
+    std::stringstream ss;
+    ss << "Failed to convert \"" << s << "\" to int";
+    return make_unexpected<int>(std::runtime_error(ss.str().c_str()));
   }
 }
 
