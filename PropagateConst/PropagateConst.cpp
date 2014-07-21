@@ -134,6 +134,78 @@ bool operator >= (const propagate_const<T>& pt, const propagate_const<U>& pu)
   return pt.get() >= pu.get();
 }
 
+template<typename T, typename U>
+bool operator == (const propagate_const<T>& pt, const U& pu)
+{
+  return pt.get() == pu;
+}
+
+template<typename T, typename U>
+bool operator != (const propagate_const<T>& pt, const U& pu)
+{
+  return pt.get() != pu;
+}
+
+template<typename T, typename U>
+bool operator < (const propagate_const<T>& pt, const U& pu)
+{
+  return pt.get() < pu;
+}
+
+template<typename T, typename U>
+bool operator > (const propagate_const<T>& pt, const U& pu)
+{
+  return pt.get() > pu;
+}
+
+template<typename T, typename U>
+bool operator <= (const propagate_const<T>& pt, const U& pu)
+{
+  return pt.get() <= pu;
+}
+
+template<typename T, typename U>
+bool operator >= (const propagate_const<T>& pt, const U& pu)
+{
+  return pt.get() >= pu;
+}
+
+template<typename T, typename U>
+bool operator == (const T& pt, const propagate_const<U>& pu)
+{
+  return pt == pu.get();
+}
+
+template<typename T, typename U>
+bool operator != (const T& pt, const propagate_const<U>& pu)
+{
+  return pt != pu.get();
+}
+
+template<typename T, typename U>
+bool operator < (const T& pt, const propagate_const<U>& pu)
+{
+  return pt < pu.get();
+}
+
+template<typename T, typename U>
+bool operator > (const T& pt, const propagate_const<U>& pu)
+{
+  return pt > pu.get();
+}
+
+template<typename T, typename U>
+bool operator <= (const T& pt, const propagate_const<U>& pu)
+{
+  return pt <= pu.get();
+}
+
+template<typename T, typename U>
+bool operator >= (const T& pt, const propagate_const<U>& pu)
+{
+  return pt >= pu.get();
+}
+
 struct A
 {
   void bar() const { std::cout << "bar (const)" << std::endl; }
