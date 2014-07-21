@@ -82,15 +82,7 @@ public:
   Expected<U> as_unexpected() noexcept
   {
     Expected<U> u;
-    try
-    {
-      if(data_.e_) std::rethrow_exception(data_.e_);
-      throw std::logic_error("No data or exception set in Expected<T>");
-    }
-    catch (...)
-    {
-      u.data_.e_ = std::current_exception();
-    }
+    u.data_.e_ = data_.e_;
     return std::move(u);
   }
 };
@@ -150,9 +142,6 @@ int main(int argc, char* argv[])
   catch (const std::runtime_error& e)
   {
     std::cout << e.what() << std::endl;
-  }
-  catch(...)
-  {
   }
 }  
 
