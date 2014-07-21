@@ -95,7 +95,7 @@ public:
   }
 };
 
-template <typename T, typename E = std::runtime_error>
+template <typename T>
 auto make_expected(T&& t)
 {
   return Expected<std::decay_t<T>>(std::forward<T>(t));
