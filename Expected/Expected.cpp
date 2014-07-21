@@ -1,3 +1,4 @@
+// Based on a sub-set of https://isocpp.org/files/papers/n4109.pdf
 #include <iostream>
 #include <exception>
 #include <stdexcept>
