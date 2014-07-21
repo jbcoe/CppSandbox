@@ -22,27 +22,20 @@ class Expected
 
   bool hasData_;
 
-public:
   template <typename U>
   friend class Expected;
 
   Expected() noexcept : hasData_(false) {}
 
+public:
   template <typename E>
-  Expected(Unexpected_T, E&& e) noexcept
-      : hasData_(false)
+  Expected(Unexpected_T, E&& e) noexcept : hasData_(false)
   {
-    try
-    {
-      throw e;
-    }
-    catch (...)
-    {
-      data_.e_ = std::current_exception();
-    }
+    data_.e_ = std::make_exception_ptr(std::forward<E>(e));
   }
 
   Expected(T&& t) : hasData_(true) { data_.t_ = std::move(t); }
+
   Expected(const T& t) : hasData_(true) { data_.t_ = t; }
 
   Expected(Expected<T>&& x) : hasData_(x.hasData_)
