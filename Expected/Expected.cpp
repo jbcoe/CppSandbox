@@ -14,9 +14,8 @@ class Expected
   {
     std::exception_ptr e_;
     T t_;
-    char c_;
 
-    Data() : c_(0) {}
+    Data() : e_(nullptr) {}
     ~Data() {}
   } data_;
 
@@ -26,10 +25,10 @@ public:
   template <typename U>
   friend class Expected;
 
-  Expected() : hasData_(false) {}
+  Expected() noexcept : hasData_(false) {}
 
   template <typename E>
-  Expected(Unexpected_T, E&& e)
+  Expected(Unexpected_T, E&& e) noexcept
       : hasData_(false)
   {
     try
@@ -57,7 +56,7 @@ public:
     }
   }
 
-  explicit operator bool() const { return hasData_; }
+  explicit operator bool() const noexcept { return hasData_; }
 
   T& operator*()
   {
@@ -65,7 +64,11 @@ public:
     {
       return data_.t_;
     }
-    std::rethrow_exception(data_.e_);
+    if(data_.e_)
+    {
+      std::rethrow_exception(data_.e_);
+    }
+    throw std::logic_error("No data and no exception");
   }
 
   const T& operator*() const
@@ -74,34 +77,21 @@ public:
     {
       return data_.t_;
     }
-    std::rethrow_exception(data_.e_);
-  }
-
-  operator const T&() const
-  {
-    if (hasData_)
+    if(data_.e_)
     {
-      return data_.t_;
+      std::rethrow_exception(data_.e_);
     }
-    std::rethrow_exception(data_.e_);
-  }
-
-  operator T&()
-  {
-    if (hasData_)
-    {
-      return data_.t_;
-    }
-    std::rethrow_exception(data_.e_);
+    throw std::logic_error("No data and no exception");
   }
 
   template <typename U>
-  Expected<U> as_unexpected()
+  Expected<U> as_unexpected() noexcept
   {
     Expected<U> u;
     try
     {
-      std::rethrow_exception(data_.e_);
+      if(data_.e_) std::rethrow_exception(data_.e_);
+      throw std::logic_error("No data or exception set in Expected<T>");
     }
     catch (...)
     {
@@ -123,20 +113,52 @@ auto make_unexpected(E&& e)
   return Expected<std::decay_t<T>>(unexpected, std::forward<E>(e));
 }
 
-int main(int argc, char* argv[])
-{
-  auto eInt = make_expected(5);
-  std::cout << *eInt << std::endl;
+///////////////////////////////////////////////////////////////////////////////
+// Main and associated test functions
+///////////////////////////////////////////////////////////////////////////////
 
+Expected<int> ToInt(const std::string& s) noexcept
+{
   try
   {
-    auto eError = make_unexpected<int>(std::runtime_error("Expected error"));
-    auto eStrError = eError.as_unexpected<std::string>();
-    *eStrError;
+    return std::stoi(s);  
+  }
+  catch(...)
+  {
+    return make_unexpected<int>(std::runtime_error("Failed to convert value to int"));
+  }
+}
+
+Expected<std::pair<int,int>> GetFraction(const std::string& s, const std::string& t) noexcept
+{
+ auto eInt_s = ToInt(s);
+ auto eInt_t = ToInt(t);
+
+ if (!eInt_s) return eInt_s.as_unexpected<std::pair<int, int>>();
+
+ if (!eInt_t) return eInt_t.as_unexpected<std::pair<int, int>>();
+
+ return std::make_pair(*eInt_s, *eInt_t);
+}
+
+void PrintFraction(const std::pair<int, int>& f)
+{
+  std::cout << f.first << "/" << f.second <<"\n";
+}
+
+int main(int argc, char* argv[])
+{
+  try
+  {
+    PrintFraction(*GetFraction("5","6"));
+    PrintFraction(*GetFraction("5","foo"));
   }
   catch (const std::runtime_error& e)
   {
     std::cout << e.what() << std::endl;
   }
-}
+  catch(...)
+  {
+  }
+}  
 
