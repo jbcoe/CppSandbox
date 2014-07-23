@@ -59,11 +59,7 @@ public:
     {
       return data_.t_;
     }
-    if(data_.e_)
-    {
-      std::rethrow_exception(data_.e_);
-    }
-    throw std::logic_error("No data and no exception");
+    std::rethrow_exception(data_.e_);
   }
 
   const T& operator*() const
@@ -72,11 +68,7 @@ public:
     {
       return data_.t_;
     }
-    if(data_.e_)
-    {
-      std::rethrow_exception(data_.e_);
-    }
-    throw std::logic_error("No data and no exception");
+    std::rethrow_exception(data_.e_);
   }
 
   template <typename U>
@@ -84,6 +76,28 @@ public:
   {
     Expected<U> u;
     u.data_.e_ = data_.e_;
+    return std::move(u);
+  }
+  
+  template <typename U, typename E>
+  Expected<U> as_unexpected(E&& e) noexcept
+  {
+    Expected<U> u;
+    try
+    {
+      try
+      {
+        std::rethrow_exception(data_.e_);
+      }
+      catch (...)
+      {
+        std::throw_with_nested(std::forward<E>(e));
+      }
+    }
+    catch (...)
+    {
+      u.data_.e_ = std::current_exception();
+    }
     return std::move(u);
   }
 };
@@ -123,9 +137,9 @@ Expected<std::pair<int,int>> GetFraction(const std::string& s, const std::string
  auto eInt_s = ToInt(s);
  auto eInt_t = ToInt(t);
 
- if (!eInt_s) return eInt_s.as_unexpected<std::pair<int, int>>();
+ if (!eInt_s) return eInt_s.as_unexpected<std::pair<int, int>>(std::runtime_error("Failed to convert numerator"));
 
- if (!eInt_t) return eInt_t.as_unexpected<std::pair<int, int>>();
+ if (!eInt_t) return eInt_t.as_unexpected<std::pair<int, int>>(std::runtime_error("Failed to convert denominator"));
 
  return std::make_pair(*eInt_s, *eInt_t);
 }
@@ -133,6 +147,20 @@ Expected<std::pair<int,int>> GetFraction(const std::string& s, const std::string
 void PrintFraction(const std::pair<int, int>& f)
 {
   std::cout << f.first << "/" << f.second <<"\n";
+}
+
+void PrintException(const std::exception& e, int level=0)
+{
+  std::cerr << std::string(level, ' ') << e.what() << '\n';
+  try
+  {
+    std::rethrow_if_nested(e);
+  }
+  catch(const std::exception& e)
+  {          
+    PrintException(e, level+1);
+  }
+  catch (...){}
 }
 
 int main(int argc, char* argv[])
@@ -144,7 +172,7 @@ int main(int argc, char* argv[])
   }
   catch (const std::runtime_error& e)
   {
-    std::cout << e.what() << std::endl;
+    PrintException(e);
   }
 }  
 
