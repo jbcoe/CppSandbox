@@ -5,23 +5,26 @@
 template <typename T>
 struct ClassWithSFINAEdFunctions
 {
-  typename std::enable_if<std::is_same<T,int>::value>::type
-  IAmAnIntWrapper()
+  template<typename T_=T, typename U = typename std::enable_if<std::is_same<T_,int>::value>::type >
+  void IAmAnIntWrapper()
   {
-    std::cout << "I hold an int" << t_ << "\n";
+    std::cout << "I hold an int " << t_ << "\n";
   }
   
-  typename std::enable_if<std::is_same<T,std::string>::value>::type
-  IAmAStringWrapper()
+  template<typename T_=T, typename U = typename std::enable_if<std::is_same<T_,std::string>::value>::type>
+  void IAmAStringWrapper()
   {
-    std::cout << "I hold an int" << t_ << "\n";
+    std::cout << "I hold a string " << t_ << "\n";
   }
 
-  T t_;
+  T t_ = T();
 };
 
 int main(int argc, char* argv[])
 {
   ClassWithSFINAEdFunctions<int> iw;
   iw.IAmAnIntWrapper();
+  
+  ClassWithSFINAEdFunctions<std::string> is;
+  is.IAmAStringWrapper();
 }
