@@ -76,7 +76,8 @@ public:
         std::make_pair(std::move(f), std::move(m_args)));
   }
 
-  typename std::enable_if< ! std::is_abstract<InnerVisitor>::value, InnerVisitor>::type
+  template<typename InnerVisitor_=InnerVisitor>
+  typename std::enable_if<!std::is_abstract<InnerVisitor_>::value, InnerVisitor>::type
   end_visitor() && { return InnerVisitor(std::move(m_args)); }
 
   ArgsT m_args;
