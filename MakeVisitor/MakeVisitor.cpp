@@ -70,7 +70,8 @@ public:
   ComposeVisitor(ArgsT&& args) : m_args(std::move(args)) {}
 
   template <typename Tadd, typename Fadd>
-  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>> on(Fadd&& f) &&
+  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>> 
+  on(Fadd&& f) &&
   {
     return ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>>(
         std::make_pair(std::move(f), std::move(m_args)));
@@ -97,7 +98,8 @@ public:
   };
 
   template <typename Tadd, typename Fadd>
-  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>> on(Fadd&& f) &&
+  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>> 
+  on(Fadd&& f) &&
   {
     return ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>>(
         std::make_pair(std::move(f), nullptr));
