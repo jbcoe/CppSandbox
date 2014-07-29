@@ -61,7 +61,22 @@ public:
 
     InnerVisitor(ArgsT&& args) : BaseInnerVisitor(std::move(args.second)), m_f(std::move(args.first)) {}
 
-    void Visit(T& t) final override { m_f(t); }
+    template <typename F_=F> 
+    typename std::enable_if<std::is_assignable<std::function<void(T&)>,F_>::value>::type
+    VisitImpl(T& t)
+    {
+      m_f(t);
+    }
+
+    
+    template <typename F_=F> 
+    typename std::enable_if<std::is_assignable<std::function<void(T&,AbstractVisitor&)>,F_>::value>::type
+    VisitImpl(T& t)
+    {
+      m_f(t,*this);
+    }
+
+    void Visit(T& t) final override { VisitImpl(t); }
 
   private:
     F m_f;
@@ -160,10 +175,12 @@ int main()
                               std::cout << "I'm a B" << std::endl;
                               iCounter += 2;
                             })
-                     .on<C>([&iCounter](C& c)
+                     .on<C>([&iCounter](C& c, AbstractVisitor& self)
                             {
                               std::cout << "I'm a C" << std::endl;
                               iCounter += 3;
+                              A a;
+                              a.Accept(self);
                            })
                      .end_visitor();
 
