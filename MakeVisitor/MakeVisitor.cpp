@@ -58,6 +58,7 @@ public:
   {
   public:
     using BaseInnerVisitor::Visit;
+    typedef typename BaseInnerVisitor::VisitorInterface VisitorInterface;
 
     InnerVisitor(ArgsT&& args) : BaseInnerVisitor(std::move(args.second)), m_f(std::move(args.first)) {}
 
@@ -70,7 +71,7 @@ public:
 
     
     template <typename F_=F> 
-    typename std::enable_if<std::is_assignable<std::function<void(T&,AbstractVisitor&)>,F_>::value>::type
+    typename std::enable_if<std::is_assignable<std::function<void(T&,VisitorInterface&)>,F_>::value>::type
     VisitImpl(T& t)
     {
       m_f(t,*this);
@@ -108,7 +109,7 @@ public:
   {
   public:
     using TVisitorBase::Visit;
-
+    typedef TVisitorBase VisitorInterface;
     InnerVisitor(std::nullptr_t) {}
   };
 
