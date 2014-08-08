@@ -133,3 +133,4 @@ MakeVisitor/MakeVisitor
 Expected/Expected
 MakeVisitor_v2/MakeVisitor_v2
 G++SFINAE/G++SFINAE
+TupleHasType/TupleHasType
