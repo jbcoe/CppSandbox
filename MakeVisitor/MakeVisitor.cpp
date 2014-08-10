@@ -62,6 +62,10 @@ public:
 
     InnerVisitor(ArgsT&& args) : BaseInnerVisitor(std::move(args.second)), m_f(std::move(args.first)) {}
 
+    void Visit(T& t) final override { VisitImpl(t); }
+
+  private:
+    
     template <typename F_=F> 
     typename std::enable_if<std::is_assignable<std::function<void(T&)>,F_>::value>::type
     VisitImpl(T& t)
@@ -77,9 +81,6 @@ public:
       m_f(t,*this);
     }
 
-    void Visit(T& t) final override { VisitImpl(t); }
-
-  private:
     F m_f;
   };
 
