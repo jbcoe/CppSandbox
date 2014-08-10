@@ -1,21 +1,23 @@
-OBJECTS=$(SOURCES:.cpp=.o)
+OPT=3
 
-run: all
-	./$(EXECUTABLE) $(EXECUTABLE_ARGS)
+OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-all: $(SOURCES) $(EXECUTABLE)
+all: $(EXECUTABLE)
+			./$(EXECUTABLE)
 
-edit:
+edit: 
 	vim $(SOURCES)
 
-.cpp.o:
-	$(CC) $(CFLAGS) $< -c -o $@
-
 $(EXECUTABLE): $(OBJECTS)
-	$(CC) $(LDFLAGS) $(OBJECTS) -o $@
+	    $(CXX) $(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(LDLIBS) 
+
+depend: .depend
+
+.depend: $(SOURCES)
+	    $(RM) ./.depend
+			$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
 
 clean:
-	- rm $(OBJECTS) $(EXECUTABLE)
+	    $(RM) $(OBJECTS) $(EXECUTABLE)
 
-.PHONY: clean
-
+-include .depend
