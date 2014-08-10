@@ -1,4 +1,4 @@
-include ../compilerSettings_clang-svn.mk
+include ../compilerSettings_clang3.5.mk
 
 SOURCES=LambdasWithAuto.cpp
 EXECUTABLE=LambdasWithAuto
