@@ -22,7 +22,8 @@ class Expected
     std::exception_ptr e_;
     T t_;
 
-    Data() : e_(nullptr) {}
+    // Don't initialise either member
+    Data() {}
     // Construct the 'e_' member
     template<typename ...Args>
     Data( Unexpected_T, Args&&...args )
@@ -76,14 +77,15 @@ public:
   {}
 
   Expected(Expected<T>&& x) : hasData_(x.hasData_)
+  // nb: here, neither 'e_' nor 't_' is initialised
   {
     if (x.hasData_)
     {
-      data_.t_ = std::move(x.data_.t_);
+      ::new (std::addressof(data_.t_)) T { std::move(x.data_.t_) };
     }
     else
     {
-      data_.e_ = std::move(x.data_.e_);
+      ::new (std::addressof(data_.e_)) std::exception_ptr { std::move(x.data_.e_) };
     }
   }
 
