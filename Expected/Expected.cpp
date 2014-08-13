@@ -18,6 +18,11 @@ class Expected
     T t_;
 
     Data() : e_(nullptr) {}
+    // Construct the 'e_' member
+    template<typename ...Args>
+    Data( Unexpected_T, Args&&...args )
+     : e_{ std::forward<Args>(args)... }
+    {}
     ~Data() {}
   } data_;
 
