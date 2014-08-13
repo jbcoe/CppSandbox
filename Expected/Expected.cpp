@@ -143,12 +143,14 @@ public:
 };
 
 template <typename T>
+inline
 auto make_expected(T&& t)
 {
   return Expected<std::decay_t<T>>(std::forward<T>(t));
 }
 
 template <typename T, typename E>
+inline
 auto make_unexpected(E&& e)
 {
   return Expected<std::decay_t<T>>(unexpected, std::forward<E>(e));
