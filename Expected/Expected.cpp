@@ -60,7 +60,7 @@ public:
     }
   }
   template <typename E>
-  Expected(Unexpected_T, E&& e) noexcept
+  Expected(Unexpected_T, E&& e) noexcept // this most probably isn't noexcept in the general case
     : data_{ Unexpected_T{}, std::make_exception_ptr(std::forward<E>(e)) }
     , hasData_(false)
   {
