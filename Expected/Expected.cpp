@@ -115,7 +115,7 @@ public:
     assert( !hasData_ );
     Expected<U> u;
     u.data_.e_ = data_.e_;
-    return std::move(u);
+    return u;
   }
   
   template <typename U, typename E>
@@ -138,7 +138,7 @@ public:
     {
       u.data_.e_ = std::current_exception();
     }
-    return std::move(u);
+    return u;
   }
 };
 
