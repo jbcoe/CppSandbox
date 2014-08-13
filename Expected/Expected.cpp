@@ -64,9 +64,15 @@ public:
   {
   }
 
-  Expected(T&& t) : hasData_(true) { data_.t_ = std::move(t); }
+  Expected(T&& t)
+    : data_{ Expected_T{}, std::move(t) }
+    , hasData_(true)
+  {}
 
-  Expected(const T& t) : hasData_(true) { data_.t_ = t; }
+  Expected(const T& t)
+    : data_{ Expected_T{}, t }
+    , hasData_(true)
+  {}
 
   Expected(Expected<T>&& x) : hasData_(x.hasData_)
   {
