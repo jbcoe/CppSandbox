@@ -29,6 +29,17 @@ class Expected
   Expected() noexcept : hasData_(false) {}
 
 public:
+  ~Expected()
+  {
+    if( hasData_ )
+    {
+      data_.t_.~T();
+    }
+    else
+    {
+      data_.e_.~exception_ptr();
+    }
+  }
   template <typename E>
   Expected(Unexpected_T, E&& e) noexcept : hasData_(false)
   {
