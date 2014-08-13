@@ -9,6 +9,10 @@ struct Unexpected_T
 };
 constexpr Unexpected_T unexpected{};
 
+// used internally co control Data_ ctor
+// no real need for a constexpr instance
+struct Expected_T {};
+
 template <typename T>
 class Expected
 {
@@ -22,6 +26,11 @@ class Expected
     template<typename ...Args>
     Data( Unexpected_T, Args&&...args )
      : e_{ std::forward<Args>(args)... }
+    {}
+    // Construct the 't_' member
+    template<typename ...Args>
+    Data( Expected_T, Args&&...args )
+     : t_{ std::forward<Args>(args)... }
     {}
     ~Data() {}
   } data_;
