@@ -31,7 +31,10 @@ class Expected
   template <typename U>
   friend class Expected;
 
-  Expected() noexcept : hasData_(false) {}
+  Expected() noexcept
+    : data_ { Unexpected_T{}, nullptr }
+    , hasData_(false)
+  {}
 
 public:
   ~Expected()
@@ -46,9 +49,10 @@ public:
     }
   }
   template <typename E>
-  Expected(Unexpected_T, E&& e) noexcept : hasData_(false)
+  Expected(Unexpected_T, E&& e) noexcept
+    : data_{ Unexpected_T{}, std::make_exception_ptr(std::forward<E>(e)) }
+    , hasData_(false)
   {
-    data_.e_ = std::make_exception_ptr(std::forward<E>(e));
   }
 
   Expected(T&& t) : hasData_(true) { data_.t_ = std::move(t); }
