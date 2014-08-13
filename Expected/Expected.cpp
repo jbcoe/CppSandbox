@@ -3,6 +3,7 @@
 #include <sstream>
 #include <exception>
 #include <stdexcept>
+#include <cassert>
 
 struct Unexpected_T
 {
@@ -109,6 +110,7 @@ public:
   template <typename U>
   Expected<U> as_unexpected() noexcept
   {
+    assert( !hasData_ );
     Expected<U> u;
     u.data_.e_ = data_.e_;
     return std::move(u);
@@ -117,6 +119,7 @@ public:
   template <typename U, typename E>
   Expected<U> as_unexpected(E&& e) noexcept
   {
+    assert( !hasData_ );
     Expected<U> u;
     try
     {
