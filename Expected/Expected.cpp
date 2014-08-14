@@ -170,9 +170,9 @@ Expected<int> ToInt(const std::string& s) noexcept
   }
   catch(...)
   {
-    std::stringstream ss;
+    std::ostringstream ss;
     ss << "Failed to convert \"" << s << "\" to int";
-    return make_unexpected<int>(std::runtime_error(ss.str().c_str()));
+    return make_unexpected<int>(std::runtime_error(ss.str()));
   }
 }
 
