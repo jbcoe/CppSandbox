@@ -136,3 +136,5 @@ G++SFINAE/G++SFINAE
 TupleHasType/TupleHasType
 FunctionIsConstructible/FunctionIsConstructible
 .depend
+*.gcda
+*.gcno

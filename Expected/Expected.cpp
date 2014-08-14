@@ -3,11 +3,16 @@
 #include <sstream>
 #include <exception>
 #include <stdexcept>
+#include <cassert>
 
 struct Unexpected_T
 {
 };
 constexpr Unexpected_T unexpected{};
+
+// used internally to control Data_ ctor
+// no real need for a constexpr instance
+struct Expected_T {};
 
 template <typename T>
 class Expected
@@ -17,7 +22,18 @@ class Expected
     std::exception_ptr e_;
     T t_;
 
-    Data() : e_(nullptr) {}
+    // Don't initialise either member
+    Data() {}
+    // Construct the 'e_' member
+    template<typename ...Args>
+    Data( Unexpected_T, Args&&...args )
+     : e_{ std::forward<Args>(args)... }
+    {}
+    // Construct the 't_' member
+    template<typename ...Args>
+    Data( Expected_T, Args&&...args )
+     : t_{ std::forward<Args>(args)... }
+    {}
     ~Data() {}
   } data_;
 
@@ -26,28 +42,52 @@ class Expected
   template <typename U>
   friend class Expected;
 
-  Expected() noexcept : hasData_(false) {}
+  Expected() noexcept
+    : data_ { Unexpected_T{}, nullptr }
+    , hasData_(false)
+  {}
 
 public:
-  template <typename E>
-  Expected(Unexpected_T, E&& e) noexcept : hasData_(false)
+  ~Expected()
   {
-    data_.e_ = std::make_exception_ptr(std::forward<E>(e));
-  }
-
-  Expected(T&& t) : hasData_(true) { data_.t_ = std::move(t); }
-
-  Expected(const T& t) : hasData_(true) { data_.t_ = t; }
-
-  Expected(Expected<T>&& x) : hasData_(x.hasData_)
-  {
-    if (x.hasData_)
+    if( hasData_ )
     {
-      data_.t_ = std::move(x.data_.t_);
+      data_.t_.~T();
     }
     else
     {
-      data_.e_ = std::move(x.data_.e_);
+      data_.e_.~exception_ptr();
+    }
+  }
+  template <typename E>
+  Expected(Unexpected_T, E&& e) noexcept // note this most certainly isn't noexcept in the general case
+    : data_{ Unexpected_T{}, std::make_exception_ptr(std::forward<E>(e)) }
+    , hasData_(false)
+  {
+  }
+
+  Expected(T&& t) //noexcept(std::is_nothrow_move_constructible<T>::value)
+    : data_{ Expected_T{}, std::move(t) }
+    , hasData_(true)
+  {}
+
+  Expected(const T& t) //noexcept(std::is_nothrow_copy_constructible<T>::value)
+    : data_{ Expected_T{}, t }
+    , hasData_(true)
+  {}
+
+  Expected(Expected<T>&& x)
+  //  noexcept(std::is_nothrow_move_constructible<T>::value && std::is_nothrow_move_constructible<std::exception_ptr>::value)
+    : hasData_(x.hasData_)
+  // nb: here, neither 'e_' nor 't_' is initialised
+  {
+    if (x.hasData_)
+    {
+      ::new (std::addressof(data_.t_)) T { std::move(x.data_.t_) };
+    }
+    else
+    {
+      ::new (std::addressof(data_.e_)) std::exception_ptr { std::move(x.data_.e_) };
     }
   }
 
@@ -74,14 +114,16 @@ public:
   template <typename U>
   Expected<U> as_unexpected() noexcept
   {
+    assert( !hasData_ );
     Expected<U> u;
     u.data_.e_ = data_.e_;
-    return std::move(u);
+    return u;
   }
-  
+
   template <typename U, typename E>
   Expected<U> as_unexpected(E&& e) noexcept
   {
+    assert( !hasData_ );
     Expected<U> u;
     try
     {
@@ -98,17 +140,19 @@ public:
     {
       u.data_.e_ = std::current_exception();
     }
-    return std::move(u);
+    return u;
   }
 };
 
 template <typename T>
+inline
 auto make_expected(T&& t)
 {
   return Expected<std::decay_t<T>>(std::forward<T>(t));
 }
 
 template <typename T, typename E>
+inline
 auto make_unexpected(E&& e)
 {
   return Expected<std::decay_t<T>>(unexpected, std::forward<E>(e));
@@ -122,13 +166,13 @@ Expected<int> ToInt(const std::string& s) noexcept
 {
   try
   {
-    return std::stoi(s);  
+    return std::stoi(s);
   }
   catch(...)
   {
-    std::stringstream ss;
+    std::ostringstream ss;
     ss << "Failed to convert \"" << s << "\" to int";
-    return make_unexpected<int>(std::runtime_error(ss.str().c_str()));
+    return make_unexpected<int>(std::runtime_error(ss.str()));
   }
 }
 
@@ -157,7 +201,7 @@ void PrintException(const std::exception& e, int level=0)
     std::rethrow_if_nested(e);
   }
   catch(const std::exception& e)
-  {          
+  {
     PrintException(e, level+1);
   }
   catch (...){}
@@ -174,5 +218,5 @@ int main(int argc, char* argv[])
   {
     PrintException(e);
   }
-}  
+}
 
