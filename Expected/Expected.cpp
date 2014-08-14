@@ -119,7 +119,7 @@ public:
     u.data_.e_ = data_.e_;
     return u;
   }
-  
+
   template <typename U, typename E>
   Expected<U> as_unexpected(E&& e) noexcept
   {
@@ -166,7 +166,7 @@ Expected<int> ToInt(const std::string& s) noexcept
 {
   try
   {
-    return std::stoi(s);  
+    return std::stoi(s);
   }
   catch(...)
   {
@@ -201,7 +201,7 @@ void PrintException(const std::exception& e, int level=0)
     std::rethrow_if_nested(e);
   }
   catch(const std::exception& e)
-  {          
+  {
     PrintException(e, level+1);
   }
   catch (...){}
@@ -218,5 +218,5 @@ int main(int argc, char* argv[])
   {
     PrintException(e);
   }
-}  
+}
 
