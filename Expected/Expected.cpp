@@ -10,7 +10,7 @@ struct Unexpected_T
 };
 constexpr Unexpected_T unexpected{};
 
-// used internally co control Data_ ctor
+// used internally to control Data_ ctor
 // no real need for a constexpr instance
 struct Expected_T {};
 
@@ -60,23 +60,25 @@ public:
     }
   }
   template <typename E>
-  Expected(Unexpected_T, E&& e) noexcept // this most probably isn't noexcept in the general case
+  Expected(Unexpected_T, E&& e) noexcept // note this most certainly isn't noexcept in the general case
     : data_{ Unexpected_T{}, std::make_exception_ptr(std::forward<E>(e)) }
     , hasData_(false)
   {
   }
 
-  Expected(T&& t)
+  Expected(T&& t) //noexcept(std::is_nothrow_move_constructible<T>::value)
     : data_{ Expected_T{}, std::move(t) }
     , hasData_(true)
   {}
 
-  Expected(const T& t)
+  Expected(const T& t) //noexcept(std::is_nothrow_copy_constructible<T>::value)
     : data_{ Expected_T{}, t }
     , hasData_(true)
   {}
 
-  Expected(Expected<T>&& x) : hasData_(x.hasData_)
+  Expected(Expected<T>&& x)
+  //  noexcept(std::is_nothrow_move_constructible<T>::value && std::is_nothrow_move_constructible<std::exception_ptr>::value)
+    : hasData_(x.hasData_)
   // nb: here, neither 'e_' nor 't_' is initialised
   {
     if (x.hasData_)
