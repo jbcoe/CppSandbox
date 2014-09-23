@@ -1,5 +1,3 @@
-OPT=3
-
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
 all: $(EXECUTABLE)
