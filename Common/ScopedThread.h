@@ -1,3 +1,6 @@
+#ifndef __USERS_JON_DEV_CPPSANDBOX_COMMON_SCOPEDTHREAD_H
+#define __USERS_JON_DEV_CPPSANDBOX_COMMON_SCOPEDTHREAD_H
+
 #include <thread>
 class ScopedThread
 {
@@ -24,3 +27,5 @@ public:
   ScopedThread(const ScopedThread&) = delete;
   ScopedThread operator=(const ScopedThread&) = delete;
 };
+
+#endif

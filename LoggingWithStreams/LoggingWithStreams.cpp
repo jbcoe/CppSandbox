@@ -24,10 +24,12 @@ std::ostream& operator<<(LogLocker&&, T&& t)
 }
 
 enum class LEVEL
-{ INFO = 3,
+{
+  INFO = 3,
   WARNING = 2,
   ERROR = 1,
-  CRITICAL = 0 } g_logLevel = LEVEL::CRITICAL;
+  CRITICAL = 0
+} g_logLevel = LEVEL::CRITICAL;
 
 void SetLogLevel(LEVEL logLevel) { g_logLevel = logLevel; }
 
@@ -51,26 +53,25 @@ int main(int argc, char* argv[])
     LOG(LEVEL::CRITICAL) << "I am on fire!\n" << std::endl;
   }
 
-  std::thread t1([]()
-                 {
-                   for (int i = 0; i < 50; ++i)
-                   {
-                     LOG(LEVEL::CRITICAL) << "Are we locked?" << std::endl;
-                     std::this_thread::sleep_for(
-                         std::chrono::milliseconds(100));
-                   }
-                 });
+  std::thread t1(
+      []()
+      {
+        for (int i = 0; i < 50; ++i)
+        {
+          LOG(LEVEL::CRITICAL) << "Are we locked?" << std::endl;
+          std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        }
+      });
 
-  std::thread t2([]()
-                 {
-                   for (int i = 0; i < 50; ++i)
-                   {
-                     LOG(LEVEL::CRITICAL) << "Are we really locked?"
-                                          << std::endl;
-                     std::this_thread::sleep_for(
-                         std::chrono::milliseconds(200));
-                   }
-                 });
+  std::thread t2(
+      []()
+      {
+        for (int i = 0; i < 50; ++i)
+        {
+          LOG(LEVEL::CRITICAL) << "Are we really locked?" << std::endl;
+          std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
+      });
 
   t1.join();
   t2.join();

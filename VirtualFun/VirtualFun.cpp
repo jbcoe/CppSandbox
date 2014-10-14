@@ -12,12 +12,12 @@ struct B : A
 
 struct C : B
 {
-  void f() { std::cout << "C::f" << std::endl; }
+  void f() override { std::cout << "C::f" << std::endl; }
 };
 
 struct D : C
 {
-  void f() { std::cout << "D::f" << std::endl; }
+  void f() override { std::cout << "D::f" << std::endl; }
 };
 
 int main(int argc, char* argv[])

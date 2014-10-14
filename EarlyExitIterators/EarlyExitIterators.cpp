@@ -68,7 +68,11 @@ int main(int argc, char* argv[])
   std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
   for (auto x : make_iterable_until(v, [](auto i)
-                                    { return i > 5; }))
+                                    {
+         return i > 5;
+       }))
+  {
     std::cout << x << ' ';
+  }
   std::cout << std::endl;
 }

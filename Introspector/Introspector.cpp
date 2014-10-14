@@ -12,7 +12,9 @@ struct Introspector
   {
     std::for_each(std::begin(fPtrs), std::end(fPtrs),
                   [&](std::function<Member_t&(T*)> f)
-                  { theFunction(f(t)); });
+                  {
+      theFunction(f(t));
+    });
   }
 };
 
@@ -37,12 +39,16 @@ int main(int argc, char* argv[])
 {
   CSomeData myData;
   auto lambda_printer = [](int theInt)
-  { std::cout << theInt << std::endl; };
+  {
+    std::cout << theInt << std::endl;
+  };
   myData.RunFunction(lambda_printer);
 
   int total = 0;
   auto lambda_summer = [&total](int theInt)
-  { total += theInt; };
+  {
+    total += theInt;
+  };
   myData.RunFunction(lambda_summer);
 
   std::cout << "The sum is " << total << std::endl;

@@ -39,7 +39,7 @@ namespace std
       return hash<decltype(m.m_value)>().operator()(m.m_value);
     }
   };
-}
+} // namespace std
 
 int main(int argc, char* argv[])
 {

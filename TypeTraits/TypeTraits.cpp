@@ -20,7 +20,9 @@ std::string TypeName()
   std::stringstream ss;
   if (std::is_const<typename std::remove_reference<
           typename std::remove_pointer<T>::type>::type>::value)
+  {
     ss << "const ";
+  }
 
   ss << std::remove_pointer<
       typename std::remove_reference<T>::type>::type::name;

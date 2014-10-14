@@ -28,22 +28,28 @@ template <typename T, typename U, typename... Vs>
 struct MaxSizeOf
 {
   enum
-  { value = sizeof(T) >= sizeof(U) ? MaxSizeOf<T, Vs...>::value
-                                   : MaxSizeOf<U, Vs...>::value };
+  {
+    value = sizeof(T) >= sizeof(U) ? MaxSizeOf<T, Vs...>::value
+                                   : MaxSizeOf<U, Vs...>::value
+  };
 };
 
 template <typename T, typename U>
 struct MaxSizeOf<T, U>
 {
   enum
-  { value = sizeof(T) >= sizeof(U) ? sizeof(T) : sizeof(U) };
+  {
+    value = sizeof(T) >= sizeof(U) ? sizeof(T) : sizeof(U)
+  };
 };
 
 template <typename... ConstructedTypes>
 class MyBlock
 {
   enum
-  { N = MaxSizeOf<char, ConstructedTypes...>::value };
+  {
+    N = MaxSizeOf<char, ConstructedTypes...>::value
+  };
 
   std::array<char, N> m_data;
 
@@ -62,7 +68,7 @@ public:
   {
     static_assert(sizeof(T) <= N, "Not enough space in block");
     return std::unique_ptr<T, Deleter>(new (m_data.data())
-                                       T(std::forward(ts)...));
+                                           T(std::forward(ts)...));
   }
 };
 

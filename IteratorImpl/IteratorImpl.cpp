@@ -85,7 +85,7 @@ class CObjectImpl : public IObject
 {
 public:
   CObjectImpl(const char* name) : m_name(name) {}
-  virtual const char* Name() const { return m_name.c_str(); }
+  const char* Name() const override { return m_name.c_str(); }
 
 private:
   std::string m_name;
@@ -103,42 +103,42 @@ private:
     {
     }
 
-    virtual IteratorImpl& operator++()
+    IteratorImpl& operator++() override
     {
       m_it++;
       return *this;
     }
 
-    virtual std::unique_ptr<IteratorImpl> Clone() const
+    std::unique_ptr<IteratorImpl> Clone() const override
     {
       std::unique_ptr<IteratorImpl> ptr(new concrete_iterator(m_it));
       return std::move(ptr);
     }
 
-    virtual bool operator==(const IteratorImpl& it) const
+    bool operator==(const IteratorImpl& it) const override
     {
       return static_cast<const concrete_iterator&>(it).m_it == m_it;
     }
 
-    virtual bool operator!=(const IteratorImpl& it) const
+    bool operator!=(const IteratorImpl& it) const override
     {
       return static_cast<const concrete_iterator&>(it).m_it != m_it;
     }
 
-    virtual IObjectSet::Object_t* operator*() { return (*m_it).get(); }
+    IObjectSet::Object_t* operator*() override { return (*m_it).get(); }
 
   private:
     std::vector<std::unique_ptr<CObjectImpl>>::iterator m_it;
   };
 
 public:
-  typename IObjectSet::iterator begin()
+  typename IObjectSet::iterator begin() override
   {
     return IObjectSet::iterator(std::unique_ptr<concrete_iterator>(
         new concrete_iterator(m_vObjects.begin())));
   }
 
-  typename IObjectSet::iterator end()
+  typename IObjectSet::iterator end() override
   {
     return IObjectSet::iterator(std::unique_ptr<concrete_iterator>(
         new concrete_iterator(m_vObjects.end())));

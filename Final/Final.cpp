@@ -7,7 +7,7 @@ struct Base
 
 struct Derived final : Base
 {
-  virtual void DoThing() const final {}
+  void DoThing() const final {}
 };
 
 struct FurtherDerived : Derived

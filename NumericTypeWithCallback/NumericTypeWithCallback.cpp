@@ -92,13 +92,21 @@ int main(int argc, char* argv[])
 
 #ifdef NUMERIC_CALLBACKS_ENABLED
   f_onAdd = [](double a, double b, double c)
-  { std::cout << a << " + " << b << " = " << c << std::endl; };
+  {
+    std::cout << a << " + " << b << " = " << c << std::endl;
+  };
   f_onSubtract = [](double a, double b, double c)
-  { std::cout << a << " - " << b << " = " << c << std::endl; };
+  {
+    std::cout << a << " - " << b << " = " << c << std::endl;
+  };
   f_onMultiply = [](double a, double b, double c)
-  { std::cout << a << " * " << b << " = " << c << std::endl; };
+  {
+    std::cout << a << " * " << b << " = " << c << std::endl;
+  };
   f_onDivide = [](double a, double b, double c)
-  { std::cout << a << " / " << b << " = " << c << std::endl; };
+  {
+    std::cout << a << " / " << b << " = " << c << std::endl;
+  };
 #endif
 
   auto result = 0.2_n + 0.3_n * 0.3_n - 0.8_n / 2.0_n;

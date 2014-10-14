@@ -19,7 +19,9 @@ int main(int argc, char* argv[])
   std::uniform_real_distribution<double> distribution(-1.0, 1.0);
   std::mt19937 engine;
   auto generator = [&]
-  { return distribution(engine); };
+  {
+    return distribution(engine);
+  };
 
   std::vector<double> values_a(size);
   values_a.resize(0);
@@ -47,6 +49,9 @@ int main(int argc, char* argv[])
     std::copy(values_a.begin(), values_a.end(), values_d.begin());
   }
 
-  if (values_a == values_b && values_c == values_d) return 0;
+  if (values_a == values_b && values_c == values_d)
+  {
+    return 0;
+  }
   return -1;
 }

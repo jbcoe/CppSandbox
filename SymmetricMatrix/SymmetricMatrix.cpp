@@ -10,7 +10,10 @@ public:
 
   T& operator()(size_t row, size_t column)
   {
-    if (row < column) std::swap(row, column);
+    if (row < column)
+    {
+      std::swap(row, column);
+    }
     return m_data[((row * (row + 1)) >> 1) + column];
   }
 
@@ -24,7 +27,9 @@ int main(int argc, char* argv[])
   std::uniform_real_distribution<double> distribution(-1, 1);
   std::mt19937 engine;
   auto generator = [&]
-  { return distribution(engine); };
+  {
+    return distribution(engine);
+  };
 
   SymmetricMatrix<double> s(5);
   for (size_t i = 0; i < 5; ++i)

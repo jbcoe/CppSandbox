@@ -14,13 +14,18 @@ int main(int argc, char* argv[])
   for (size_t i = 0; i < 100; ++i)
   {
     futures[i] = std::async([&completionCount]()
-                            { return ++completionCount; });
+                            {
+                              return ++completionCount;
+                            });
   }
 
   for (size_t i = 0; i < futures.size(); ++i)
   {
     std::cout << futures[i].get();
-    if (i < futures.size() - 1) std::cout << ", ";
+    if (i < futures.size() - 1)
+    {
+      std::cout << ", ";
+    }
   }
   std::cout << std::endl;
 }

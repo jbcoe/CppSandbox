@@ -29,14 +29,14 @@ struct Visitor
 
 struct A : O
 {
-  virtual void Accept(Visitor& v) { v.Visit(*this); }
-  Type GetType() { return Type_A; }
+  void Accept(Visitor& v) override { v.Visit(*this); }
+  Type GetType() override { return Type_A; }
 };
 
 struct B : O
 {
-  virtual void Accept(Visitor& v) { v.Visit(*this); }
-  Type GetType() { return Type_B; }
+  void Accept(Visitor& v) override { v.Visit(*this); }
+  Type GetType() override { return Type_B; }
 };
 
 struct IsAGetter : Visitor
@@ -49,8 +49,8 @@ struct IsAGetter : Visitor
     return m_bIsA;
   }
 
-  void Visit(A& a) { m_bIsA = true; }
-  void Visit(B& a) { m_bIsA = false; }
+  void Visit(A& a) override { m_bIsA = true; }
+  void Visit(B& a) override { m_bIsA = false; }
 
   bool m_bIsA;
 };
@@ -58,7 +58,10 @@ struct IsAGetter : Visitor
 int main(int argc, char** argv)
 {
   int count = 100000000;
-  if (argc > 1) count = atoi(argv[1]);
+  if (argc > 1)
+  {
+    count = atoi(argv[1]);
+  }
 
   int aCount = 0;
   int bCount = 0;
@@ -70,16 +73,22 @@ int main(int argc, char** argv)
                   {
     std::unique_ptr<O> ptr;
     if (bBuildA)
+    {
       ptr.reset(new A());
+    }
     else
+    {
       ptr.reset(new B());
+    }
     bBuildA = !bBuildA;
     return std::move(ptr);
   });
 
   int a_count0 = std::count_if(myObjects.begin(), myObjects.end(),
                                [&](std::unique_ptr<O>& po)
-                               { return po == 0; });
+                               {
+    return po == 0;
+  });
 
   int a_count1 = 0;
   {
@@ -87,7 +96,9 @@ int main(int argc, char** argv)
     IsAGetter isAGetter;
     a_count1 = std::count_if(myObjects.begin(), myObjects.end(),
                              [&](std::unique_ptr<O>& po)
-                             { return isAGetter.IsA(*po); });
+                             {
+      return isAGetter.IsA(*po);
+    });
   }
 
   int a_count2 = 0;
@@ -96,7 +107,9 @@ int main(int argc, char** argv)
     IsAGetter isAGetter;
     a_count2 = std::count_if(myObjects.begin(), myObjects.end(),
                              [&](std::unique_ptr<O>& po)
-                             { return po->GetType() == Type_A; });
+                             {
+      return po->GetType() == Type_A;
+    });
   }
 
 

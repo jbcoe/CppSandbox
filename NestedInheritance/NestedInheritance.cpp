@@ -33,10 +33,10 @@ private:
   DataForA m_aData;
 
 protected:
-  ~VirtualWrapper_A() {}
+  ~VirtualWrapper_A() override {}
 
 public:
-  virtual void DoA() const {}
+  void DoA() const override {}
 
   typedef typename BaseType<TInterface>::Type BaseType;
 };
@@ -55,10 +55,10 @@ private:
   DataForB m_bData;
 
 protected:
-  ~VirtualWrapper_B() {}
+  ~VirtualWrapper_B() override {}
 
 public:
-  virtual void DoB() const {}
+  void DoB() const override {}
 
   typedef typename BaseType<TInterface>::Type BaseType;
 };
@@ -77,10 +77,10 @@ private:
   DataForA m_aData;
 
 protected:
-  ~Wrapper_A() {}
+  ~Wrapper_A() override {}
 
 public:
-  virtual void DoA() const {}
+  void DoA() const override {}
 
   typedef typename BaseType<TInterface>::Type BaseType;
   typedef TInterface NestedType;
@@ -106,10 +106,10 @@ private:
   DataForB m_bData;
 
 protected:
-  ~Wrapper_B() {}
+  ~Wrapper_B() override {}
 
 public:
-  virtual void DoB() const {}
+  void DoB() const override {}
 
   typedef typename BaseType<TInterface>::Type BaseType;
   typedef TInterface NestedType;
@@ -135,7 +135,7 @@ private:
   DataForBase m_baseData;
 
 public:
-  virtual void DoBase() const {};
+  void DoBase() const override{};
 
   typedef Interface BaseType;
 };
@@ -153,7 +153,7 @@ private:
   DataForBase m_baseData;
 
 public:
-  virtual void DoBase() const {};
+  void DoBase() const override{};
 
   typedef Wrapper_A<Wrapper_B<Interface>> NestedType;
 };
@@ -194,9 +194,9 @@ private:
   DelegateB m_dB;
 
 public:
-  virtual void DoBase() const {}
-  virtual void DoA() const { m_dA.DoA(); }
-  virtual void DoB() const { m_dB.DoB(); }
+  void DoBase() const override {}
+  void DoA() const override { m_dA.DoA(); }
+  void DoB() const override { m_dB.DoB(); }
 };
 
 class RawImpl : public Interface
@@ -207,9 +207,9 @@ private:
   DataForB m_bData;
 
 public:
-  virtual void DoBase() const {}
-  virtual void DoA() const {}
-  virtual void DoB() const {}
+  void DoBase() const override {}
+  void DoA() const override {}
+  void DoB() const override {}
 };
 
 

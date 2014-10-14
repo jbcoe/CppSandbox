@@ -24,7 +24,10 @@ public:
   ScopedThread operator=(ScopedThread&& s) { t_ = std::move(s.t_); }
   ~ScopedThread()
   {
-    if (t_.joinable()) t_.join();
+    if (t_.joinable())
+    {
+      t_.join();
+    }
   }
 
   ScopedThread(const ScopedThread&) = delete;

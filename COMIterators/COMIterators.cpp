@@ -69,7 +69,9 @@ auto make_iterable(List_T& list)
 {
   List_T* pList = &list;
   auto accessor = [=](auto i)
-  { return pList->Get(i); };
+  {
+    return pList->Get(i);
+  };
   return COMIterableProxy<decltype(accessor)>(accessor, list.Count());
 }
 

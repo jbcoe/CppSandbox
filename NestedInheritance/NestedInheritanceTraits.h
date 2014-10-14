@@ -1,3 +1,6 @@
+#ifndef __USERS_JON_DEV_CPPSANDBOX_NESTEDINHERITANCE_NESTEDINHERITANCETRAITS_H
+#define __USERS_JON_DEV_CPPSANDBOX_NESTEDINHERITANCE_NESTEDINHERITANCETRAITS_H
+
 #pragma once
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -43,3 +46,5 @@ struct NestedInheritance
         NestedInheritanceTraits<T>::HasNestedInheritance, 0, T>::NestDepth();
   }
 };
+
+#endif

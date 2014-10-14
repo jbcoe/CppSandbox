@@ -17,7 +17,10 @@ void data_reading()
     std::lock_guard<std::mutex> lg(m);
     messages.push(line);
     data_condition.notify_one();
-    if (line.empty()) break;
+    if (line.empty())
+    {
+      break;
+    }
   }
 }
 
@@ -27,11 +30,16 @@ void data_printing()
   {
     std::unique_lock<std::mutex> l(m);
     data_condition.wait(l, []
-                        { return !messages.empty(); });
+                        {
+      return !messages.empty();
+    });
     auto message = std::move(messages.front());
     messages.pop();
     l.unlock();
-    if (message.empty()) break;
+    if (message.empty())
+    {
+      break;
+    }
     std::cout << "READ: " << message << std::endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
   }

@@ -20,7 +20,10 @@ int main(int argc, char* argv[])
     for (int i = 0; i < repeat; ++i)
     {
       std::string s = GetConstBigString();
-      if (s.empty()) return -1;
+      if (s.empty())
+      {
+        return -1;
+      }
     }
   }
   {
@@ -28,7 +31,10 @@ int main(int argc, char* argv[])
     for (int i = 0; i < repeat; ++i)
     {
       std::string s = GetConstBigString().c_str();
-      if (s.empty()) return -1;
+      if (s.empty())
+      {
+        return -1;
+      }
     }
   }
 
@@ -37,7 +43,10 @@ int main(int argc, char* argv[])
     for (int i = 0; i < repeat; ++i)
     {
       std::string s = GetBigString();
-      if (s.empty()) return -1;
+      if (s.empty())
+      {
+        return -1;
+      }
     }
   }
   {
@@ -45,7 +54,10 @@ int main(int argc, char* argv[])
     for (int i = 0; i < repeat; ++i)
     {
       std::string s = GetBigString().c_str();
-      if (s.empty()) return -1;
+      if (s.empty())
+      {
+        return -1;
+      }
     }
   }
   return 0;

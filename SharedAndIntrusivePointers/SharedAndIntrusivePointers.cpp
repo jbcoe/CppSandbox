@@ -14,7 +14,10 @@ void intrusive_ptr_add_ref(T* p)
 template <typename T>
 void intrusive_ptr_release(T* p)
 {
-  if (!--p->refCount_) delete p;
+  if (!--p->refCount_)
+  {
+    delete p;
+  }
 }
 
 //////////////////////////////////////////////////
@@ -69,7 +72,9 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
     {
       std::vector<std::shared_ptr<T>> objects;
       std::generate_n(std::back_inserter(objects), objectCount, []
-                      { return std::shared_ptr<T>(new T()); });
+                      {
+        return std::shared_ptr<T>(new T());
+      });
     }
   }
 
@@ -78,7 +83,9 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
         make_timer("std::shared_ptr and new : ", objectName, " ", objectCount);
     std::vector<std::shared_ptr<T>> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
-                    { return std::shared_ptr<T>(new T()); });
+                    {
+      return std::shared_ptr<T>(new T());
+    });
   }
 
   {
@@ -86,7 +93,9 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
                         objectCount);
     std::vector<std::shared_ptr<T>> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
-                    { return std::make_shared<T>(); });
+                    {
+      return std::make_shared<T>();
+    });
   }
 
   {
@@ -94,7 +103,9 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
         make_timer("std::unique_ptr and new : ", objectName, " ", objectCount);
     std::vector<std::unique_ptr<T>> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
-                    { return std::unique_ptr<T>(new T()); });
+                    {
+      return std::unique_ptr<T>(new T());
+    });
   }
 
   {
@@ -102,7 +113,9 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
                         objectCount);
     std::vector<boost::shared_ptr<T>> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
-                    { return boost::shared_ptr<T>(new T()); });
+                    {
+      return boost::shared_ptr<T>(new T());
+    });
   }
 
   {
@@ -110,7 +123,9 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
                         objectCount);
     std::vector<boost::shared_ptr<T>> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
-                    { return boost::make_shared<T>(); });
+                    {
+      return boost::make_shared<T>();
+    });
   }
 
   {
@@ -118,15 +133,22 @@ void RunDefaultConstructableObjectTimings(size_t objectCount,
         make_timer("boost::intrusive_ptr : ", objectName, " ", objectCount);
     std::vector<boost::intrusive_ptr<T>> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
-                    { return boost::intrusive_ptr<T>(new T()); });
+                    {
+      return boost::intrusive_ptr<T>(new T());
+    });
   }
 
   {
     auto t = make_timer(objectName, "*  ", objectCount);
     std::vector<T*> objects;
     std::generate_n(std::back_inserter(objects), objectCount, []
-                    { return new T(); });
-    for (auto o : objects) delete o;
+                    {
+      return new T();
+    });
+    for (auto o : objects)
+    {
+      delete o;
+    }
   }
 
   std::cout << std::endl;

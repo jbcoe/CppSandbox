@@ -23,7 +23,7 @@ public:
 class VisitableA : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
+  void Accept(IVisitor& visitor) const override { visitor.Visit(*this); }
 
   const char* Name() const { return "A"; }
 };
@@ -31,7 +31,7 @@ public:
 class VisitableB : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
+  void Accept(IVisitor& visitor) const override { visitor.Visit(*this); }
 
   const char* Name() const { return "B"; }
 };
@@ -39,7 +39,7 @@ public:
 class VisitableC : public IVisitable
 {
 public:
-  virtual void Accept(IVisitor& visitor) const { visitor.Visit(*this); }
+  void Accept(IVisitor& visitor) const override { visitor.Visit(*this); }
 
   const char* Name() const { return "C"; }
 };
@@ -49,11 +49,11 @@ class BaseVisitor : protected IVisitor
 protected:
   BaseVisitor() {}
 
-  virtual void Visit(const VisitableA& a) { std::cout << "I saw nothing\n"; }
+  void Visit(const VisitableA& a) override { std::cout << "I saw nothing\n"; }
 
-  virtual void Visit(const VisitableB& b) { std::cout << "I saw nothing\n"; }
+  void Visit(const VisitableB& b) override { std::cout << "I saw nothing\n"; }
 
-  virtual void Visit(const VisitableC& c) { std::cout << "I saw nothing\n"; }
+  void Visit(const VisitableC& c) override { std::cout << "I saw nothing\n"; }
 };
 
 ////////
@@ -77,7 +77,7 @@ class VTVisitor<T, F, VisitableTypes_ts...>
     : public VTVisitor<VisitableTypes_ts...>
 {
 protected:
-  virtual void Visit(const T& v)
+  void Visit(const T& v) override
   {
     F f;
     f(v);
@@ -88,7 +88,7 @@ template <typename T, typename F>
 class VTVisitor<T, F> : public T, public BaseVisitor
 {
 protected:
-  virtual void Visit(const T& v)
+  void Visit(const T& v) override
   {
     F f;
     f(v);

@@ -18,7 +18,9 @@ public:
 thread_local ThreadLocalGenerator generator{};
 
 enum
-{ BIG_COUNT = 10000 };
+{
+  BIG_COUNT = 10000
+};
 
 int main(int argc, char* argv[])
 {
@@ -32,11 +34,16 @@ int main(int argc, char* argv[])
                                        // Prevent dead code optimisation by
                                        // using the result of generator()
                                        if (generator() == 42)
+                                       {
                                          ++impossible_error_count;
+                                       }
                                      }));
   }
 
-  for (auto& t : generators) t.join();
+  for (auto& t : generators)
+  {
+    t.join();
+  }
 
   return 0;
 }

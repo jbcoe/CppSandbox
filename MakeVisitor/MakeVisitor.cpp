@@ -60,25 +60,29 @@ public:
     using BaseInnerVisitor::Visit;
     typedef typename BaseInnerVisitor::VisitorInterface VisitorInterface;
 
-    InnerVisitor(ArgsT&& args) : BaseInnerVisitor(std::move(args.second)), m_f(std::move(args.first)) {}
+    InnerVisitor(ArgsT&& args)
+        : BaseInnerVisitor(std::move(args.second)), m_f(std::move(args.first))
+    {
+    }
 
-    void Visit(T& t) final override { VisitImpl(t); }
+    void Visit(T& t) final { VisitImpl(t); }
 
   private:
-    
-    template <typename F_=F> 
-    typename std::enable_if<std::is_assignable<std::function<void(T&)>,F_>::value>::type
+    template <typename F_ = F>
+    typename std::enable_if<
+        std::is_assignable<std::function<void(T&)>, F_>::value>::type
     VisitImpl(T& t)
     {
       m_f(t);
     }
 
-    
-    template <typename F_=F> 
-    typename std::enable_if<std::is_assignable<std::function<void(T&,VisitorInterface&)>,F_>::value>::type
+
+    template <typename F_ = F>
+    typename std::enable_if<std::is_assignable<
+        std::function<void(T&, VisitorInterface&)>, F_>::value>::type
     VisitImpl(T& t)
     {
-      m_f(t,*this);
+      m_f(t, *this);
     }
 
     F m_f;
@@ -87,16 +91,20 @@ public:
   ComposeVisitor(ArgsT&& args) : m_args(std::move(args)) {}
 
   template <typename Tadd, typename Fadd>
-  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>> 
+  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>>
   on(Fadd&& f) &&
   {
     return ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>>(
         std::make_pair(std::move(f), std::move(m_args)));
   }
 
-  template<typename InnerVisitor_=InnerVisitor>
-  typename std::enable_if<!std::is_abstract<InnerVisitor_>::value, InnerVisitor>::type
-  end_visitor() && { return InnerVisitor(std::move(m_args)); }
+  template <typename InnerVisitor_ = InnerVisitor>
+  typename std::enable_if<!std::is_abstract<InnerVisitor_>::value,
+                          InnerVisitor>::type
+  end_visitor() &&
+  {
+    return InnerVisitor(std::move(m_args));
+  }
 
   ArgsT m_args;
 };
@@ -115,10 +123,11 @@ public:
   };
 
   template <typename Tadd, typename Fadd>
-  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>> 
+  ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>>
   on(Fadd&& f) &&
   {
-    return ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, std::nullptr_t>>(
+    return ComposeVisitor<Tadd, Fadd, InnerVisitor,
+                          std::pair<Fadd, std::nullptr_t>>(
         std::make_pair(std::move(f), nullptr));
   }
 };
@@ -158,7 +167,7 @@ int main()
       std::cout << "I'm a B" << std::endl;
       iCounter_ += 2;
     }
-    
+
     void Visit(C& a) override final
     {
       std::cout << "I'm a C" << std::endl;
@@ -183,10 +192,10 @@ int main()
                               iCounter += 3;
                               A a;
                               a.Accept(self);
-                           })
+                            })
                      .end_visitor();
 
-#endif                     
+#endif
 
   a.Accept(visitor);
   b.Accept(visitor);

@@ -28,7 +28,7 @@ class A : public IVisitable
 public:
   A(int i) : id_(i) {}
 
-  void Accept(IVisitor& v) const { v.Visit(*this); }
+  void Accept(IVisitor& v) const override { v.Visit(*this); }
 
   int A_ID() const { return id_; }
 
@@ -41,7 +41,7 @@ class B : public IVisitable
 public:
   B(int i) : id_(i) {}
 
-  void Accept(IVisitor& v) const { v.Visit(*this); }
+  void Accept(IVisitor& v) const override { v.Visit(*this); }
 
   int B_ID() const { return id_; }
 
@@ -54,7 +54,7 @@ class C : public IVisitable
 public:
   C(int i) : id_(i) {}
 
-  void Accept(IVisitor& v) const { v.Visit(*this); }
+  void Accept(IVisitor& v) const override { v.Visit(*this); }
 
   int C_ID() const { return id_; }
 
@@ -64,9 +64,9 @@ private:
 
 class NullVisitor : public IVisitor
 {
-  void Visit(const A& a) {}
-  void Visit(const B& b) {}
-  void Visit(const C& b) {}
+  void Visit(const A& a) override {}
+  void Visit(const B& b) override {}
+  void Visit(const C& b) override {}
 };
 
 template <typename Matched_T, typename MatchFunctor_T>
@@ -84,9 +84,12 @@ struct Matcher : public NullVisitor
     return matched_ != nullptr;
   }
 
-  void Visit(const Matched_T& m)
+  void Visit(const Matched_T& m) override
   {
-    if (f_(m)) matched_ = &m;
+    if (f_(m))
+    {
+      matched_ = &m;
+    }
   }
 };
 
@@ -105,10 +108,14 @@ int main(int argc, char* argv[])
   objects.push_back(std::unique_ptr<C>(new C(3)));
 
   auto b2Matcher = make_matcher<B>([](const B& b)
-                                   { return b.B_ID() == 2; });
+                                   {
+                                     return b.B_ID() == 2;
+                                   });
   for (auto& p : objects)
   {
     if (b2Matcher.IsMatch(*p))
+    {
       std::cout << "Matched a B with id 2" << std::endl;
+    }
   }
 }

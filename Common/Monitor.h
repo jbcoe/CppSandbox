@@ -1,3 +1,6 @@
+#ifndef __USERS_JON_DEV_CPPSANDBOX_COMMON_MONITOR_H
+#define __USERS_JON_DEV_CPPSANDBOX_COMMON_MONITOR_H
+
 #include <thread>
 
 template <typename T>
@@ -17,3 +20,5 @@ public:
     return f(t);
   }
 };
+
+#endif

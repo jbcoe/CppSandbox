@@ -12,7 +12,9 @@ std::mt19937 engine;
 auto generator = std::bind(distribution, engine);
 
 auto lambda_sum_sq = [](auto sum, auto x)
-{ return sum + x * x; };
+{
+  return sum + x * x;
+};
 
 int main(int argc, char* argv[])
 {

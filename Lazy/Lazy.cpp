@@ -25,7 +25,9 @@ struct NullableValue<std::shared_ptr<T>>
   typedef std::shared_ptr<T> value;
 };
 
-template <typename F, typename Value_T = std::remove_reference_t<decltype(std::declval<F>()())>>
+template <typename F,
+          typename Value_T =
+              std::remove_reference_t<decltype(std::declval<F>()())>>
 class Lazy
 {
   typedef typename NullableValue<Value_T>::value NullableValue_T;
@@ -103,7 +105,9 @@ int main(int argc, char* argv[])
   std::cout << std::endl;
 
   auto f = [](MyClass* pM)
-  { std::cout << "Called f" << std::endl; };
+  {
+    std::cout << "Called f" << std::endl;
+  };
 
   f(lptrX.get());
 }

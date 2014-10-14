@@ -54,7 +54,10 @@ public:
   pointer allocate(size_type n, const_pointer = 0)
   {
     void* p = std::malloc(n * sizeof(T));
-    if (!p) throw std::bad_alloc();
+    if (!p)
+    {
+      throw std::bad_alloc();
+    }
 
     std::cout << "Allocator: Allocated a block of memory of size "
               << n * sizeof(T) << std::endl;

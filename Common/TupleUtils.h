@@ -1,3 +1,6 @@
+#ifndef __USERS_JON_DEV_CPPSANDBOX_COMMON_TUPLEUTILS_H
+#define __USERS_JON_DEV_CPPSANDBOX_COMMON_TUPLEUTILS_H
+
 #include <tuple>
 
 class TupleUtils
@@ -68,3 +71,5 @@ std::ostream& operator<<(std::ostream& os, std::tuple<Ts...> t)
   os << "\b)";
   return os;
 }
+
+#endif

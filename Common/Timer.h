@@ -1,7 +1,9 @@
+#ifndef __USERS_JON_DEV_CPPSANDBOX_COMMON_TIMER_H
+#define __USERS_JON_DEV_CPPSANDBOX_COMMON_TIMER_H
+
 #include <iostream>
 #include <chrono>
 #include <sstream>
-
 
 
 template <typename F_t>
@@ -10,15 +12,13 @@ class TTimer
   using clock = std::chrono::high_resolution_clock;
 
 public:
-  TTimer(F_t f_) : f(f_) 
-  { 
-    start_ = clock::now();
-  }
+  TTimer(F_t f_) : f(f_) { start_ = clock::now(); }
 
   ~TTimer()
   {
     auto end = clock::now();
-    f(std::chrono::duration_cast<std::chrono::microseconds>(end - start_).count());
+    f(std::chrono::duration_cast<std::chrono::microseconds>(end - start_)
+          .count());
   }
 
 private:
@@ -49,7 +49,7 @@ struct TimingReport
     event = ss.str();
   }
 
-  template<typename T>
+  template <typename T>
   void operator()(T t) const
   {
     std::cout << event << " " << t << " us" << std::endl;
@@ -86,3 +86,5 @@ public:
   Timer(const char* s) : TTimer(TimingReport(s)) {}
   Timer(const std::string s) : TTimer(TimingReport(s)) {}
 };
+
+#endif

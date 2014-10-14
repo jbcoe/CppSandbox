@@ -18,12 +18,11 @@ class Monitor
   operator T&() { return t_; }
 
 public:
-
-  Monitor()=default;
-  Monitor(const Monitor&)=delete;
-  Monitor(Monitor&&)=delete;
-  Monitor& operator=(const Monitor&)=delete;
-  Monitor& operator=(Monitor&&)=delete;
+  Monitor() = default;
+  Monitor(const Monitor&) = delete;
+  Monitor(Monitor&&) = delete;
+  Monitor& operator=(const Monitor&) = delete;
+  Monitor& operator=(Monitor&&) = delete;
 
   template <typename F>
   auto operator()(F f)
@@ -47,45 +46,41 @@ int main(int argc, char* argv[])
 
   std::vector<std::thread> threads;
 
-  
-	threads.emplace_back([&]()
+
+  threads.emplace_back([&]()
                        {
                          ss([](auto& ss)
-                                   {
-                                     ss << "Hello 1 : "
-                                        << std::this_thread::get_id()
-                                        << std::endl;
-                                   });
+                            {
+                              ss << "Hello 1 : " << std::this_thread::get_id()
+                                 << std::endl;
+                            });
                        });
-  
-	threads.emplace_back([&]()
+
+  threads.emplace_back([&]()
                        {
                          ss([](auto& ss)
-                                   {
-                                     ss << "Hello 2 : "
-                                        << std::this_thread::get_id()
-                                        << std::endl;
-                                   });
+                            {
+                              ss << "Hello 2 : " << std::this_thread::get_id()
+                                 << std::endl;
+                            });
                        });
-  
-	threads.emplace_back([&]()
+
+  threads.emplace_back([&]()
                        {
                          ss([](auto& ss)
-                                   {
-                                     ss << "Hello 3 : "
-                                        << std::this_thread::get_id()
-                                        << std::endl;
-                                   });
+                            {
+                              ss << "Hello 3 : " << std::this_thread::get_id()
+                                 << std::endl;
+                            });
                        });
-  
-	threads.emplace_back([&]()
+
+  threads.emplace_back([&]()
                        {
                          ss([](auto& ss)
-                                   {
-                                     ss << "Hello 4 : "
-                                        << std::this_thread::get_id()
-                                        << std::endl;
-                                   });
+                            {
+                              ss << "Hello 4 : " << std::this_thread::get_id()
+                                 << std::endl;
+                            });
                        });
 
   for (auto& t : threads)
@@ -93,5 +88,8 @@ int main(int argc, char* argv[])
     t.join();
   }
 
-	ss([](auto& ss){ std::cout << ss.str() << std::endl; });
+  ss([](auto& ss)
+     {
+       std::cout << ss.str() << std::endl;
+     });
 }

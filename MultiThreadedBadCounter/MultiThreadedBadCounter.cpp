@@ -7,8 +7,20 @@ int main(int argc, char* argv[])
 
   const size_t N = 100000;
 
-  std::thread t1([&](){ for (int i=0;i<N;++i) ++count; });
-  std::thread t2([&](){ for (int i=0;i<N;++i) ++count; });
+  std::thread t1([&]()
+                 {
+                   for (int i = 0; i < N; ++i)
+                   {
+                     ++count;
+                   }
+                 });
+  std::thread t2([&]()
+                 {
+                   for (int i = 0; i < N; ++i)
+                   {
+                     ++count;
+                   }
+                 });
 
   t1.join();
   t2.join();
@@ -17,4 +29,3 @@ int main(int argc, char* argv[])
 
   return 0;
 }
-

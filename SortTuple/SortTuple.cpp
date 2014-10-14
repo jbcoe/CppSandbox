@@ -18,8 +18,8 @@ struct index_tuple
 template <unsigned Size>
 struct make_index_tuple
 {
-  typedef typename make_index_tuple<Size - 1>::type::template append<Size - 1>
-  type;
+  typedef
+      typename make_index_tuple<Size - 1>::type::template append<Size - 1> type;
 };
 
 template <>

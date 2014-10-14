@@ -15,7 +15,10 @@ int SumOfBigNumbers(const Ints_t& ints, const size_t iterations,
   {
     std::for_each(ints.begin(), ints.end(), [&](int i)
                   {
-      if (i > BIG) bigSum += i;
+      if (i > BIG)
+      {
+        bigSum += i;
+      }
     });
   }
   return bigSum;
@@ -24,11 +27,17 @@ int SumOfBigNumbers(const Ints_t& ints, const size_t iterations,
 int main()
 {
   enum
-  { COUNT = 10000 };
+  {
+    COUNT = 10000
+  };
   enum
-  { MAX = 100 };
+  {
+    MAX = 100
+  };
   enum
-  { BIG = 50 };
+  {
+    BIG = 50
+  };
 
   size_t repeats = 100000;
 

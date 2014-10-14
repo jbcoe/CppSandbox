@@ -1,16 +1,19 @@
 #include <iostream>
 
 enum class Day
-{ Monday,
+{
+  Monday,
   Tuesday,
   Wednesday,
   Thursday,
   Friday,
   Saturday,
-  Sunday };
+  Sunday
+};
 
 enum class Month
-{ January,
+{
+  January,
   February,
   March,
   April,
@@ -21,7 +24,8 @@ enum class Month
   September,
   October,
   November,
-  December };
+  December
+};
 
 int main(int argc, char* argv[])
 {

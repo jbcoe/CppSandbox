@@ -14,7 +14,10 @@ public:
   }
   ~ScopedThread()
   {
-    if (t.joinable()) t.join();
+    if (t.joinable())
+    {
+      t.join();
+    }
   }
 
   ScopedThread(const ScopedThread&) = delete;

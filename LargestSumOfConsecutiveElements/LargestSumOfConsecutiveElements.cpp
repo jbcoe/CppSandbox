@@ -11,8 +11,8 @@ template <typename Iterator_t>
 std::pair<Iterator_t, Iterator_t> max_subarray(const Iterator_t begin,
                                                const Iterator_t end)
 {
-  typedef typename std::remove_const<typename std::remove_reference<
-      decltype(std::declval<Iterator_t&>().operator*())>::type>::type Value_t;
+  typedef typename std::remove_const<typename std::remove_reference<decltype(
+      std::declval<Iterator_t&>().operator*())>::type>::type Value_t;
 
   Value_t max_so_far{};
   Value_t max_ending_here{};

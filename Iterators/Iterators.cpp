@@ -11,7 +11,10 @@ void PrintCollection(T begin, T end)
   while (begin != end)
   {
     std::cout << *begin++;
-    if (begin != end) std::cout << ' ';
+    if (begin != end)
+    {
+      std::cout << ' ';
+    }
   }
   std::cout << std::endl;
 }

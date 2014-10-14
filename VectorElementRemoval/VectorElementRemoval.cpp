@@ -17,12 +17,17 @@
 int main()
 {
   std::vector<int> myValues;
-  for (long int i = 0L; i < 10000000L; ++i) myValues.push_back(i % 3);
+  for (long int i = 0L; i < 10000000L; ++i)
+  {
+    myValues.push_back(i % 3);
+  }
 
   int iOriginalSize = myValues.size();
 #ifdef REMOVE_VALUES
   myValues.erase(std::remove_if(myValues.begin(), myValues.end(), [](int i)
-                                { return i == 2; }),
+                                {
+                   return i == 2;
+                 }),
                  myValues.end());
 #endif
 

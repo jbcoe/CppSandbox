@@ -32,7 +32,9 @@ double* GetDoublePointer(MemBlock& m, size_t length, Generator_t& g)
 {
   auto position = g();
   while ((position + length * (sizeof(double) / (sizeof(char*)))) >= m.m_size)
+  {
     position = g();
+  }
 
   return reinterpret_cast<double*>(m.m_rawMemory + position);
 }
@@ -44,14 +46,18 @@ int main(int argc, char* argv[])
   std::uniform_int_distribution<size_t> distribution(0, size / 10);
   std::mt19937 engine;
   auto generator = [&]
-  { return distribution(engine); };
+  {
+    return distribution(engine);
+  };
 
   MemBlock m(size, generator);
 
   size_t length = size / 10;
 
   auto theFunction = [](double a, double b, double c, double d)
-  { return (a + b) / (c + d); };
+  {
+    return (a + b) / (c + d);
+  };
 
   double sum1 = 0.0;
   {

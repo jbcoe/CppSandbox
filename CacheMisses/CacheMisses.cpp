@@ -19,13 +19,21 @@ void RandomOrderedFill(Collection_t& collection, const int maxElement,
     auto v = generator();
     auto find_insertion_point =
         std::find_if(collection.begin(), collection.end(), [=](int x)
-                     { return x >= v; });
+                     {
+          return x >= v;
+        });
     if (find_insertion_point == collection.end())
+    {
       collection.push_back(v);
+    }
     else if (find_insertion_point != collection.begin())
+    {
       collection.insert(--find_insertion_point, v);
+    }
     else
+    {
       collection.insert(collection.begin(), v);
+    }
   }
 }
 

@@ -1,3 +1,6 @@
+#ifndef __USERS_JON_DEV_CPPSANDBOX_NESTEDINHERITANCE_BASETYPETRAITS_H
+#define __USERS_JON_DEV_CPPSANDBOX_NESTEDINHERITANCE_BASETYPETRAITS_H
+
 #pragma once
 
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -44,3 +47,5 @@ struct BaseType
 {
   typedef typename BaseTypeImpl<BaseTypeTraits<T>::HasBaseType, T>::Type Type;
 };
+
+#endif

@@ -18,16 +18,20 @@ int main(int argc, char* argv[])
 {
   size_t count = 10000000;
 
-  if (argc == 2) count = boost::lexical_cast<size_t>(argv[1]);
+  if (argc == 2)
+  {
+    count = boost::lexical_cast<size_t>(argv[1]);
+  }
 
   {
     std::vector<std::unique_ptr<MySimpleClass>> vptrObjects;
     vptrObjects.reserve(count);
     {
       Timer t("Build pointer vector");
-      std::generate_n(
-          std::back_inserter(vptrObjects), count, []()
-          { return std::unique_ptr<MySimpleClass>(new MySimpleClass()); });
+      std::generate_n(std::back_inserter(vptrObjects), count, []()
+                      {
+        return std::unique_ptr<MySimpleClass>(new MySimpleClass());
+      });
     }
     {
       Timer t("Modify Pointer Vector");
@@ -52,7 +56,9 @@ int main(int argc, char* argv[])
     {
       Timer t("Build Object Vector");
       std::generate_n(std::back_inserter(objects), count, []()
-                      { return MySimpleClass(); });
+                      {
+        return MySimpleClass();
+      });
     }
     {
       Timer t("Modify Object Vector");

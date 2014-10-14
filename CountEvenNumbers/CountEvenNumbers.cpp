@@ -24,7 +24,10 @@ public:
 
   ConditionalIterator<Iterator_t, Functor_t>& operator++()
   {
-    if (iterator_ == end_) return *this;
+    if (iterator_ == end_)
+    {
+      return *this;
+    }
 
     ++iterator_;
 
@@ -131,7 +134,9 @@ int main(int argc, char* argv[])
 
   auto even_number_iterators =
       make_conditional_begin_and_end(numbers.begin(), numbers.end(), [](int x)
-                                     { return x % 2 == 0; });
+                                     {
+        return x % 2 == 0;
+      });
 
   int count = 0;
   auto even_number_with_count_iterators = make_transform_iterator_begin_and_end(

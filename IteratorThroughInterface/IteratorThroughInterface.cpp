@@ -67,14 +67,16 @@ public:
   ListOfObjectsImpl(size_t n) : m_ptrObjects(n)
   {
     std::generate(m_ptrObjects.begin(), m_ptrObjects.end(), []()
-                  { return std::unique_ptr<IObject>(new IObject()); });
+                  {
+      return std::unique_ptr<IObject>(new IObject());
+    });
   }
 
-  virtual size_t count() const { return m_ptrObjects.size(); }
+  size_t count() const override { return m_ptrObjects.size(); }
 
-  virtual const IObject* get(size_t i) const { return m_ptrObjects[i].get(); }
+  const IObject* get(size_t i) const override { return m_ptrObjects[i].get(); }
 
-  virtual IObject* get(size_t i) { return m_ptrObjects[i].get(); }
+  IObject* get(size_t i) override { return m_ptrObjects[i].get(); }
 
 private:
   std::vector<std::unique_ptr<IObject>> m_ptrObjects;
@@ -85,5 +87,7 @@ int main(int argc, char* argv[])
   ListOfObjectsImpl myList(100);
 
   std::for_each(myList.begin(), myList.end(), [](IObject* pObject)
-                { pObject->m_value = 3.14159; });
+                {
+    pObject->m_value = 3.14159;
+  });
 }

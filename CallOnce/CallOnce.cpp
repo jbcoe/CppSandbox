@@ -39,5 +39,7 @@ int main(int argc, char* argv[])
                                   }));
   }
   std::for_each(threads.begin(), threads.end(), [](std::thread& t)
-                { t.join(); });
+                {
+    t.join();
+  });
 }

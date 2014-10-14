@@ -27,7 +27,10 @@ public:
 
   ScopeExitRunner& operator=(ScopeExitRunner&& s)
   {
-    if (&s == this) return *this;
+    if (&s == this)
+    {
+      return *this;
+    }
 
     f = std::move(s.f);
     run = s.run;
@@ -52,12 +55,16 @@ void f()
 
 int main(int argc, char* argv[])
 {
-  auto printHelloWorldOnExit =
-      run_on_scope_exit([]
-                        { std::cout << "Hello world" << std::endl; });
+  auto printHelloWorldOnExit = run_on_scope_exit([]
+                                                 {
+                                                   std::cout << "Hello world"
+                                                             << std::endl;
+                                                 });
   auto printGoodbyeWorldOnExit =
       run_on_scope_exit([]
-                        { std::cout << "Goodbye cruel world" << std::endl; });
+                        {
+                          std::cout << "Goodbye cruel world" << std::endl;
+                        });
   auto functionPointerTest = run_on_scope_exit(&f);
   printGoodbyeWorldOnExit.Release();
 }

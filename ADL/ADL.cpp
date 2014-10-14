@@ -11,7 +11,7 @@ namespace ADL
   {
     std::cout << "ADL::foo()" << std::endl;
   }
-}
+} // namespace ADL
 
 namespace OTHER
 {
@@ -24,7 +24,7 @@ namespace OTHER
   {
     std::cout << "OTHER::foo()" << std::endl;
   }
-}
+} // namespace OTHER
 
 class C
 {

@@ -27,15 +27,23 @@ private:
 int main(int argc, char* argv[])
 {
   size_t THREADS = 4;
-  if (argc > 1) THREADS = boost::lexical_cast<size_t>(argv[1]);
+  if (argc > 1)
+  {
+    THREADS = boost::lexical_cast<size_t>(argv[1]);
+  }
 
   size_t dim = 1024;
-  if (argc > 2) dim = boost::lexical_cast<size_t>(argv[2]);
+  if (argc > 2)
+  {
+    dim = boost::lexical_cast<size_t>(argv[2]);
+  }
 
   std::uniform_real_distribution<double> distribution(-1, 1);
   std::mt19937 engine;
   auto generator = [&]
-  { return distribution(engine); };
+  {
+    return distribution(engine);
+  };
 
   SquareMatrix m(dim);
   std::generate(m.begin(), m.end(), generator);
