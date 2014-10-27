@@ -139,3 +139,4 @@ FunctionIsConstructible/FunctionIsConstructible
 *.gcda
 *.gcno
 MultiThreadedBadCounter/MultiThreadedBadCounter
+SynchronizedValue/SynchronizedValue
