@@ -2,21 +2,23 @@
 #include <sstream>
 #include <vector>
 #include <thread>
+#include <mutex>
+#include <shared_mutex>
 
 template <typename T>
 class SynchronizedValue
 {
   T t_;
-  mutable std::mutex m_;
+  mutable std::shared_timed_mutex m_;
 
 public:
   class Guard
   {
     const T* t_;
-    std::unique_lock<std::mutex> l_;
+    std::shared_lock<std::shared_timed_mutex> l_;
 
   public:
-    Guard(const T& t, std::mutex& m) : t_(&t), l_(m) {}
+    Guard(const T& t, std::shared_timed_mutex& m) : t_(&t), l_(m) {}
 
     const T* operator->() const { return t_; }
   };
@@ -24,10 +26,10 @@ public:
   class EditGuard
   {
     T* t_;
-    std::unique_lock<std::mutex> l_;
+    std::unique_lock<std::shared_timed_mutex> l_;
 
   public:
-    EditGuard(const T& t, std::mutex& m) : t_(&t), l_(m) {}
+    EditGuard(const T& t, std::shared_timed_mutex& m) : t_(&t), l_(m) {}
 
     const T* operator->() const { return t_; }
 

@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.5.mk
+include ../compilerSettings_gcc.mk
 
 SOURCES=SynchronizedValue.cpp
 EXECUTABLE=SynchronizedValue
