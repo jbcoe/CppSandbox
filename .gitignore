@@ -140,3 +140,4 @@ FunctionIsConstructible/FunctionIsConstructible
 *.gcno
 MultiThreadedBadCounter/MultiThreadedBadCounter
 SynchronizedValue/SynchronizedValue
+PolyAlloc/PolyAlloc
