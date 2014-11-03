@@ -65,7 +65,7 @@ public:
   
   polymorphic_allocator(polymorphic_allocator&& a) = default;
 
-  polymorphic_allocator(memory_resource* r) : m_resource(r) { assert(r); }
+  polymorphic_allocator(memory_resource* r) : m_resource(r ? r : default_resource) { }
   
   polymorphic_allocator select_on_container_copy_construction() const
   {
@@ -105,6 +105,8 @@ public:
 
   monotonic_buffer_resource& operator = (const monotonic_buffer_resource&) = delete;
 
+  size_t remaining() const { return m_remaining; }
+
   virtual void* do_allocate(std::size_t sz, std::size_t alignment) override
   {
     std::cout << "Requested " << sz << " with alignment " << alignment << " with " << m_remaining << " remaining\n";
@@ -136,15 +138,25 @@ public:
 template <typename T>
 using Vector = std::vector<T, polymorphic_allocator<T>>;
 
-int main(int argc, char* argv[])
+Vector<int> FastInts(memory_resource* mr=nullptr)
 {
-  try 
-  {
-    monotonic_buffer_resource<32> b;
+    monotonic_buffer_resource<16> b;
     Vector<int> ints(4,0,&b);
 
+    std::cout << "Function monotonic buffer has " << b.remaining() << " bytes remaining\n";
+
     // Buffer is now fully used
-    Vector<int> moreInts(ints);
+    return Vector<int>(ints, mr);
+}
+
+int main(int argc, char* argv[])
+{
+
+  try 
+  {
+    monotonic_buffer_resource<16> b;
+    auto ints = FastInts(&b);
+    std::cout << "Main monotonic buffer has " << b.remaining() << " bytes remaining\n";
   }
   catch (const std::exception& e)
   {
