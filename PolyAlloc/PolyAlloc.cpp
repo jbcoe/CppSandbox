@@ -1,7 +1,10 @@
 // based on http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4082.pdf
-// 8.3-
+// and      http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2013/n3525.pdf
 
+#include <array>
 #include <cassert>
+#include <exception>
+#include <sstream>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -29,13 +32,24 @@ protected:
   // virtual bool do_is_equal(const memory_resource& other) const noexcept = 0;
 };
 
-struct malloc_and_free_t : memory_resource
+class new_and_delete_t : public memory_resource
 {
-  virtual void* do_allocate(size_t bytes, size_t) { return malloc(bytes); }
-  virtual void do_deallocate(void* p, size_t, size_t) { return free(p); }
-};
+  std::allocator<char> m_allocator;
 
-malloc_and_free_t malloc_and_free;
+public:
+  virtual void* do_allocate(size_t bytes, size_t) override
+  {
+    return m_allocator.allocate(bytes);
+  }
+
+  virtual void do_deallocate(void* p, size_t bytes, size_t) override
+  {
+    m_allocator.deallocate(static_cast<char*>(p), bytes);
+  }
+};
+                      
+new_and_delete_t new_and_delete;
+memory_resource* default_resource = &new_and_delete;
 
 template <class Tp>
 class polymorphic_allocator
@@ -46,78 +60,91 @@ public:
 
   typedef Tp value_type;
 
-  polymorphic_allocator() : m_resource(&malloc_and_free) {}
+  polymorphic_allocator() : m_resource(default_resource) {}
 
   polymorphic_allocator(memory_resource* r) : m_resource(r) { assert(r); }
-
-  // polymorphic_allocator(const polymorphic_allocator& other) = default;
-
-  // template <class U>
-  //  polymorphic_allocator(const polymorphic_allocator<U>& other) noexcept;
-
-  // polymorphic_allocator& operator=(const polymorphic_allocator& rhs) =
-  // default;
-
-  Tp* allocate(size_t n) { return (Tp*)m_resource->allocate(n * sizeof(Tp)); }
+  
+  Tp* allocate(size_t n) 
+  { 
+    return (Tp*)m_resource->allocate(n * sizeof(Tp)); 
+  }
 
   void deallocate(Tp* p, size_t n)
   {
     m_resource->deallocate(p, n * sizeof(Tp));
   }
-
-  // template <class T, class... Args>
-  //  void construct(T* p, Args&&... args);
-
-  template <class T>
-  void destroy(T* p)
-  {
-    p->~T();
-  }
 };
 
-class delegating_memory_resource : public memory_resource
+template <size_t N>
+class monotonic_buffer_resource : public memory_resource
 {
-  memory_resource* m_resource;
+  std::array<char,N> m_buffer;  
+  void* m_next = nullptr;
+  size_t m_remaining = 0;
 
 public:
-  
-  std::function<void(size_t,size_t)> m_on_allocate;
-  std::function<void(void*,size_t,size_t)> m_on_deallocate;
-  
-  delegating_memory_resource(memory_resource* r) : m_resource(r) { assert(r); }
 
-  virtual void* do_allocate(size_t bytes, size_t alignment) override
+  monotonic_buffer_resource() : m_next(m_buffer.data()), m_remaining(N) 
   {
-    if ( m_on_allocate ) { m_on_allocate(bytes, alignment); }
-    return m_resource->allocate(bytes, alignment);
+    m_buffer.fill(0);
+    std::cout << "buffer constructed with size " << N << "\n";
   }
 
-  virtual void do_deallocate(void* p, size_t bytes, size_t alignment) override
+  monotonic_buffer_resource(const monotonic_buffer_resource&) = delete;
+
+  virtual void* do_allocate(std::size_t sz, std::size_t alignment) override
   {
-    if ( m_on_deallocate ) { m_on_deallocate(p, bytes, alignment); }
-    return m_resource->deallocate(p, bytes, alignment);
+    std::cout << "Requested " << sz << " with alignment " << alignment << " with " << m_remaining << " remaining\n";
+    auto initial_remaining = m_remaining;
+    if (std::align(alignment, sz, m_next, m_remaining))
+    {
+      if ( initial_remaining != m_remaining )
+      {
+        std::cout << initial_remaining - m_remaining << " bytes used for alignment\n";
+      }
+      m_remaining -= sz;
+      std::cout << sz << " bytes used for data\n";
+      std::cout << m_remaining << " bytes remaining\n";
+      return m_next;
+    }
+    else 
+    {
+      std::ostringstream ss;
+      ss << "ERROR: Requested " << sz << " with alignment " << alignment << " but only " << m_remaining << " remaining";
+      throw std::runtime_error(ss.str());
+    }
+  }
+  
+  virtual void do_deallocate(void*, std::size_t, std::size_t) override 
+  {
   }
 };
+
+template <typename T>
+using Vector = std::vector<T, polymorphic_allocator<T>>;
 
 int main(int argc, char* argv[])
 {
-  delegating_memory_resource mr(&malloc_and_free);
-  mr.m_on_allocate = [](size_t bytes, size_t) { std::cout << "Allocated " << bytes << " bytes\n"; };
-  
-  std::vector<int, polymorphic_allocator<int>> ints(0,polymorphic_allocator<int>(&mr));
-  ints.push_back(1);
-  ints.push_back(2);
-  ints.push_back(3);
-  ints.push_back(4);
-  ints.push_back(5);
-  ints.push_back(6);
-  ints.push_back(7);
-  ints.push_back(8);
-
-  for (const auto& i : ints)
+  try 
   {
-    std::cout << i << ' ';
+    monotonic_buffer_resource<128> b;
+    Vector<int> ints(0,0,&b);
+    auto i = 0;
+    while (1)
+    {
+      ints.push_back(++i);
+
+      for (const auto& i : ints)
+      {
+        std::cout << i << ' ';
+      }
+      std::cout << '\n';
+    }
   }
-  std::cout << '\n';
+  catch (const std::exception& e)
+  {
+    std::cerr << e.what() << std::endl;
+    return -1;
+  }
 }
 
