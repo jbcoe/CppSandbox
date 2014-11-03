@@ -29,7 +29,6 @@ public:
 protected:
   virtual void* do_allocate(size_t bytes, size_t alignment) = 0;
   virtual void do_deallocate(void* p, size_t bytes, size_t alignment) = 0;
-  // virtual bool do_is_equal(const memory_resource& other) const noexcept = 0;
 };
 
 class new_and_delete_t : public memory_resource
@@ -49,7 +48,7 @@ public:
 };
                       
 new_and_delete_t new_and_delete;
-memory_resource* default_resource = &new_and_delete;
+memory_resource* const default_resource = &new_and_delete;
 
 template <class Tp>
 class polymorphic_allocator
@@ -62,8 +61,19 @@ public:
 
   polymorphic_allocator() : m_resource(default_resource) {}
 
+  polymorphic_allocator(const polymorphic_allocator& a) = default;
+  
+  polymorphic_allocator(polymorphic_allocator&& a) = default;
+
   polymorphic_allocator(memory_resource* r) : m_resource(r) { assert(r); }
   
+  polymorphic_allocator select_on_container_copy_construction() const
+  {
+    return polymorphic_allocator();
+  }
+
+  memory_resource* resource() const { return m_resource; }
+
   Tp* allocate(size_t n) 
   { 
     return (Tp*)m_resource->allocate(n * sizeof(Tp)); 
@@ -127,19 +137,11 @@ int main(int argc, char* argv[])
 {
   try 
   {
-    monotonic_buffer_resource<128> b;
-    Vector<int> ints(0,0,&b);
-    auto i = 0;
-    while (1)
-    {
-      ints.push_back(++i);
+    monotonic_buffer_resource<32> b;
+    Vector<int> ints(6,0,&b);
 
-      for (const auto& i : ints)
-      {
-        std::cout << i << ' ';
-      }
-      std::cout << '\n';
-    }
+    // Buffer is now fully used
+    Vector<int> moreInts(ints);
   }
   catch (const std::exception& e)
   {
