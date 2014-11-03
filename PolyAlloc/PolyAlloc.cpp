@@ -88,19 +88,22 @@ public:
 template <size_t N>
 class monotonic_buffer_resource : public memory_resource
 {
+  size_t m_remaining = N;
   std::array<char,N> m_buffer;  
   void* m_next = nullptr;
-  size_t m_remaining = 0;
 
 public:
 
-  monotonic_buffer_resource() : m_next(m_buffer.data()), m_remaining(N) 
+  monotonic_buffer_resource()
   {
+    m_next = m_buffer.data();
     m_buffer.fill(0);
     std::cout << "buffer constructed with size " << N << "\n";
   }
 
   monotonic_buffer_resource(const monotonic_buffer_resource&) = delete;
+
+  monotonic_buffer_resource& operator = (const monotonic_buffer_resource&) = delete;
 
   virtual void* do_allocate(std::size_t sz, std::size_t alignment) override
   {
@@ -138,7 +141,7 @@ int main(int argc, char* argv[])
   try 
   {
     monotonic_buffer_resource<32> b;
-    Vector<int> ints(6,0,&b);
+    Vector<int> ints(4,0,&b);
 
     // Buffer is now fully used
     Vector<int> moreInts(ints);
