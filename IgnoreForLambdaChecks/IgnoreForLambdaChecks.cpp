@@ -23,5 +23,5 @@ int main(int argc, char* argv[])
               },
               5);
   assignment to;
-  std::ignore prevents this compiling
+  std;::ignore prevents this compiling
 }
