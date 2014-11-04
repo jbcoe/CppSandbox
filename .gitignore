@@ -87,6 +87,7 @@ PreventCallingWithRValues/PreventCallingWithRValues
 PreventingDuplicateEnums/PreventingDuplicateEnums
 PrivateVisitor/PrivateVisitor
 PropagateConst/PropagateConst
+ReturnTypeDeduction/ReturnTypeDeduction
 RValueMemberFunctions/RValueMemberFunctions
 RValues/RValues
 RandomNumbers/RandomNumbers
