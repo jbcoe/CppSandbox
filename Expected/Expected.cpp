@@ -24,8 +24,8 @@ class Expected
     std::exception_ptr e_;
     T t_;
 
-    // Don't initialise either member
-    Data() {}
+    // Zero initialise the 'e_' member
+    Data() : e_{} {}
     // Construct the 'e_' member
     template <typename... Args>
     Data(Unexpected_T, Args&&... args)
@@ -61,39 +61,57 @@ public:
     }
   }
   template <typename E>
-  Expected(Unexpected_T, E&& e) noexcept // note this most certainly isn't
-                                         // noexcept in the general case
-      : data_{Unexpected_T{}, std::make_exception_ptr(std::forward<E>(e))},
+  Expected(Unexpected_T, E&& e) noexcept try
+      : data_(Unexpected_T{}, std::make_exception_ptr(std::forward<E>(e))),
         hasData_(false)
   {
   }
-
-  Expected(T&& t) // noexcept(std::is_nothrow_move_constructible<T>::value)
-      : data_{Expected_T{}, std::move(t)},
-        hasData_(true)
+  catch(...)
   {
+    hasData_ = false;
+    ::new (std::addressof(data_.e_)) std::exception_ptr{};
+    data_.e_ = std::current_exception();
   }
 
-  Expected(const T& t) // noexcept(std::is_nothrow_copy_constructible<T>::value)
-      : data_{Expected_T{}, t},
-        hasData_(true)
+  Expected(T&& t) noexcept try : data_(Expected_T{}, std::move(t)),
+                                 hasData_(true)
   {
   }
-
-  Expected(Expected<T>&& x)
-      //  noexcept(std::is_nothrow_move_constructible<T>::value &&
-      //  std::is_nothrow_move_constructible<std::exception_ptr>::value)
-      : hasData_(x.hasData_)
-  // nb: here, neither 'e_' nor 't_' is initialised
+  catch(...)
   {
-    if (x.hasData_)
+    hasData_ = false;
+    ::new (std::addressof(data_.e_)) std::exception_ptr{};
+    data_.e_ = std::current_exception();
+  }
+
+  Expected(const T& t) noexcept try : data_(Expected_T{}, t), hasData_(true)
+  {
+  }
+  catch(...)
+  {
+    hasData_ = false;
+    ::new (std::addressof(data_.e_)) std::exception_ptr{};
+    data_.e_ = std::current_exception();
+  }
+
+  Expected(Expected<T>&& x) noexcept : hasData_(x.hasData_)
+  {
+    try
     {
-      ::new (std::addressof(data_.t_)) T{std::move(x.data_.t_)};
+      if (x.hasData_)
+      {
+        ::new (std::addressof(data_.t_)) T{std::move(x.data_.t_)};
+      }
+      else
+      {
+        ::new (std::addressof(data_.e_)) std::exception_ptr{std::move(x.data_.e_)};
+      }
     }
-    else
+    catch(...)
     {
-      ::new (std::addressof(data_.e_))
-          std::exception_ptr{std::move(x.data_.e_)};
+      hasData_ = false;
+      ::new (std::addressof(data_.e_)) std::exception_ptr{};
+      data_.e_ = std::current_exception();
     }
   }
 
@@ -159,13 +177,13 @@ public:
 };
 
 template <typename T>
-inline auto make_expected(T&& t)
+inline auto make_expected(T&& t) noexcept
 {
   return Expected<std::decay_t<T>>(std::forward<T>(t));
 }
 
 template <typename T, typename E>
-inline auto make_unexpected(E&& e)
+inline auto make_unexpected(E&& e) noexcept
 {
   return Expected<std::decay_t<T>>(unexpected, std::forward<E>(e));
 }
