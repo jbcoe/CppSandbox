@@ -97,6 +97,10 @@ public:
     }
   }
 
+  // TODO: if internal assignment throws, = can leave Expected in a bad state 
+  Expected& operator = (const Expected& ) = delete;
+  Expected& operator = (Expected&& ) = delete;
+
   explicit operator bool() const noexcept { return hasData_; }
 
   T& operator*()
@@ -105,6 +109,7 @@ public:
     {
       return data_.t_;
     }
+    assert(data_.e_);
     std::rethrow_exception(data_.e_);
   }
 
@@ -114,6 +119,7 @@ public:
     {
       return data_.t_;
     }
+    assert(data_.e_);
     std::rethrow_exception(data_.e_);
   }
 
@@ -121,6 +127,7 @@ public:
   Expected<U> as_unexpected() noexcept
   {
     assert(!hasData_);
+    assert(data_.e_);
     Expected<U> u;
     u.data_.e_ = data_.e_;
     return u;
@@ -130,6 +137,7 @@ public:
   Expected<U> as_unexpected(E&& e) noexcept
   {
     assert(!hasData_);
+    assert(data_.e_);
     Expected<U> u;
     try
     {
@@ -226,7 +234,9 @@ int main(int argc, char* argv[])
 {
   try
   {
+    std::cout << "Try divide \"5\" by \"6\"\n";
     PrintFraction(*GetFraction("5", "6"));
+    std::cout << "Try divide \"5\" by \"foo\"\n";
     PrintFraction(*GetFraction("5", "foo"));
   }
   catch (const std::runtime_error& e)
