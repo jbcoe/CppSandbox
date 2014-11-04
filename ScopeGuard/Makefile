@@ -1,6 +1,6 @@
 include ../compilerSettings_clang3.5.mk
 
-SOURCES=ScopeExitRun.cpp
-EXECUTABLE=ScopeExitRun
+SOURCES=ScopeGuard.cpp
+EXECUTABLE=ScopeGuard
 
 include ../makeCommon.mk
