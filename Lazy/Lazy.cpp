@@ -1,71 +1,63 @@
 #include <iostream>
+#include <mutex>
 #include <experimental/optional>
 
 using std::experimental::optional;
-template <typename T>
-struct NullableValue
-{
-  typedef optional<T> value;
-};
 
-template <typename T>
-struct NullableValue<T*>
-{
-};
-
-template <typename T>
-struct NullableValue<std::unique_ptr<T>>
-{
-  typedef std::unique_ptr<T> value;
-};
-
-template <typename T>
-struct NullableValue<std::shared_ptr<T>>
-{
-  typedef std::shared_ptr<T> value;
-};
-
-template <typename F,
-          typename Value_T =
-              std::remove_reference_t<decltype(std::declval<F>()())>>
+template <typename Value_T>
 class Lazy
 {
-  typedef typename NullableValue<Value_T>::value NullableValue_T;
-  NullableValue_T m_value;
-  F m_f;
+  mutable optional<Value_T> m_value;
+  mutable std::function<Value_T()> m_f;
+  std::unique_ptr<std::mutex> m_mutex;
 
 public:
-  Lazy(F f) : m_f(std::move(f)) {}
+  
+  template<typename F>
+  Lazy(F f) : m_f(std::move(f)), m_mutex(std::make_unique<std::mutex>()) {}
+
+  Lazy(const Lazy&) = delete;
+  Lazy& operator = (const Lazy&) = delete;
+
+  Lazy(Lazy&&) = default;
+  Lazy& operator = (Lazy&&) = default;
+  
   auto& operator*()
   {
     init();
     return *m_value;
   }
-  auto* operator -> ()
+  
+  const auto& operator*() const
   {
     init();
-    return &*m_value;
+    return *m_value;
   }
-  auto* get()
+ 
+  auto* operator->()
   {
     init();
-    return &*m_value;
+    return std::addressof(*m_value);
+  }
+  
+  const auto* operator->() const
+  {
+    init();
+    return std::addressof(*m_value);
   }
 
 private:
-  void init()
+  void init() const
   {
-    if (!m_value)
-    {
-      m_value = m_f();
-    }
+    std::lock_guard<std::mutex> l(*m_mutex);
+    if ( ! m_value ) { m_value = m_f(); }
   }
 };
 
-template <typename F>
+template <typename F, typename T=decltype(std::declval<F&>()())>
 auto make_lazy(F f)
 {
-  return Lazy<F>(std::move(f));
+  return Lazy<T>(std::move(f));
 }
 
 class MyClass
@@ -92,22 +84,22 @@ int main(int argc, char* argv[])
   std::cout << *lX << std::endl;
   std::cout << std::endl;
 
-  auto lptrX = make_lazy([]
+  auto lClass = make_lazy([]
                          {
                            std::cout << "Building" << std::endl;
-                           return std::make_unique<MyClass>(5);
+                           return MyClass(5);
                          });
 
-  std::cout << lptrX->GetValue() << std::endl;
-  std::cout << lptrX->GetValue() << std::endl;
-  std::cout << lptrX->GetValue() << std::endl;
-  std::cout << lptrX->GetValue() << std::endl;
+  std::cout << lClass->GetValue() << std::endl;
+  std::cout << lClass->GetValue() << std::endl;
+  std::cout << lClass->GetValue() << std::endl;
+  std::cout << lClass->GetValue() << std::endl;
   std::cout << std::endl;
 
-  auto f = [](MyClass* pM)
+  auto f = [](MyClass& pM)
   {
     std::cout << "Called f" << std::endl;
   };
 
-  f(lptrX.get());
+  f(*lClass);
 }
