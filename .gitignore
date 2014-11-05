@@ -137,3 +137,4 @@ VisitorVsType/VisitorVsType
 WordCanBeMadeWithLetters/WordCanBeMadeWithLetters
 ZipIterator/ZipIterator
 memcmpVsDirectCompare/memcmpVsDirectCompare
+ValueContracts/ValueContracts
