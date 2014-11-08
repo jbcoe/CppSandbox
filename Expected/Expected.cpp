@@ -19,6 +19,8 @@ struct Expected_T
 template <typename T>
 class Expected
 {
+  bool hasData_;
+  
   union Data
   {
     std::exception_ptr e_;
@@ -41,12 +43,10 @@ class Expected
     ~Data() {}
   } data_;
 
-  bool hasData_;
-
   template <typename U>
   friend class Expected;
 
-  Expected() noexcept : data_{Unexpected_T{}, nullptr}, hasData_(false) {}
+  Expected() noexcept : hasData_(false), data_{Unexpected_T{}, nullptr} {}
 
 public:
   ~Expected()
@@ -60,10 +60,31 @@ public:
       data_.e_. ~exception_ptr();
     }
   }
-  template <typename E>
-  Expected(Unexpected_T, E&& e) noexcept try
-      : data_(Unexpected_T{}, std::make_exception_ptr(std::forward<E>(e))),
-        hasData_(false)
+  template <typename U>
+  Expected(Unexpected_T, U&& u) noexcept try
+      : hasData_(false),
+        data_(Unexpected_T{}, std::make_exception_ptr(std::forward<U>(u)))
+
+  {
+  }
+  catch(...)
+  {
+    ::new (std::addressof(data_.e_)) std::exception_ptr{};
+    data_.e_ = std::current_exception();
+  }
+
+  Expected(T&& t) noexcept try : hasData_(true),
+                                 data_(Expected_T{}, std::move(t))
+
+  {
+  }
+  catch(...)
+  {
+    ::new (std::addressof(data_.e_)) std::exception_ptr{};
+    data_.e_ = std::current_exception();
+  }
+
+  Expected(const T& t) noexcept try : hasData_(true), data_(Expected_T{}, t) 
   {
   }
   catch(...)
@@ -73,27 +94,28 @@ public:
     data_.e_ = std::current_exception();
   }
 
-  Expected(T&& t) noexcept try : data_(Expected_T{}, std::move(t)),
-                                 hasData_(true)
+  Expected(const Expected<T>& x) noexcept : hasData_(x.hasData_)
   {
+    try
+    {
+      if (x.hasData_)
+      {
+        ::new (std::addressof(data_.t_)) T{x.data_.t_};
+      }
+      else
+      {
+        ::new (std::addressof(data_.e_))
+            std::exception_ptr{x.data_.e_};
+      }
+    }
+    catch(...)
+    {
+      hasData_ = false;
+      ::new (std::addressof(data_.e_)) std::exception_ptr{};
+      data_.e_ = std::current_exception();
+    }
   }
-  catch(...)
-  {
-    hasData_ = false;
-    ::new (std::addressof(data_.e_)) std::exception_ptr{};
-    data_.e_ = std::current_exception();
-  }
-
-  Expected(const T& t) noexcept try : data_(Expected_T{}, t), hasData_(true)
-  {
-  }
-  catch(...)
-  {
-    hasData_ = false;
-    ::new (std::addressof(data_.e_)) std::exception_ptr{};
-    data_.e_ = std::current_exception();
-  }
-
+  
   Expected(Expected<T>&& x) noexcept : hasData_(x.hasData_)
   {
     try
