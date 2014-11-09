@@ -95,26 +95,25 @@ public:
 
   Expected(const Expected<T>& x) noexcept : hasData_(x.hasData_)
   {
-    try
+    if (x.hasData_)
     {
-      if (x.hasData_)
+      try
       {
         ::new (std::addressof(data_.t_)) T{x.data_.t_};
       }
-      else
+      catch (...)
       {
-        ::new (std::addressof(data_.e_))
-            std::exception_ptr{x.data_.e_};
+        hasData_ = false;
+        ::new (std::addressof(data_.e_)) std::exception_ptr{};
+        data_.e_ = std::current_exception();
       }
     }
-    catch(...)
+    else
     {
-      hasData_ = false;
-      ::new (std::addressof(data_.e_)) std::exception_ptr{};
-      data_.e_ = std::current_exception();
+      ::new (std::addressof(data_.e_)) std::exception_ptr{x.data_.e_};
     }
   }
-  
+
   Expected(Expected<T>&& x) noexcept : hasData_(x.hasData_)
   {
     try
@@ -152,7 +151,7 @@ public:
     std::rethrow_exception(data_.e_);
   }
 
-  const T& operator*() const
+  const T& operator*() const // exceptions can be thrown by *
   {
     if (hasData_)
     {
