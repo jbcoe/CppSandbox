@@ -61,16 +61,15 @@ public:
     }
   }
   template <typename U>
-  Expected(Unexpected_T, U&& u) noexcept try
+  Expected(Unexpected_T, U&& u) noexcept
       : hasData_(false),
         data_(Unexpected_T{}, std::make_exception_ptr(std::forward<U>(u)))
 
   {
-  }
-  catch(...)
-  {
-    ::new (std::addressof(data_.e_)) std::exception_ptr{};
-    data_.e_ = std::current_exception();
+    static_assert( (std::is_nothrow_copy_constructible<U>::value && std::is_lvalue_reference<decltype(u)>::value)
+        || (std::is_nothrow_copy_constructible<U>::value && std::is_rvalue_reference<decltype(u)>::value)
+        || (std::is_nothrow_move_constructible<U>::value && std::is_rvalue_reference<decltype(u)>::value)
+        , "Unexpected type must be no-throw movable or copyable");
   }
 
   Expected(T&& t) noexcept try : hasData_(true),
