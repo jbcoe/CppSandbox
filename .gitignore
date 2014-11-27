@@ -140,3 +140,4 @@ memcmpVsDirectCompare/memcmpVsDirectCompare
 ValueContracts/ValueContracts
 AssertWithLambda/AssertWithLambda
 QuickSort/QuickSort
+ArrayView/ArrayView
