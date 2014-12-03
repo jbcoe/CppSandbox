@@ -27,18 +27,36 @@ extern "C" {
 
 Circle* Circle_new(double r) { return new (std::nothrow) Circle(r); }
 
-void Shape_delete(Shape* shape) { delete shape; }
+void Shape_delete(const Shape* shape) { delete shape; }
 
-double Shape_area(Shape* shape) { return shape->area(); }
+double Shape_area(const Shape* shape) { return shape->area(); }
 
-double Shape_perimiter(Shape* shape) { return shape->perimiter(); }
+double Shape_perimiter(const Shape* shape) { return shape->perimiter(); }
 }
+
+class CircleHandle
+{
+  const Circle* c_;
+
+public:
+  ~CircleHandle() { Shape_delete(c_); }
+
+  CircleHandle(double r) : c_(Circle_new(r))
+  {
+    if (!c_)
+    {
+      throw std::runtime_error("Failed to build Circle");
+    }
+  }
+  double area() const { return Shape_area(c_); }
+
+  double perimiter() const { return Shape_perimiter(c_); }
+};
 
 int main(int argc, char* argv[])
 {
-  auto c = Circle_new(10);
-  std::cout << "Area=" << Shape_area(c) << "\n";
-  std::cout << "Perimiter=" << Shape_perimiter(c) << "\n";
-  Shape_delete(c);
+  auto c = CircleHandle(10);
+  std::cout << "Area=" << c.area() << "\n";
+  std::cout << "Perimiter=" << c.perimiter() << "\n";
 }
 
