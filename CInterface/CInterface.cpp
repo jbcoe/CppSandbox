@@ -22,6 +22,8 @@ public:
   Circle(double r) : radius_(r) {}
 };
 
+//
+// The bridge
 
 extern "C" {
 
@@ -31,17 +33,23 @@ void Shape_delete(const void* shape) { delete ((const Shape*)shape); }
 
 double Shape_area(const void* shape) { return ((const Shape*)shape)->area(); }
 
-double Shape_perimiter(const void* shape) { return ((const Shape*)shape)->perimiter(); }
+double Shape_perimiter(const void* shape)
+{
+  return ((const Shape*)shape)->perimiter();
 }
+}
+
+//
+// The other side
 
 class CircleHandle
 {
-  const Circle* c_;
+  const void* c_;
 
 public:
   ~CircleHandle() { Shape_delete(c_); }
 
-  CircleHandle(double r) : c_((Circle*)Circle_new(r))
+  CircleHandle(double r) : c_(Circle_new(r))
   {
     if (!c_)
     {
@@ -59,4 +67,3 @@ int main(int argc, char* argv[])
   std::cout << "Area=" << c.area() << "\n";
   std::cout << "Perimiter=" << c.perimiter() << "\n";
 }
-
