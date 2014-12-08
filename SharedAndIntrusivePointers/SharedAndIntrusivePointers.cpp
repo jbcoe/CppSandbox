@@ -1,5 +1,6 @@
 #include <boost/smart_ptr.hpp>
 #include <vector>
+#include <array>
 #include <iostream>
 #include <Common/Timer.h>
 
