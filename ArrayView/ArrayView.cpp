@@ -48,7 +48,7 @@ public:
   const_iterator cend() const { return data_+size_; }
 };
 
-template<typename C>
+template<typename C, typename U=typename std::enable_if<!std::is_array<C>::value>::type>
 auto make_array_view(C& c)
 {
   using data_t = decltype(c.data());
@@ -62,6 +62,12 @@ auto make_array_view(T* t, size_t size)
   return ArrayView<T>(t,size);
 }
 
+template<typename T, size_t N>
+auto make_array_view(T (&t)[N])
+{
+  return ArrayView<T>(t,N);
+}
+
 int main(int argc, char* argv[]) 
 {
   std::vector<int> ints = {0,1,2,3,4,5,6,7,8,9};
@@ -73,7 +79,7 @@ int main(int argc, char* argv[])
   std::cout << std::endl;
   
   double doubles[] = {2.81718, 3.14159};
-  auto view_doubles = make_array_view(doubles, 2);
+  auto view_doubles = make_array_view(doubles);
   for (const auto d : view_doubles)
   {
     std::cout << d << " ";
