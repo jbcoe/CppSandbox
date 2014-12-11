@@ -143,3 +143,4 @@ QuickSort/QuickSort
 ArrayView/ArrayView
 TerminateHandler/TerminateHandler
 CInterface/CInterface
+TypeErasure/TypeErasure
