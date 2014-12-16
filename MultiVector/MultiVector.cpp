@@ -21,22 +21,64 @@ struct MultiVectorBase<T>
 };
 
 template<size_t N, size_t Max>
-struct Pack
+struct PushBack
 {
   template<typename... Ts, typename... Vs>
-  static void DoPack(std::tuple<Ts...>& tpl, const std::tuple<Vs...>& vals)
+  static void DoPushBack(std::tuple<Ts...>& tpl, const std::tuple<Vs...>& vals)
   {
     std::get<N>(tpl).push_back(std::get<N>(vals));
-    Pack<N+1, Max>::DoPack(tpl, vals);
+    PushBack<N+1, Max>::DoPushBack(tpl, vals);
   }
 };
 
 template<size_t Max>
-struct Pack<Max, Max>
+struct PushBack<Max, Max>
 {
   template<typename... Ts, typename... Vs>
-  static void DoPack(std::tuple<Ts...>& tpl, const std::tuple<Vs...>& vals)
+  static void DoPushBack(std::tuple<Ts...>& tpl, const std::tuple<Vs...>& vals)
   {
+  }
+};
+
+template<size_t N, size_t Max>
+struct BuildReferenceTuple
+{
+  template<typename... Ts>
+  static auto DoBuildReferenceTuple(std::tuple<Ts...>& tpl, size_t i)
+  {
+    return std::tuple_cat(std::forward_as_tuple(std::get<N>(tpl)[i]), 
+          BuildReferenceTuple<N+1,Max>::DoBuildReferenceTuple(tpl,i));
+  }
+};
+
+template<size_t Max>
+struct BuildReferenceTuple<Max, Max>
+{
+  template<typename... Ts>
+  static auto DoBuildReferenceTuple(std::tuple<Ts...>& tpl, size_t i)
+  {
+    return std::make_tuple();
+  }
+};
+
+template<size_t N, size_t Max>
+struct BuildConstReferenceTuple
+{
+  template<typename... Ts>
+  static auto DoBuildConstReferenceTuple(const std::tuple<Ts...>& tpl, size_t i)
+  {
+    return std::tuple_cat(std::forward_as_tuple(std::get<N>(tpl)[i]), 
+          BuildConstReferenceTuple<N+1,Max>::DoBuildReferenceTuple(tpl,i));
+  }
+};
+
+template<size_t Max>
+struct BuildConstReferenceTuple<Max, Max>
+{
+  template<typename... Ts>
+  static auto DoBuildConstReferenceTuple(const std::tuple<Ts...>& tpl, size_t i)
+  {
+    return std::make_tuple();
   }
 };
 
@@ -49,12 +91,30 @@ struct MultiVector
   void push_back(const Vs&... vs)
   { 
     static_assert(sizeof...(Ts)==sizeof...(Vs), "Argument count mismatch");
-    Pack<0,sizeof...(Ts)>::DoPack(data_, std::make_tuple(vs...));
+    PushBack<0,sizeof...(Ts)>::DoPushBack(data_, std::make_tuple(vs...));
   }
+
+  std::tuple<Ts&...> operator[](size_t i)
+  {
+    return BuildReferenceTuple<0,sizeof...(Ts)>::DoBuildReferenceTuple(data_, i);
+  }
+
+  std::tuple<const Ts&...> operator[](size_t i) const
+  {
+    return BuildConstReferenceTuple<0,sizeof...(Ts)>::DoBuildConstReferenceTuple(data_, i);
+  }
+  
+  size_t size() const { return data_.size(); }
 };
 
 template<size_t N, typename... Ts>
-const auto& get(MultiVector<Ts...>& mv)
+auto& get(MultiVector<Ts...>& mv)
+{
+  return std::get<N>(mv.data_);
+}
+
+template<size_t N, typename... Ts>
+const auto& get(const MultiVector<Ts...>& mv)
 {
   return std::get<N>(mv.data_);
 }
@@ -65,8 +125,8 @@ int main(int argc, char* argv[])
 
   mv.push_back(1,2.718281,'e');
   mv.push_back(2,3.14159,'p');
-  mv.push_back(3,2.718281,'e');
-  mv.push_back(4,3.14159,'p');
+  mv.push_back(3,4,'x');
+  mv.push_back(4,5,'y');
 
   const std::vector<int>& ints = get<0>(mv);
   const std::vector<double>& dbls = get<1>(mv);
@@ -77,6 +137,11 @@ int main(int argc, char* argv[])
   std::copy(dbls.begin(),dbls.end(),std::ostream_iterator<double>(std::cout," "));
   std::cout << '\n';
   std::copy(chars.begin(),chars.end(),std::ostream_iterator<char>(std::cout," "));
+  std::cout << '\n';
+
+  auto x = mv[0];
+  std::get<0>(x)=99;
+  std::copy(ints.begin(),ints.end(),std::ostream_iterator<int>(std::cout," "));
   std::cout << '\n';
 }
 
