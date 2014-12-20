@@ -145,3 +145,4 @@ TerminateHandler/TerminateHandler
 CInterface/CInterface
 TypeErasure/TypeErasure
 MultiVector/MultiVector
+AggregateType/AggregateType
