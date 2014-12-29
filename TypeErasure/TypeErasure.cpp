@@ -8,7 +8,7 @@ class Noisy
     template<typename T>
     Noisy(const T& t)
     {
-      impl_ = std::make_shared<const Impl<T>>(t);
+      impl_ = std::make_shared<const InnerImpl<T>>(t);
     }
 
     const char* Noise() const
@@ -25,17 +25,17 @@ class Noisy
   
     std::shared_ptr<const Inner> impl_;
 
-    template<typename T>
-    struct Impl : Inner
+    template<typename ErasedType>
+    struct InnerImpl : Inner
     {
-      Impl(const T& t) : t_(t) {}
+      InnerImpl(const ErasedType& t) : t_(t) {}
 
       const char* Noise() const override
       {
         return t_.Noise();
       }
 
-      T t_;
+      ErasedType t_;
     };
 };
 
