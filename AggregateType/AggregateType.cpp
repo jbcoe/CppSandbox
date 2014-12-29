@@ -23,6 +23,14 @@ public:
     return static_cast<std::shared_ptr<const V>>(*impl_);
   }
 
+  operator const T1&() const { return *impl_; }
+  operator const T2&() const { return *impl_; }
+  operator const T3&() const { return *impl_; }
+
+  operator std::shared_ptr<const T1>() const { return impl_; }
+  operator std::shared_ptr<const T2>() const { return impl_; }
+  operator std::shared_ptr<const T3>() const { return impl_; }
+
 private:
 
   struct Inner
@@ -75,6 +83,9 @@ struct Chimera : Cat, Pig, Dog {};
 int main(int argc, char* argv[]) {
 
   Aggregate<Cat,Pig,Dog> agg(std::make_shared<const Chimera>());
+  Pig p(agg);
+  Cat c(agg);
+  Dog d(agg);
 
   std::cout << agg.AsPtr<Cat>()->MakeNoise() << '\n';
   std::cout << agg.AsPtr<Pig>()->MakeNoise() << '\n';
