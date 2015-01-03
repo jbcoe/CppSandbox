@@ -82,16 +82,58 @@ struct BuildConstReferenceTuple<Max, Max>
   }
 };
 
+template<int N, int I=0>
+struct ApplyToAll
+{
+  template<typename ...Ts, typename F>
+  static void DoApply(std::tuple<Ts...>& t, const F& f)
+  {
+    f(std::get<I>(t));
+    ApplyToAll<N, I+1>::DoApply(t,f);
+  }
+};
+
+template<int N>
+struct ApplyToAll<N,N>
+{
+  template<typename ...Ts, typename F>
+  static void DoApply(std::tuple<Ts...>& t, const F& f)
+  {
+  }
+};
+
+template <typename TupleT>
+class RestoreSize
+{
+  TupleT* data_;
+  const size_t n_;
+
+public:
+  RestoreSize(TupleT& data, size_t n) : data_(&data), n_(n) {}
+  void release() { data_ = nullptr; }
+  ~RestoreSize()
+  {
+    if (!data_)
+    {
+      return;
+    }
+    ApplyToAll<std::tuple_size<TupleT>::value>::DoApply(*data_,[n=n_](auto& v){v.resize(n);});
+  }
+};
+
 template<typename... Ts>
 struct MultiVector
 {
   typename MultiVectorBase<Ts...>::Data data_;
   
+
   template<typename... Vs>
   void push_back(const Vs&... vs)
   { 
     static_assert(sizeof...(Ts)==sizeof...(Vs), "Argument count mismatch");
+    RestoreSize<decltype(data_)> r(data_,std::get<0>(data_).size());
     PushBack<0,sizeof...(Ts)>::DoPushBack(data_, std::make_tuple(vs...));
+    r.release();
   }
 
   std::tuple<Ts&...> operator[](size_t i)
