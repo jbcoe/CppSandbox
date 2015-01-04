@@ -147,3 +147,4 @@ TypeErasure/TypeErasure
 MultiVector/MultiVector
 AggregateType/AggregateType
 ThrowOnMove/ThrowOnMove
+ThrowOnCopy/ThrowOnCopy

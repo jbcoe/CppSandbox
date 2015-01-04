@@ -2,30 +2,30 @@
 #include <exception>
 
 template <typename Base>
-class ThrowOnMove
+class ThrowOnCopy
 {
   Base base_;
 
 public:
     
-  ThrowOnMove(Base b) : base_(std::move(b)) {}
+  ThrowOnCopy(Base b) : base_(std::move(b)) {}
   
-  ThrowOnMove() : base_() {}
+  ThrowOnCopy() : base_() {}
 
   class Exception : public std::exception
   {
   };
 
-  ThrowOnMove& operator=(const ThrowOnMove&) = default;
+  ThrowOnCopy& operator=(ThrowOnCopy&&) = default;
   
-  ThrowOnMove(const ThrowOnMove&) = default;
+  ThrowOnCopy(ThrowOnCopy&&) = default;
   
-  ThrowOnMove& operator=(ThrowOnMove&&)
+  ThrowOnCopy& operator=(const ThrowOnCopy&)
   {
     throw Exception();
   }
   
-  ThrowOnMove(ThrowOnMove&&)
+  ThrowOnCopy(const ThrowOnCopy&)
   {
     throw Exception();
   }
@@ -43,17 +43,17 @@ class Empty {};
 
 int main(int argc, char* argv[])
 {
-  ThrowOnMove<Empty> e;
+  ThrowOnCopy<Empty> e;
 
-  auto c = e;
   try
   {
-    auto m = std::move(e);
+    auto c = e;
   }
-  catch(ThrowOnMove<Empty>::Exception&)
+  catch(ThrowOnCopy<Empty>::Exception&)
   {
-    std::cout << "Exception thrown on move as expected\n";
+    std::cout << "Exception thrown on copy as expected\n";
   }
 
+  auto m = std::move(e);
 }
 
