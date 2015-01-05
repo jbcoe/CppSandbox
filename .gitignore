@@ -62,8 +62,8 @@ LoggingWithStreams/LoggingWithStreams
 LogicalConst/LogicalConst
 LongestWord/LongestWord
 MadNew/MadNew
-MakeVisitor/MakeVisitor
-MakeVisitor_v2/MakeVisitor_v2
+InlineVisitor/InlineVisitor
+InlineVisitor_v2/InlineVisitor_v2
 MapOfMaps/MapOfMaps
 MemCopyVsStdCopy/MemCopyVsStdCopy
 MemberFunctionOnNullObject/MemberFunctionOnNullObject
