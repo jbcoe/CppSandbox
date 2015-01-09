@@ -3,6 +3,7 @@
 #include <Common/Timer.h>
 #include <map>
 #include <vector>
+#include <deque>
 
 template <typename K, typename V>
 class FlatMap
@@ -16,6 +17,8 @@ private:
   KeyValueData data_;
 
 public:
+  const_iterator end() const { return data_.end(); }
+
   const_iterator find(const K& k) const
   {
 
@@ -60,36 +63,69 @@ int main(int argc, char* argv[])
 
   FlatMap<int, double> flatMappedRandomNumbers;
 
-  std::uniform_real_distribution<double> value_distribution(-1,1);
-  std::uniform_int_distribution<int> key_distribution(0, BIG_NUMBER/100);
-  std::mt19937 engine;
+  std::uniform_real_distribution<double> value_distribution(-1, 1);
+  std::uniform_int_distribution<int> key_distribution(0, BIG_NUMBER / 100);
+  std::mt19937 engine(0);
 
   auto value_generator = [&]()
   {
     return value_distribution(engine);
   };
-  
+
   auto key_generator = [&]()
   {
     return key_distribution(engine);
   };
 
+  std::cout << "\nPopulate\n";
   {
     auto t = make_timer("Flat map");
     for (int i = 0; i < BIG_NUMBER; ++i)
     {
-      flatMappedRandomNumbers.insert(std::make_pair(i, generator()));
+      flatMappedRandomNumbers.insert(
+          std::make_pair(key_generator(), value_generator()));
     }
   }
 
-
+  engine.seed(0);
   std::map<int, double> stdMappedRandomNumbers;
   {
     auto t = make_timer("std::map");
     for (int i = 0; i < BIG_NUMBER; ++i)
     {
-      stdMappedRandomNumbers.insert(std::make_pair(i, generator()));
+      stdMappedRandomNumbers.insert(
+          std::make_pair(key_generator(), value_generator()));
     }
   }
+
+  std::cout << "\nLookup\n";
+  engine.seed(0);
+  auto hits_0 = 0;
+  {
+    auto t = make_timer("Flat map");
+    for (int i = 0; i < BIG_NUMBER; ++i)
+    {
+      if (flatMappedRandomNumbers.find(key_generator()) !=
+          flatMappedRandomNumbers.end())
+      {
+        ++hits_0;
+      }
+    }
+  }
+  engine.seed(0);
+  auto hits_1 = 0;
+  {
+    auto t = make_timer("std::map");
+    for (int i = 0; i < BIG_NUMBER; ++i)
+    {
+      if (stdMappedRandomNumbers.find(key_generator()) !=
+          stdMappedRandomNumbers.end())
+      {
+        ++hits_1;
+      }
+    }
+  }
+
+  return hits_0 == hits_1 ? 0 : -1;
 }
 
