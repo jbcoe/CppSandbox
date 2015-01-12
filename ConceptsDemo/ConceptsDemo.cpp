@@ -10,15 +10,34 @@ using namespace origin;
 template <typename T>
 concept bool Cloneable()
 {
-  return requires(T* t)
+  return requires(const T& t)
   {
-    { t->Clone() } -> std::unique_ptr<T>;
+    { t.Clone() } -> std::unique_ptr<T>;
   };
 }
 
+template<typename T, typename Archive>
+concept bool Serializeable()
+{
+  return requires(const T& t, Archive& a)
+  {
+    t.Store(a);
+  } 
+  && requires(T& t, const Archive& a)
+  {
+    t.Load(a);
+  };
+}
+
+class PolymorphicArchive
+{
+};
+
 struct MyClass 
 {
-  auto Clone() { return std::make_unique<MyClass>(); }
+  auto Clone() const { return std::make_unique<MyClass>(); }
+  void Store(PolymorphicArchive& a) const {}
+  void Load(const PolymorphicArchive& a) {}
 };
 
 struct MyNonCopyableClass
@@ -56,6 +75,7 @@ int main(int argc, char* argv[])
   print_concept(Copyable, MyNonCopyableClass);
 
   std::cout << Cloneable<MyClass>() << std::endl;
+  std::cout << Serializeable<MyClass,PolymorphicArchive>() << std::endl;
 }
 
 
