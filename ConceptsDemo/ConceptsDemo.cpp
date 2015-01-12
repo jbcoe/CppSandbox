@@ -18,7 +18,7 @@ concept bool Cloneable()
 
 struct MyClass 
 {
-  std::unique_ptr<MyClass> Clone() { return std::unique_ptr<MyClass>(new MyClass()); }
+  auto Clone() { return std::make_unique<MyClass>(); }
 };
 
 struct MyNonCopyableClass
