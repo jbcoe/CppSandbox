@@ -16,7 +16,12 @@ concept bool Cloneable()
   };
 }
 
-template<typename T, typename Archive>
+
+class PolymorphicArchive
+{
+};
+
+template<typename T, typename Archive=PolymorphicArchive>
 concept bool Serializeable()
 {
   return requires(const T& t, Archive& a)
@@ -28,10 +33,6 @@ concept bool Serializeable()
     t.Load(a);
   };
 }
-
-class PolymorphicArchive
-{
-};
 
 struct MyClass 
 {
@@ -63,6 +64,16 @@ void foo(T& i)
 
 #define print_concept(x,y) std::cout << std::boolalpha << #x << " " << #y << " " << x<y>() << std::endl 
 
+void f(const Serializeable& s)
+{
+  std::cout << "I am serializeable\n";
+}
+
+void f(const auto& s)
+{
+  std::cout << "I am not serializeable\n";
+}
+
 int main(int argc, char* argv[])
 {
   MyClass m;
@@ -76,6 +87,8 @@ int main(int argc, char* argv[])
 
   std::cout << Cloneable<MyClass>() << std::endl;
   std::cout << Serializeable<MyClass,PolymorphicArchive>() << std::endl;
-}
 
+  f(m);
+  f(7);
+}
 
