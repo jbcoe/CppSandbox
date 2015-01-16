@@ -80,8 +80,8 @@ struct Dog
 
 struct Chimera : Cat, Pig, Dog {};
 
-int main(int argc, char* argv[]) {
-
+int main(int argc, char* argv[])
+{
   Aggregate<Cat,Pig,Dog> agg(std::make_shared<const Chimera>());
   Pig p(agg);
   Cat c(agg);
