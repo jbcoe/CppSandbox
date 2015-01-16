@@ -109,7 +109,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-  const int BIG_NUMBER = 1E6;
+  const int BIG_NUMBER = 1E7;
 
   FlatMap<int, double> flatMappedRandomNumbers;
   std::map<int, double> stdMappedRandomNumbers;
