@@ -9,9 +9,9 @@ class Buffer
 {
 public:
 
-  void StoreInt(int t)
+  void StoreInt(int64_t t)
   {
-    *reinterpret_cast<int*>(data_) = t;
+    *reinterpret_cast<int64_t*>(data_) = t;
   }
 
 private:
@@ -23,28 +23,39 @@ class MisalignedBuffer
 {
 public:
 
-  void StoreInt(int t)
+  void StoreInt(int64_t t)
   {
-    *reinterpret_cast<int*>(data_) = t;
+    *reinterpret_cast<int64_t*>(data_) = t;
   }
 
 private:
   char padding_[N];
-  char data_[sizeof(int)];
+  char data_[sizeof(int64_t)];
 };
+
+#define ALIGNMENT(x) std::cout << "alignof("#x") = " << alignof(x) << '\n';
 
 int main(int argc, char* argv[]) 
 {
-  const size_t LOOPS = 1e7;
+  ALIGNMENT(char);
+  ALIGNMENT(int);
+  ALIGNMENT(size_t);
+  ALIGNMENT(int64_t);
+  ALIGNMENT(float);
+  ALIGNMENT(double);
+  ALIGNMENT(std::max_align_t);
+
+  const size_t LOOPS = 1e8;
 
   std::mt19937 engine;
-  std::uniform_int_distribution<int> distribution(0,1000);
+  std::uniform_int_distribution<int64_t> distribution(0,1000);
   auto gen = [&]
   {
     return distribution(engine);
   };
 
   std::vector<int> numbers(LOOPS);
+
   std::generate(numbers.begin(),numbers.end(),gen);
 
   {
