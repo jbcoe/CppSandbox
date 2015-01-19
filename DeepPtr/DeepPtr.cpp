@@ -9,9 +9,12 @@ class deep_ptr
     deep_ptr() : i_() {}
 
     deep_ptr(std::nullptr_t) : i_(nullptr) {}
-    
-    template<typename U>
-    deep_ptr(U* u) : i_(new inner_impl<U>(u)) {}
+
+    template <typename U>
+    deep_ptr(U* u)
+        : i_(u ? new inner_impl<U>(*u) : nullptr)
+    {
+    }
 
     ~deep_ptr() { delete i_; }
 
@@ -56,37 +59,29 @@ class deep_ptr
   private:
     struct inner
     { 
-      inner(T* t) : t_(t) {}
+      virtual inner* copy() const = 0;
+      
+      virtual operator const T*() const  = 0;
+      
+      virtual operator T*() = 0;
 
-      inner* copy() const
-      {
-        if(!t_) { return nullptr; }
-        return do_copy();
-      }
-
-      operator const T*() const { return t_; } 
-      operator T*() { return t_; } 
-      virtual ~inner() { delete t_; }
-
-    private:
-      virtual inner* do_copy() const = 0;
-
-    protected:
-      T* t_;
+      virtual ~inner() {}
     };
     
     inner* i_;
 
-    template<typename U>
+    template <typename U>
     struct inner_impl : inner
     {
-      inner_impl(U* u) : inner(u) {}
-      inner_impl* do_copy() const override
-      {
-        assert(inner::t_);
-        const U& u = static_cast<U&>(*inner::t_);
-        return new inner_impl(new U(u));
-      }
+      inner_impl(const U& u) : u_(u) {}
+
+      inner_impl* copy() const override { return new inner_impl(u_); }
+
+      operator const T*() const override { return &u_; }
+
+      operator T*() override { return &u_; }
+
+      U u_;
     };
 };
 
