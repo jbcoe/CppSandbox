@@ -18,9 +18,19 @@ class deep_ptr
 
     ~deep_ptr() { delete i_; }
 
-    deep_ptr(const deep_ptr& p) : i_(p.i_->copy()) {}
+    deep_ptr(const deep_ptr& p) : i_(p.i_ ? p.i_->copy() : nullptr) {}
 
-    deep_ptr& operator=(const deep_ptr& p) { i_ = p.i_->copy(); }
+    deep_ptr& operator=(const deep_ptr& p)
+    {
+      if (!p.i_)
+      {
+        i_ = nullptr;
+      }
+      else
+      {
+        i_ = p.i_->copy();
+      }
+    }
 
     deep_ptr(deep_ptr&& p) : i_(p.i_) { p.i_ = nullptr; }
 
