@@ -1,3 +1,5 @@
+// TODO: make the new map classes exception-safe
+
 #include <iostream>
 #include <random>
 #include <Common/Timer.h>
