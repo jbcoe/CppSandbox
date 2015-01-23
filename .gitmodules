@@ -1,3 +1,6 @@
 [submodule "ConceptsOrigin"]
   path = ConceptsOrigin
   url = https://github.com/asutton/origin
+[submodule "externals/catch"]
+	path = externals/catch
+	url = https://github.com/philsquared/Catch.git
