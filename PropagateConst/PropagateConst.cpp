@@ -21,12 +21,8 @@ public:
   {
   }
 
-  template <typename U, typename Dummy = typename std::enable_if<
-                            std::is_convertible<U, T>::value>::type>
-  propagate_const(const propagate_const<U>& pu)
-      : t(pu.t)
-  {
-  }
+  template <typename U>
+  propagate_const(const propagate_const<U>& pu) = delete;
 
   template <typename U, typename Dummy = typename std::enable_if<
                             std::is_convertible<U, T>::value>::type>
@@ -43,13 +39,8 @@ public:
     return *this;
   }
 
-  template <typename U, typename Dummy = typename std::enable_if<
-                            std::is_convertible<U, T>::value>::type>
-  propagate_const<T>& operator=(const propagate_const<U>& pt)
-  {
-    t = pt.t;
-    return *this;
-  }
+  template <typename U>
+  propagate_const<T>& operator=(const propagate_const<U>& pt) = delete;
 
   template <typename U, typename Dummy = typename std::enable_if<
                             std::is_convertible<U, T>::value>::type>
@@ -269,6 +260,7 @@ int main(int argc, char* argv[])
 
   static_assert(std::is_trivially_destructible<decltype(pcA)>::value,
                 "Not trivially destructible");
+
   static_assert(std::is_trivially_move_constructible<decltype(pcA)>::value,
                 "Not trivially move constructible");
 
