@@ -2,8 +2,8 @@
 #include <iostream>
 #include <type_traits>
 #include <memory>
-#include "origin/core/Concepts.hpp"
-#include "origin/sequence/Concepts.hpp"
+#include <origin/core/Concepts.hpp>
+#include <origin/sequence/Concepts.hpp>
 
 using namespace origin;
 
