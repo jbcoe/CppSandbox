@@ -16,8 +16,8 @@ TEST_CASE("Factorials are computed", "[factorial]")
   REQUIRE(Factorial(10) == 3628800);
 }
 
-TEST_CASE("Failures where anticipated", "[What goes here?]")
+TEST_CASE("Forced Fail", "[2+2=5]")
 {
-  REQUIRE(2==1);
+  REQUIRE((2+2)==5);
 }
 
