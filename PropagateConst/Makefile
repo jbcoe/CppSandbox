@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.5.mk
+include ../compilerSettings_clang3.7.mk
 
 SOURCES=PropagateConst.cpp
 EXECUTABLE=PropagateConst

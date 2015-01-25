@@ -111,40 +111,52 @@ private:
   }
 };
 
+template<typename T>
+static const auto& get_underlying(const propagate_const<T>& p)
+{
+  return p.t;
+}
+
+template<typename T>
+static auto& get_underlying(propagate_const<T>& p)
+{
+  return p.t;
+}
+
 template <typename T, typename U>
 bool operator==(const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.get() == pu.get();
+  return pt.get() == get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator!=(const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.get() != pu.get();
+  return pt.get() != get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator<(const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.get() < pu.get();
+  return pt.get() < get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator>(const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.get() > pu.get();
+  return pt.get() > get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator<=(const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.get() <= pu.get();
+  return pt.get() <= get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator>=(const propagate_const<T>& pt, const propagate_const<U>& pu)
 {
-  return pt.get() >= pu.get();
+  return pt.get() >= get_underlying(pu);
 }
 
 template <typename T, typename U>
@@ -186,37 +198,37 @@ bool operator>=(const propagate_const<T>& pt, const U& pu)
 template <typename T, typename U>
 bool operator==(const T& pt, const propagate_const<U>& pu)
 {
-  return pt == pu.get();
+  return pt == get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator!=(const T& pt, const propagate_const<U>& pu)
 {
-  return pt != pu.get();
+  return pt != get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator<(const T& pt, const propagate_const<U>& pu)
 {
-  return pt < pu.get();
+  return pt < get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator>(const T& pt, const propagate_const<U>& pu)
 {
-  return pt > pu.get();
+  return pt > get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator<=(const T& pt, const propagate_const<U>& pu)
 {
-  return pt <= pu.get();
+  return pt <= get_underlying(pu);
 }
 
 template <typename T, typename U>
 bool operator>=(const T& pt, const propagate_const<U>& pu)
 {
-  return pt >= pu.get();
+  return pt >= get_underlying(pu);
 }
 
 struct A
