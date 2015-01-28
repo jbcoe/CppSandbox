@@ -1,7 +1,7 @@
 CXX=g++-concepts
 RM=rm -f
 OPT=0
-CPPFLAGS= -Wall -Winline -Wwrite-strings -Wno-unused -O$(OPT) -std=c++14 -I../ -I../externals/origin
+CPPFLAGS= -Wall -Winline -Wwrite-strings -Wno-unused -O$(OPT) -std=c++1y
 LDFLAGS=
 LDLIBS=
  

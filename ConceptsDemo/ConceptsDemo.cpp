@@ -17,10 +17,20 @@ struct MyClass
   auto Clone() const { return std::make_unique<MyClass>(); }
 };
 
-#define print_concept(x,y) std::cout << std::boolalpha << #x << " " << #y << " " << x<y>() << std::endl 
+template<typename T>
+bool IsCloneable()
+{
+  return false;
+}
+
+template<Cloneable C>
+bool IsCloneable()
+{
+  return true;
+}
 
 int main(int argc, char* argv[])
 {
-  print_concept(Cloneable,MyClass);
+  std::cout << std::boolalpha << "IsCloneable" << " " << "MyClass" << " " << IsCloneable<MyClass>() << std::endl 
 }
 
