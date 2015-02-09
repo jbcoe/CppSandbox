@@ -15,7 +15,7 @@ public:
   }
 
 private:
-  char data_[sizeof(int)];
+  char data_[sizeof(int64_t)];
 };
 
 template<size_t N>
@@ -30,13 +30,14 @@ public:
 
 private:
   char padding_[N];
-  char data_[sizeof(int64_t)];
+  char data_[sizeof(int64_t)*SIZE];
 };
 
 #define ALIGNMENT(x) std::cout << "alignof("#x") = " << alignof(x) << '\n';
 
 int main(int argc, char* argv[]) 
 {
+  /*
   ALIGNMENT(char);
   ALIGNMENT(int);
   ALIGNMENT(size_t);
@@ -44,8 +45,8 @@ int main(int argc, char* argv[])
   ALIGNMENT(float);
   ALIGNMENT(double);
   ALIGNMENT(std::max_align_t);
-
-  const size_t LOOPS = 1e8;
+  */
+  const size_t LOOPS = 1e7;
 
   std::mt19937 engine;
   std::uniform_int_distribution<int64_t> distribution(0,1000);
@@ -97,6 +98,24 @@ int main(int argc, char* argv[])
   {
     auto t = Timer("MisalignedBuffer<4>");
     MisalignedBuffer<4> b;
+    for(size_t i =0; i<LOOPS; ++i)
+    {
+      b.StoreInt(numbers[i]);
+    }
+  }
+  
+  {
+    auto t = Timer("MisalignedBuffer<5>");
+    MisalignedBuffer<5> b;
+    for(size_t i =0; i<LOOPS; ++i)
+    {
+      b.StoreInt(numbers[i]);
+    }
+  }
+  
+  {
+    auto t = Timer("MisalignedBuffer<",6,">");
+    MisalignedBuffer<6> b;
     for(size_t i =0; i<LOOPS; ++i)
     {
       b.StoreInt(numbers[i]);

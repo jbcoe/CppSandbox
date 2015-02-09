@@ -1,6 +1,5 @@
 // NO CLANG FORMAT (concepts not yet supported)
 #include <iostream>
-#include <type_traits>
 #include <memory>
 
 template <typename T>
@@ -17,20 +16,18 @@ struct MyClass
   auto Clone() const { return std::make_unique<MyClass>(); }
 };
 
-template<typename T>
-bool IsCloneable()
+void f(const auto& a)
 {
-  return false;
+  std::cout << "Generic f\n";
 }
 
-template<Cloneable C>
-bool IsCloneable()
+void f(const Cloneable& a)
 {
-  return true;
+  std::cout << "Cloneable f\n";
 }
 
 int main(int argc, char* argv[])
 {
-  std::cout << std::boolalpha << "IsCloneable" << " " << "MyClass" << " " << IsCloneable<MyClass>() << std::endl 
+  f(MyClass());
 }
 

@@ -17,7 +17,7 @@ public:
   ~TTimer()
   {
     auto end = clock::now();
-    f(std::chrono::duration_cast<std::chrono::microseconds>(end - start_)
+    f(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start_)
           .count());
   }
 
