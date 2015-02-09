@@ -40,9 +40,9 @@ class deep_ptr
       p.i_ = nullptr;
     }
 
-    const T* operator->() const { return get(); }
+    T* operator->() const { return get(); }
 
-    const T* get() const
+    T* get() const
     {
       if (i_)
       {
@@ -51,7 +51,7 @@ class deep_ptr
       return nullptr;
     }
 
-    const T& operator*() const { return *static_cast<T*>(*i_); }
+    T& operator*() const { return *static_cast<T*>(*i_); }
 
     T* operator->() { return get(); }
 
