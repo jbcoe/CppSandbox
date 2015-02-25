@@ -151,5 +151,5 @@ ThrowOnCopy/ThrowOnCopy
 Maps/Maps
 NonVirtualInterface/NonVirtualInterface
 Alignment/Alignment
-DeepPtr/DeepPtr
+CloningPtr/CloningPtr
 CatchTestingDemo/CatchTestingDemo

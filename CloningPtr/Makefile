@@ -1,6 +1,6 @@
 include ../compilerSettings_clang3.5.mk
 
-SOURCES=DeepPtr.cpp
-EXECUTABLE=DeepPtr
+SOURCES=CloningPtr.cpp
+EXECUTABLE=CloningPtr
 
 include ../makeCommon.mk
