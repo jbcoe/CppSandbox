@@ -2,88 +2,104 @@
 
 namespace detail
 {
-
-template <typename F_t>
-class no_except_scoped_guard
-{
-  F_t f;
-  bool run;
-
-public:
-  no_except_scoped_guard(F_t f_) : f(f_), run(true) {}
-
-  ~no_except_scoped_guard()
+  template <typename F_t>
+  class no_except_scoped_guard
   {
-    if (run)
+    F_t f;
+    bool run;
+
+  public:
+    no_except_scoped_guard(F_t f_) : f(f_), run(true)
     {
-      f();
-    }     
-  }
-
-  no_except_scoped_guard(const no_except_scoped_guard& s) = delete;
-  no_except_scoped_guard(no_except_scoped_guard&& s) : f(std::move(s.f)), run(s.run) { s.run = false; }
-
-  no_except_scoped_guard& operator=(const no_except_scoped_guard& s) = delete;
-
-  no_except_scoped_guard& operator=(no_except_scoped_guard&& s)
-  {
-    if (&s == this)
-    {
-      return *this;
     }
 
-    f = std::move(s.f);
-    run = s.run;
-    s.run = false;
-    return *this;
-  }
-
-  void release() { run = false; }
-};
-
-template <typename F_t>
-class scoped_guard
-{
-  F_t f;
-  bool run;
-
-public:
-  scoped_guard(F_t f_) : f(f_), run(true) {}
-
-  ~scoped_guard()
-  {
-    if (run)
+    ~no_except_scoped_guard()
     {
-      try
+      if (run)
       {
         f();
       }
-      catch (...)
-      {
-      }
-    }     
-  }
+    }
 
-  scoped_guard(const scoped_guard& s) = delete;
-  scoped_guard(scoped_guard&& s) : f(std::move(s.f)), run(s.run) { s.run = false; }
-
-  scoped_guard& operator=(const scoped_guard& s) = delete;
-
-  scoped_guard& operator=(scoped_guard&& s)
-  {
-    if (&s == this)
+    no_except_scoped_guard(const no_except_scoped_guard& s) = delete;
+    no_except_scoped_guard(no_except_scoped_guard&& s)
+        : f(std::move(s.f)), run(s.run)
     {
+      s.run = false;
+    }
+
+    no_except_scoped_guard& operator=(const no_except_scoped_guard& s) = delete;
+
+    no_except_scoped_guard& operator=(no_except_scoped_guard&& s)
+    {
+      if (&s == this)
+      {
+        return *this;
+      }
+
+      f = std::move(s.f);
+      run = s.run;
+      s.run = false;
       return *this;
     }
 
-    f = std::move(s.f);
-    run = s.run;
-    s.run = false;
-    return *this;
-  }
+    void release()
+    {
+      run = false;
+    }
+  };
 
-  void release() { run = false; }
-};
+  template <typename F_t>
+  class scoped_guard
+  {
+    F_t f;
+    bool run;
+
+  public:
+    scoped_guard(F_t f_) : f(f_), run(true)
+    {
+    }
+
+    ~scoped_guard()
+    {
+      if (run)
+      {
+        try
+        {
+          f();
+        }
+        catch (...)
+        {
+        }
+      }
+    }
+
+    scoped_guard(const scoped_guard& s) = delete;
+    scoped_guard(scoped_guard&& s) : f(std::move(s.f)), run(s.run)
+    {
+      s.run = false;
+    }
+
+    scoped_guard& operator=(const scoped_guard& s) = delete;
+
+    scoped_guard& operator=(scoped_guard&& s)
+    {
+      if (&s == this)
+      {
+        return *this;
+      }
+
+      f = std::move(s.f);
+      run = s.run;
+      s.run = false;
+      return *this;
+    }
+
+    void release()
+    {
+      run = false;
+    }
+  };
 
 } // end namespace detail
 
@@ -105,10 +121,12 @@ struct if_type_else_type<false, T, U>
 };
 
 template <bool b, typename T, typename U>
-using if_type_else_type_t = typename if_type_else_type<b,T,U>::type;
+using if_type_else_type_t = typename if_type_else_type<b, T, U>::type;
 
-template <typename F_t, typename scoped_guard_t = if_type_else_type_t<noexcept(std::declval<F_t&>()()),
-                                         detail::no_except_scoped_guard<F_t>, detail::scoped_guard<F_t>>>
+template <typename F_t,
+          typename scoped_guard_t = if_type_else_type_t<
+              noexcept(std::declval<F_t&>()()),
+              detail::no_except_scoped_guard<F_t>, detail::scoped_guard<F_t>>>
 auto make_scoped_guard(F_t f)
 {
   return scoped_guard_t(std::move(f));
@@ -123,21 +141,22 @@ void f() noexcept
 int main(int argc, char* argv[])
 {
   auto printHelloWorldOnExit = make_scoped_guard([]
-                                               {
-                                                 std::cout << "Hello world"
-                                                           << std::endl;
-                                               });
+                                                 {
+                                                   std::cout << "Hello world"
+                                                             << std::endl;
+                                                 });
   auto printGoodbyeWorldOnExit =
       make_scoped_guard([]
-                      {
-                        std::cout << "Goodbye cruel world" << std::endl;
-                      });
+                        {
+                          std::cout << "Goodbye cruel world" << std::endl;
+                        });
+
   auto functionPointerTest = make_scoped_guard(&f);
   printGoodbyeWorldOnExit.release();
 
-  auto exceptionsAreContained =
-      make_scoped_guard([]
-                      {
-                        throw std::runtime_error("Exception from within guard");
-                      });
+  auto exceptionsAreContained = make_scoped_guard(
+      []
+      {
+        throw std::runtime_error("Exception from within guard");
+      });
 }
