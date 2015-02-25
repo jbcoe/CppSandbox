@@ -7,14 +7,16 @@
 class MyClassWithLazyInitialization
 {
 public:
-  MyClassWithLazyInitialization() {}
+  MyClassWithLazyInitialization()
+  {
+  }
   const char* Name()
   {
     std::call_once(m_nameInitFlag, [this]()
                    {
-      this->m_name = "Boris";
-      std::cout << "Object has been named\n";
-    });
+                     this->m_name = "Boris";
+                     std::cout << "Object has been named\n";
+                   });
     return m_name.c_str();
   }
 
@@ -40,6 +42,6 @@ int main(int argc, char* argv[])
   }
   std::for_each(threads.begin(), threads.end(), [](std::thread& t)
                 {
-    t.join();
-  });
+                  t.join();
+                });
 }

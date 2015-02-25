@@ -13,9 +13,15 @@ class Monitor
   T t_;
   mutable std::mutex m_;
 
-  operator const T&() const { return t_; }
+  operator const T&() const
+  {
+    return t_;
+  }
 
-  operator T&() { return t_; }
+  operator T&()
+  {
+    return t_;
+  }
 
 public:
   Monitor() = default;

@@ -20,7 +20,9 @@ struct DataForB
 class Interface
 {
 public:
-  virtual ~Interface() {}
+  virtual ~Interface()
+  {
+  }
   virtual void DoBase() const = 0;
   virtual void DoA() const = 0;
   virtual void DoB() const = 0;
@@ -33,10 +35,14 @@ private:
   DataForA m_aData;
 
 protected:
-  ~VirtualWrapper_A() override {}
+  ~VirtualWrapper_A() override
+  {
+  }
 
 public:
-  void DoA() const override {}
+  void DoA() const override
+  {
+  }
 
   typedef typename BaseType<TInterface>::Type BaseType;
 };
@@ -55,10 +61,14 @@ private:
   DataForB m_bData;
 
 protected:
-  ~VirtualWrapper_B() override {}
+  ~VirtualWrapper_B() override
+  {
+  }
 
 public:
-  void DoB() const override {}
+  void DoB() const override
+  {
+  }
 
   typedef typename BaseType<TInterface>::Type BaseType;
 };
@@ -77,10 +87,14 @@ private:
   DataForA m_aData;
 
 protected:
-  ~Wrapper_A() override {}
+  ~Wrapper_A() override
+  {
+  }
 
 public:
-  void DoA() const override {}
+  void DoA() const override
+  {
+  }
 
   typedef typename BaseType<TInterface>::Type BaseType;
   typedef TInterface NestedType;
@@ -106,10 +120,14 @@ private:
   DataForB m_bData;
 
 protected:
-  ~Wrapper_B() override {}
+  ~Wrapper_B() override
+  {
+  }
 
 public:
-  void DoB() const override {}
+  void DoB() const override
+  {
+  }
 
   typedef typename BaseType<TInterface>::Type BaseType;
   typedef TInterface NestedType;
@@ -176,7 +194,9 @@ class DelegateA
   DataForA m_base;
 
 public:
-  virtual void DoA() const {}
+  virtual void DoA() const
+  {
+  }
 };
 
 class DelegateB
@@ -184,7 +204,9 @@ class DelegateB
   DataForB m_base;
 
 public:
-  virtual void DoB() const {}
+  virtual void DoB() const
+  {
+  }
 };
 
 class DelegatingImpl : public Interface
@@ -194,9 +216,17 @@ private:
   DelegateB m_dB;
 
 public:
-  void DoBase() const override {}
-  void DoA() const override { m_dA.DoA(); }
-  void DoB() const override { m_dB.DoB(); }
+  void DoBase() const override
+  {
+  }
+  void DoA() const override
+  {
+    m_dA.DoA();
+  }
+  void DoB() const override
+  {
+    m_dB.DoB();
+  }
 };
 
 class RawImpl : public Interface
@@ -207,9 +237,15 @@ private:
   DataForB m_bData;
 
 public:
-  void DoBase() const override {}
-  void DoA() const override {}
-  void DoB() const override {}
+  void DoBase() const override
+  {
+  }
+  void DoA() const override
+  {
+  }
+  void DoB() const override
+  {
+  }
 };
 
 
@@ -220,7 +256,10 @@ struct TypeName;
   template <>                                                                  \
   struct TypeName<X>                                                           \
   {                                                                            \
-    static const char* Name() { return #X; }                                   \
+    static const char* Name()                                                  \
+    {                                                                          \
+      return #X;                                                               \
+    }                                                                          \
   };
 
 DEFINE_NAME_FOR_TYPE(void*);

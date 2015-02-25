@@ -49,7 +49,10 @@ private:
   FunctionObject_t f_;
 
 public:
-  auto operator*() const { return *iterator_; }
+  auto operator*() const
+  {
+    return *iterator_;
+  }
 };
 
 

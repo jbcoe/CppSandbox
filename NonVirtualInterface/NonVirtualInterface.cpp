@@ -7,7 +7,9 @@ using std::experimental::optional;
 class Interface
 {
 public:
-  virtual ~Interface() {}
+  virtual ~Interface()
+  {
+  }
 
   optional<double> Evaluate() const noexcept
   {
@@ -28,7 +30,9 @@ private:
 class Implementation : public Interface
 {
 public:
-  Implementation(double a) : a_(a) {}
+  Implementation(double a) : a_(a)
+  {
+  }
 
 private:
   double a_ = 0.0;

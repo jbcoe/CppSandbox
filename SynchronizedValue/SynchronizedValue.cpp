@@ -18,9 +18,14 @@ public:
     std::shared_lock<std::shared_timed_mutex> l_;
 
   public:
-    Guard(const T& t, std::shared_timed_mutex& m) : t_(&t), l_(m) {}
+    Guard(const T& t, std::shared_timed_mutex& m) : t_(&t), l_(m)
+    {
+    }
 
-    const T* operator->() const { return t_; }
+    const T* operator->() const
+    {
+      return t_;
+    }
   };
 
   class EditGuard
@@ -29,20 +34,37 @@ public:
     std::unique_lock<std::shared_timed_mutex> l_;
 
   public:
-    EditGuard(const T& t, std::shared_timed_mutex& m) : t_(&t), l_(m) {}
+    EditGuard(const T& t, std::shared_timed_mutex& m) : t_(&t), l_(m)
+    {
+    }
 
-    const T* operator->() const { return t_; }
+    const T* operator->() const
+    {
+      return t_;
+    }
 
-    T* operator->() { return t_; }
+    T* operator->()
+    {
+      return t_;
+    }
   };
-  
-  SynchronizedValue() : t_() {}
 
-  SynchronizedValue(const T& t) : t_(t) {}
+  SynchronizedValue() : t_()
+  {
+  }
 
-  SynchronizedValue(T&& t) : t_(std::move(t)) {}
+  SynchronizedValue(const T& t) : t_(t)
+  {
+  }
 
-  Guard Access() const { return Guard(t_, m_); }
+  SynchronizedValue(T&& t) : t_(std::move(t))
+  {
+  }
+
+  Guard Access() const
+  {
+    return Guard(t_, m_);
+  }
 };
 
 class MyClass
@@ -74,7 +96,7 @@ int main(int argc, char* argv[])
 
   for (size_t i = 0; i < 5; ++i)
   {
-    ts.emplace_back([&,i]()
+    ts.emplace_back([&, i]()
                     {
                       auto g = s.Access();
                       std::ostringstream ss;
@@ -83,9 +105,8 @@ int main(int argc, char* argv[])
                     });
   }
 
-  for(auto& t : ts ) 
+  for (auto& t : ts)
   {
     t.join();
   }
 }
-

@@ -10,9 +10,9 @@ int main(int argc, char* argv[])
 
   std::for_each(some_list.begin(), some_list.end(), [&count, &sum](int x)
                 {
-    sum += x;
-    ++count;
-  });
+                  sum += x;
+                  ++count;
+                });
 
   std::cout << "Sum: " << sum << " count: " << count << std::endl;
 }

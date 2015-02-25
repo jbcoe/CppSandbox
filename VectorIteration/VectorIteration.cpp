@@ -22,7 +22,10 @@ public:
     }
   }
 
-  ~MemBlock() { free(m_rawMemory); }
+  ~MemBlock()
+  {
+    free(m_rawMemory);
+  }
   size_t m_size;
   char* m_rawMemory;
 };
@@ -91,8 +94,9 @@ int main(int argc, char* argv[])
                         ws + length, xs + length, ys + length, zs + length)),
                     [&](const boost::tuple<double, double, double, double>& t)
                     {
-        sum2 += theFunction(t.get<0>(), t.get<1>(), t.get<2>(), t.get<3>());
-      });
+                      sum2 += theFunction(t.get<0>(), t.get<1>(), t.get<2>(),
+                                          t.get<3>());
+                    });
     }
   }
 

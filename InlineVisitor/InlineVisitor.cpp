@@ -15,7 +15,9 @@ public:
   virtual void Visit(C& c) = 0;
 
 protected:
-  ~AbstractVisitor() {}
+  ~AbstractVisitor()
+  {
+  }
 };
 
 
@@ -25,28 +27,39 @@ public:
   virtual void Accept(AbstractVisitor& v) = 0;
 
 protected:
-  ~Visitable() {}
+  ~Visitable()
+  {
+  }
 };
 
 
 class A : public Visitable
 {
 public:
-  void Accept(AbstractVisitor& v) override { v.Visit(*this); }
+  void Accept(AbstractVisitor& v) override
+  {
+    v.Visit(*this);
+  }
 };
 
 
 class B : public Visitable
 {
 public:
-  void Accept(AbstractVisitor& v) override { v.Visit(*this); }
+  void Accept(AbstractVisitor& v) override
+  {
+    v.Visit(*this);
+  }
 };
 
 
 class C : public Visitable
 {
 public:
-  void Accept(AbstractVisitor& v) override { v.Visit(*this); }
+  void Accept(AbstractVisitor& v) override
+  {
+    v.Visit(*this);
+  }
 };
 
 
@@ -65,7 +78,10 @@ public:
     {
     }
 
-    void Visit(T& t) final { VisitImpl(t); }
+    void Visit(T& t) final
+    {
+      VisitImpl(t);
+    }
 
   private:
     template <typename F_ = F>
@@ -88,7 +104,9 @@ public:
     F m_f;
   };
 
-  ComposeVisitor(ArgsT&& args) : m_args(std::move(args)) {}
+  ComposeVisitor(ArgsT&& args) : m_args(std::move(args))
+  {
+  }
 
   template <typename Tadd, typename Fadd>
   ComposeVisitor<Tadd, Fadd, InnerVisitor, std::pair<Fadd, ArgsT>>
@@ -119,7 +137,9 @@ public:
   public:
     using TVisitorBase::Visit;
     typedef TVisitorBase VisitorInterface;
-    InnerVisitor(std::nullptr_t) {}
+    InnerVisitor(std::nullptr_t)
+    {
+    }
   };
 
   template <typename Tadd, typename Fadd>
@@ -152,7 +172,9 @@ int main()
 
   struct CVisitor : public AbstractVisitor
   {
-    CVisitor(int& i) : iCounter_(i) {}
+    CVisitor(int& i) : iCounter_(i)
+    {
+    }
 
     int& iCounter_;
 

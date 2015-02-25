@@ -9,9 +9,13 @@ class non_copyable_map : public std::map<Key_t, Value_t, Compare_t>
   typedef std::map<Key_t, Value_t, Compare_t> BaseType;
 
 public:
-  non_copyable_map() {}
+  non_copyable_map()
+  {
+  }
 
-  non_copyable_map(non_copyable_map&& t) : BaseType(std::move(t)) {}
+  non_copyable_map(non_copyable_map&& t) : BaseType(std::move(t))
+  {
+  }
 
   non_copyable_map& operator=(non_copyable_map&& t)
   {

@@ -18,6 +18,5 @@ TEST_CASE("Factorials are computed", "[factorial]")
 
 TEST_CASE("Forced Fail", "[2+2=5]")
 {
-  REQUIRE((2+2)==5);
+  REQUIRE((2 + 2) == 5);
 }
-

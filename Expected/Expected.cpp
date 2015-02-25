@@ -20,14 +20,16 @@ template <typename T>
 class Expected
 {
   bool hasData_;
-  
+
   union Data
   {
     std::exception_ptr e_;
     T t_;
 
     // Zero initialise the 'e_' member
-    Data() : e_{} {}
+    Data() : e_{}
+    {
+    }
     // Construct the 'e_' member
     template <typename... Args>
     Data(Unexpected_T, Args&&... args)
@@ -40,24 +42,28 @@ class Expected
         : t_{std::forward<Args>(args)...}
     {
     }
-    ~Data() {}
+    ~Data()
+    {
+    }
   } data_;
 
   template <typename U>
   friend class Expected;
 
-  Expected() noexcept : hasData_(false), data_{Unexpected_T{}, nullptr} {}
+  Expected() noexcept : hasData_(false), data_{Unexpected_T{}, nullptr}
+  {
+  }
 
 public:
   ~Expected()
   {
     if (hasData_)
     {
-      data_.t_. ~T();
+      data_.t_.~T();
     }
     else
     {
-      data_.e_. ~exception_ptr();
+      data_.e_.~exception_ptr();
     }
   }
   template <typename U>
@@ -66,10 +72,13 @@ public:
         data_(Unexpected_T{}, std::make_exception_ptr(std::forward<U>(u)))
 
   {
-    static_assert( (std::is_nothrow_copy_constructible<U>::value && std::is_lvalue_reference<decltype(u)>::value)
-        || (std::is_nothrow_copy_constructible<U>::value && std::is_rvalue_reference<decltype(u)>::value)
-        || (std::is_nothrow_move_constructible<U>::value && std::is_rvalue_reference<decltype(u)>::value)
-        , "Unexpected type must be no-throw movable or copyable");
+    static_assert((std::is_nothrow_copy_constructible<U>::value &&
+                   std::is_lvalue_reference<decltype(u)>::value) ||
+                      (std::is_nothrow_copy_constructible<U>::value &&
+                       std::is_rvalue_reference<decltype(u)>::value) ||
+                      (std::is_nothrow_move_constructible<U>::value &&
+                       std::is_rvalue_reference<decltype(u)>::value),
+                  "Unexpected type must be no-throw movable or copyable");
   }
 
   Expected(T&& t) noexcept try : hasData_(true),
@@ -77,16 +86,16 @@ public:
 
   {
   }
-  catch(...)
+  catch (...)
   {
     ::new (std::addressof(data_.e_)) std::exception_ptr{};
     data_.e_ = std::current_exception();
   }
 
-  Expected(const T& t) noexcept try : hasData_(true), data_(Expected_T{}, t) 
+  Expected(const T& t) noexcept try : hasData_(true), data_(Expected_T{}, t)
   {
   }
-  catch(...)
+  catch (...)
   {
     hasData_ = false;
     ::new (std::addressof(data_.e_)) std::exception_ptr{};
@@ -124,10 +133,11 @@ public:
       }
       else
       {
-        ::new (std::addressof(data_.e_)) std::exception_ptr{std::move(x.data_.e_)};
+        ::new (std::addressof(data_.e_))
+            std::exception_ptr{std::move(x.data_.e_)};
       }
     }
-    catch(...)
+    catch (...)
     {
       hasData_ = false;
       ::new (std::addressof(data_.e_)) std::exception_ptr{};
@@ -135,11 +145,14 @@ public:
     }
   }
 
-  // TODO: if internal assignment throws, = can leave Expected in a bad state 
-  Expected& operator = (const Expected& ) = delete;
-  Expected& operator = (Expected&& ) = delete;
+  // TODO: if internal assignment throws, = can leave Expected in a bad state
+  Expected& operator=(const Expected&) = delete;
+  Expected& operator=(Expected&&) = delete;
 
-  explicit operator bool() const noexcept { return hasData_; }
+  explicit operator bool() const noexcept
+  {
+    return hasData_;
+  }
 
   T& operator*()
   {

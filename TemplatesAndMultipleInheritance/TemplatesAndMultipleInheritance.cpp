@@ -7,7 +7,10 @@
 template <typename T, typename TInterface>
 struct TSetImpl : public TInterface
 {
-  void doThing() override { std::cout << "CSetImpl" << std::endl; }
+  void doThing() override
+  {
+    std::cout << "CSetImpl" << std::endl;
+  }
 };
 
 ////////////////////////////////////////////

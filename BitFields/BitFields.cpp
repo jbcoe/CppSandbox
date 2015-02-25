@@ -18,7 +18,9 @@ struct PermissionFlags
     is_execute = (value & 1u << 0);
   }
 
-  PermissionFlags() : is_write(0), is_read(0), is_execute(0) {}
+  PermissionFlags() : is_write(0), is_read(0), is_execute(0)
+  {
+  }
 };
 
 int main(int argc, char* argv[])

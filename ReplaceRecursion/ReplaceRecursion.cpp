@@ -6,8 +6,12 @@
 
 struct Node
 {
-  Node(int data) : data_(data) {}
-  Node() {}
+  Node(int data) : data_(data)
+  {
+  }
+  Node()
+  {
+  }
 
   static std::unique_ptr<Node> Instance(int data)
   {
@@ -22,9 +26,15 @@ struct Node
 
 struct Incrementable
 {
-  operator int() { return i_++; }
+  operator int()
+  {
+    return i_++;
+  }
 
-  void operator++() { i_++; }
+  void operator++()
+  {
+    i_++;
+  }
 
   int i_ = 0;
 };
@@ -105,7 +115,8 @@ int main(int argc, char* argv[])
 {
   Incrementable i;
   Node rootNode(i);
-  AddNodes(rootNode, [&i]
+  AddNodes(rootNode,
+           [&i]
            {
              return Node::Instance(i);
            },

@@ -13,9 +13,14 @@ struct ThreadCountInfo
     ++totalCreatedThreadCount;
   }
 
-  ~ThreadCountInfo() { --totalLiveThreadCount; }
+  ~ThreadCountInfo()
+  {
+    --totalLiveThreadCount;
+  }
 
-  void Init() {}
+  void Init()
+  {
+  }
 };
 
 thread_local ThreadCountInfo tcInfo = ThreadCountInfo{};

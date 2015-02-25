@@ -32,7 +32,9 @@ class TupleUtils
 
   struct ToStream
   {
-    ToStream(std::ostream& os) : m_os(os) {}
+    ToStream(std::ostream& os) : m_os(os)
+    {
+    }
     template <typename T>
     T operator()(T t)
     {

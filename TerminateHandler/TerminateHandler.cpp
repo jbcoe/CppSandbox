@@ -16,4 +16,3 @@ int main(int argc, char* argv[])
   std::set_terminate(its_all_gone_quiet_over_there);
   f();
 }
-

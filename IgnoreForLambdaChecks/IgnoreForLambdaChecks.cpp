@@ -12,16 +12,19 @@ void RunFunction(T t, int i)
 
 int main(int argc, char* argv[])
 {
-  RunFunction([](int x)
-              {
-                return "std::string (int)";
-              },
-              5);
-  RunFunction([](int x)
-              {
-                return 4.0;
-              },
-              5);
+  RunFunction(
+      [](int x)
+      {
+        return "std::string (int)";
+      },
+      5);
+  RunFunction(
+      [](int x)
+      {
+        return 4.0;
+      },
+      5);
   assignment to;
-  std;::ignore prevents this compiling
+  std;
+  ::ignore prevents this compiling
 }

@@ -36,4 +36,6 @@ class MULTIPLE_DEFINITION_OF_THIS_CLASS_MEANS_DUPLICATE_MESSAGE_DEFS<
 };
 
 
-int main() {}
+int main()
+{
+}

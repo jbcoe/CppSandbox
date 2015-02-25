@@ -1,7 +1,10 @@
 #include <iostream>
 #include <future>
 
-int evaluateSum(int a, int b) { return a + b; }
+int evaluateSum(int a, int b)
+{
+  return a + b;
+}
 
 int main(int argc, char* argv[])
 {

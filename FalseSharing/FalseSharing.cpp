@@ -13,11 +13,22 @@
 class SquareMatrix
 {
 public:
-  SquareMatrix(size_t dim) : m_data(dim * dim, 0), m_dim(dim) {}
-  double* operator[](size_t i) { return &m_data[i * m_dim]; }
+  SquareMatrix(size_t dim) : m_data(dim * dim, 0), m_dim(dim)
+  {
+  }
+  double* operator[](size_t i)
+  {
+    return &m_data[i * m_dim];
+  }
 
-  std::vector<double>::iterator begin() { return m_data.begin(); }
-  std::vector<double>::iterator end() { return m_data.end(); }
+  std::vector<double>::iterator begin()
+  {
+    return m_data.begin();
+  }
+  std::vector<double>::iterator end()
+  {
+    return m_data.end();
+  }
 
 private:
   std::vector<double> m_data;

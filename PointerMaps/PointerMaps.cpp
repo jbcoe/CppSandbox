@@ -16,7 +16,9 @@ struct MyData
     return p;
   }
 
-  MyData() {}
+  MyData()
+  {
+  }
 
   int x = 0;
   int y = 0;

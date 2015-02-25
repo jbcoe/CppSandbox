@@ -9,7 +9,9 @@ class MyClass
 public:
   int m_iInt;
   double m_dbl;
-  MyClass() {}
+  MyClass()
+  {
+  }
 };
 
 ////////////////////////////////////////////////////////////
@@ -19,7 +21,9 @@ class MyOtherClass
 public:
   double m_dbl;
   int m_iInt;
-  MyOtherClass() {}
+  MyOtherClass()
+  {
+  }
 };
 
 ////////////////////////////////////////////////////////////

@@ -7,21 +7,21 @@
 #include <vector>
 #include <deque>
 
-template<typename K,typename V>
+template <typename K, typename V>
 class IndexedKeyMap
 {
   std::vector<K> keys_;
   std::vector<V> values_;
 
 public:
-  
   const V* find(const K& k) const
   {
-    auto find_it = std::lower_bound(keys_.begin(), keys_.end(), k, [](const auto& k_, const auto& k)
-        {
-          return k_ < k;
-        });
-  
+    auto find_it = std::lower_bound(keys_.begin(), keys_.end(), k,
+                                    [](const auto& k_, const auto& k)
+                                    {
+                                      return k_ < k;
+                                    });
+
     if (find_it == keys_.end() || *find_it != k)
     {
       return nullptr;
@@ -30,29 +30,29 @@ public:
     return &values_[index];
   }
 
-  bool insert(const std::pair<K,V>& kv)
+  bool insert(const std::pair<K, V>& kv)
   {
     auto find_it = std::lower_bound(keys_.begin(), keys_.end(), kv.first,
-                                        [](const auto& kv, const auto& k)
-                                        {
-                                          return kv < k;
-                                        });
+                                    [](const auto& kv, const auto& k)
+                                    {
+                                      return kv < k;
+                                    });
     if (find_it == keys_.end())
     {
       keys_.push_back(kv.first);
       values_.push_back(kv.second);
       return true;
-    }                                      
+    }
     if (*find_it == kv.first)
     {
       return false;
     }
-    
+
     auto index = std::distance(keys_.begin(), find_it);
-    
-    keys_.insert(keys_.begin()+index, kv.first);
-    values_.insert(values_.begin()+index, kv.second);
-    
+
+    keys_.insert(keys_.begin() + index, kv.first);
+    values_.insert(values_.begin() + index, kv.second);
+
     return true;
   }
 };
@@ -69,7 +69,10 @@ private:
   KeyValueData data_;
 
 public:
-  const_iterator end() const { return data_.end(); }
+  const_iterator end() const
+  {
+    return data_.end();
+  }
 
   const_iterator find(const K& k) const
   {
@@ -160,7 +163,7 @@ int main(int argc, char* argv[])
           std::make_pair(key_generator(), value_generator()));
     }
   }
-  
+
   std::cout << "\nLookup\n";
   engine.seed(0);
   auto hits_0 = 0;
@@ -201,7 +204,6 @@ int main(int argc, char* argv[])
       }
     }
   }
-  
-  return ( hits_0 == hits_1 && hits_1 == hits_2 ) ? 0 : -1;
-}
 
+  return (hits_0 == hits_1 && hits_1 == hits_2) ? 0 : -1;
+}

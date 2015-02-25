@@ -31,8 +31,8 @@ void data_printing()
     std::unique_lock<std::mutex> l(m);
     data_condition.wait(l, []
                         {
-      return !messages.empty();
-    });
+                          return !messages.empty();
+                        });
     auto message = std::move(messages.front());
     messages.pop();
     l.unlock();

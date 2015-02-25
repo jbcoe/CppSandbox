@@ -36,7 +36,10 @@ private:
   Iterator_t iterator_;
 
 public:
-  auto operator*() const -> decltype(f_(*iterator_)) { return f_(*iterator_); }
+  auto operator*() const -> decltype(f_(*iterator_))
+  {
+    return f_(*iterator_);
+  }
 };
 
 template <Iterator Iterator_t, Functor Functor_t>
@@ -55,22 +58,22 @@ int main(int argc, char* argv[])
   auto roman_begin_and_end = make_transform_iterator_begin_and_end(
       numbers.begin(), numbers.end(), [](int x) -> std::string
                                       {
-        switch (x)
-        {
-        case 1:
-          return "I";
-        case 2:
-          return "II";
-        case 3:
-          return "III";
-        case 4:
-          return "IV";
-        case 5:
-          return "V";
-        default:
-          return "?";
-        }
-      });
+                                        switch (x)
+                                        {
+                                        case 1:
+                                          return "I";
+                                        case 2:
+                                          return "II";
+                                        case 3:
+                                          return "III";
+                                        case 4:
+                                          return "IV";
+                                        case 5:
+                                          return "V";
+                                        default:
+                                          return "?";
+                                        }
+                                      });
 
   std::ostream_iterator<std::string> osi(std::cout, " ");
   std::copy(roman_begin_and_end.first, roman_begin_and_end.second, osi);

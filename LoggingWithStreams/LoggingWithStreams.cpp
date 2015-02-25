@@ -11,7 +11,9 @@ std::mutex g_logMutex;
 class LogLocker
 {
 public:
-  LogLocker() : l(g_logMutex) {}
+  LogLocker() : l(g_logMutex)
+  {
+  }
 
 private:
   std::unique_lock<std::mutex> l;
@@ -31,7 +33,10 @@ enum class LEVEL
   CRITICAL = 0
 } g_logLevel = LEVEL::CRITICAL;
 
-void SetLogLevel(LEVEL logLevel) { g_logLevel = logLevel; }
+void SetLogLevel(LEVEL logLevel)
+{
+  g_logLevel = logLevel;
+}
 
 #define LOG(level)                                                             \
   if (g_logLevel < level)                                                      \

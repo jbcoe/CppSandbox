@@ -7,39 +7,56 @@ class ThrowOnMove
   Base base_;
 
 public:
-    
-  ThrowOnMove(Base b) : base_(std::move(b)) {}
-  
-  ThrowOnMove() : base_() {}
+  ThrowOnMove(Base b) : base_(std::move(b))
+  {
+  }
+
+  ThrowOnMove() : base_()
+  {
+  }
 
   class Exception : public std::exception
   {
   };
 
   ThrowOnMove& operator=(const ThrowOnMove&) = default;
-  
+
   ThrowOnMove(const ThrowOnMove&) = default;
-  
+
   ThrowOnMove& operator=(ThrowOnMove&&)
   {
     throw Exception();
   }
-  
+
   ThrowOnMove(ThrowOnMove&&)
   {
     throw Exception();
   }
 
-  Base& Unwrap() { return base_; }
-  
-  const Base& CUnwrap() const { return base_; }
-  
-  operator Base& () { return base_; }
-  
-  operator const Base& () const { return base_; }
+  Base& Unwrap()
+  {
+    return base_;
+  }
+
+  const Base& CUnwrap() const
+  {
+    return base_;
+  }
+
+  operator Base&()
+  {
+    return base_;
+  }
+
+  operator const Base&() const
+  {
+    return base_;
+  }
 };
 
-class Empty {};
+class Empty
+{
+};
 
 int main(int argc, char* argv[])
 {
@@ -50,10 +67,8 @@ int main(int argc, char* argv[])
   {
     auto m = std::move(e);
   }
-  catch(ThrowOnMove<Empty>::Exception&)
+  catch (ThrowOnMove<Empty>::Exception&)
   {
     std::cout << "Exception thrown on move as expected\n";
   }
-
 }
-

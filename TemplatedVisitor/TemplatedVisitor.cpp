@@ -23,37 +23,66 @@ public:
 class VisitableA : public IVisitable
 {
 public:
-  void Accept(IVisitor& visitor) const override { visitor.Visit(*this); }
+  void Accept(IVisitor& visitor) const override
+  {
+    visitor.Visit(*this);
+  }
 
-  const char* Name() const { return "A"; }
+  const char* Name() const
+  {
+    return "A";
+  }
 };
 
 class VisitableB : public IVisitable
 {
 public:
-  void Accept(IVisitor& visitor) const override { visitor.Visit(*this); }
+  void Accept(IVisitor& visitor) const override
+  {
+    visitor.Visit(*this);
+  }
 
-  const char* Name() const { return "B"; }
+  const char* Name() const
+  {
+    return "B";
+  }
 };
 
 class VisitableC : public IVisitable
 {
 public:
-  void Accept(IVisitor& visitor) const override { visitor.Visit(*this); }
+  void Accept(IVisitor& visitor) const override
+  {
+    visitor.Visit(*this);
+  }
 
-  const char* Name() const { return "C"; }
+  const char* Name() const
+  {
+    return "C";
+  }
 };
 
 class BaseVisitor : protected IVisitor
 {
 protected:
-  BaseVisitor() {}
+  BaseVisitor()
+  {
+  }
 
-  void Visit(const VisitableA& a) override { std::cout << "I saw nothing\n"; }
+  void Visit(const VisitableA& a) override
+  {
+    std::cout << "I saw nothing\n";
+  }
 
-  void Visit(const VisitableB& b) override { std::cout << "I saw nothing\n"; }
+  void Visit(const VisitableB& b) override
+  {
+    std::cout << "I saw nothing\n";
+  }
 
-  void Visit(const VisitableC& c) override { std::cout << "I saw nothing\n"; }
+  void Visit(const VisitableC& c) override
+  {
+    std::cout << "I saw nothing\n";
+  }
 };
 
 ////////
@@ -101,7 +130,10 @@ template <typename T1, typename F1, typename T2, typename F2>
 class TemplatedVisitor : public VTVisitor<T1, F1, T2, F2>
 {
 public:
-  TemplatedVisitor(IVisitable& v) { v.Accept(*this); }
+  TemplatedVisitor(IVisitable& v)
+  {
+    v.Accept(*this);
+  }
 };
 
 int main(int argc, char* argv[])

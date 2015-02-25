@@ -3,16 +3,25 @@
 #include <thread>
 #include <vector>
 
-int GetInteger() { return 5; }
+int GetInteger()
+{
+  return 5;
+}
 
 class ThreadLocalGenerator
 {
   std::function<int(void)> f_;
 
 public:
-  ThreadLocalGenerator() { f_ = std::bind(GetInteger); }
+  ThreadLocalGenerator()
+  {
+    f_ = std::bind(GetInteger);
+  }
 
-  int operator()() { return f_(); }
+  int operator()()
+  {
+    return f_();
+  }
 };
 
 thread_local ThreadLocalGenerator generator{};

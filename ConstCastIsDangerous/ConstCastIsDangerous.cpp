@@ -3,7 +3,9 @@
 class MyClass
 {
 public:
-  MyClass(int value) : m_fixedValue(value), m_nonFixedValue(value) {}
+  MyClass(int value) : m_fixedValue(value), m_nonFixedValue(value)
+  {
+  }
 
   const int m_fixedValue;
 

@@ -5,9 +5,14 @@
 class A
 {
 public:
-  A(std::string s) : m_name(std::move(s)) {}
+  A(std::string s) : m_name(std::move(s))
+  {
+  }
 
-  const std::string& GetName() { return m_name; }
+  const std::string& GetName()
+  {
+    return m_name;
+  }
 
 private:
   std::string m_name;

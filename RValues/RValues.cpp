@@ -1,12 +1,24 @@
 #include <iostream>
 
-void f(const int& i) { std::cout << "  const int&\n"; }
+void f(const int& i)
+{
+  std::cout << "  const int&\n";
+}
 
-void f(int& i) { std::cout << "  int&\n"; }
+void f(int& i)
+{
+  std::cout << "  int&\n";
+}
 
-void f(int&& i) { std::cout << "  int&&\n"; }
+void f(int&& i)
+{
+  std::cout << "  int&&\n";
+}
 
-int GetFive() { return 5; }
+int GetFive()
+{
+  return 5;
+}
 
 int main(int argc, char* argv[])
 {

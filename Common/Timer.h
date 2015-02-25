@@ -12,7 +12,10 @@ class TTimer
   using clock = std::chrono::high_resolution_clock;
 
 public:
-  TTimer(F_t f_) : f(f_) { start_ = clock::now(); }
+  TTimer(F_t f_) : f(f_)
+  {
+    start_ = clock::now();
+  }
 
   ~TTimer()
   {
@@ -83,8 +86,12 @@ TTimer<TimingReport> make_timer(Ts... ts)
 class Timer : TTimer<TimingReport>
 {
 public:
-  Timer(const char* s) : TTimer(TimingReport(s)) {}
-  Timer(const std::string s) : TTimer(TimingReport(s)) {}
+  Timer(const char* s) : TTimer(TimingReport(s))
+  {
+  }
+  Timer(const std::string s) : TTimer(TimingReport(s))
+  {
+  }
 };
 
 #endif

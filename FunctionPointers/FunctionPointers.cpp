@@ -13,7 +13,9 @@ Return_t CallMemberFunction(Class_t* pInstance,
 class MyClass
 {
 public:
-  MyClass(double multiplier) : m_multiplier(multiplier) {}
+  MyClass(double multiplier) : m_multiplier(multiplier)
+  {
+  }
 
   double Multiply(double value, double value2)
   {

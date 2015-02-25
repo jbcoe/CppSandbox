@@ -24,8 +24,8 @@ int main(int argc, char* argv[])
   sort(letters.begin(), letters.end());
   transform(letters.begin(), letters.end(), letters.begin(), [](char c)
             {
-    return tolower(c);
-  });
+              return tolower(c);
+            });
 
   std::vector<string> results;
 
@@ -36,53 +36,53 @@ int main(int argc, char* argv[])
 
   for_each(is, is_end, [&](const std::string& _s)
            {
-    if (_s.size() > letters.size())
-    {
-      return;
-    }
-    if (_s.size() < minLength)
-    {
-      return;
-    }
+             if (_s.size() > letters.size())
+             {
+               return;
+             }
+             if (_s.size() < minLength)
+             {
+               return;
+             }
 
-    auto s(_s);
-    sort(s.begin(), s.end());
-    transform(s.begin(), s.end(), s.begin(), [](char c)
-              {
-      return tolower(c);
-    });
+             auto s(_s);
+             sort(s.begin(), s.end());
+             transform(s.begin(), s.end(), s.begin(), [](char c)
+                       {
+                         return tolower(c);
+                       });
 
-    auto letter_it = letters.begin();
+             auto letter_it = letters.begin();
 
-    for (auto it = s.begin(); it != s.end(); ++it)
-    {
-      auto find_letter = find(letter_it, letter_end, *it);
-      if (find_letter == letter_end)
-      {
-        return;
-      }
-      letter_it = find_letter;
-      ++letter_it;
-    }
+             for (auto it = s.begin(); it != s.end(); ++it)
+             {
+               auto find_letter = find(letter_it, letter_end, *it);
+               if (find_letter == letter_end)
+               {
+                 return;
+               }
+               letter_it = find_letter;
+               ++letter_it;
+             }
 
-    results.push_back(_s);
-  });
+             results.push_back(_s);
+           });
 
   sort(results.begin(), results.end(), [](const string& s1, const string& s2)
                                            -> bool
                                        {
-    if (s1.size() < s2.size())
-    {
-      return true;
-    }
+                                         if (s1.size() < s2.size())
+                                         {
+                                           return true;
+                                         }
 
-    if (s2.size() < s1.size())
-    {
-      return false;
-    }
+                                         if (s2.size() < s1.size())
+                                         {
+                                           return false;
+                                         }
 
-    return s1 < s2;
-  });
+                                         return s1 < s2;
+                                       });
 
   results.erase(unique(results.begin(), results.end()), results.end());
 

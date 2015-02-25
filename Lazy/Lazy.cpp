@@ -12,35 +12,37 @@ class Lazy
   std::unique_ptr<std::mutex> m_mutex;
 
 public:
-  
-  template<typename F>
-  Lazy(F f) : m_f(std::move(f)), m_mutex(std::make_unique<std::mutex>()) {}
+  template <typename F>
+  Lazy(F f)
+      : m_f(std::move(f)), m_mutex(std::make_unique<std::mutex>())
+  {
+  }
 
   Lazy(const Lazy&) = delete;
-  Lazy& operator = (const Lazy&) = delete;
+  Lazy& operator=(const Lazy&) = delete;
 
   Lazy(Lazy&&) = default;
-  Lazy& operator = (Lazy&&) = default;
-  
+  Lazy& operator=(Lazy&&) = default;
+
   auto& operator*()
   {
     init();
     return *m_value;
   }
-  
+
   const auto& operator*() const
   {
     init();
     return *m_value;
   }
- 
-  auto* operator->()
+
+  auto* operator -> ()
   {
     init();
     return std::addressof(*m_value);
   }
-  
-  const auto* operator->() const
+
+  const auto* operator -> () const
   {
     init();
     return std::addressof(*m_value);
@@ -50,11 +52,14 @@ private:
   void init() const
   {
     std::lock_guard<std::mutex> l(*m_mutex);
-    if ( ! m_value ) { m_value = m_f(); }
+    if (!m_value)
+    {
+      m_value = m_f();
+    }
   }
 };
 
-template <typename F, typename T=decltype(std::declval<F&>()())>
+template <typename F, typename T = decltype(std::declval<F&>()())>
 auto make_lazy(F f)
 {
   return Lazy<T>(std::move(f));
@@ -65,8 +70,13 @@ class MyClass
   int m_x = 0;
 
 public:
-  MyClass(int x) : m_x(x) {}
-  int GetValue() { return m_x; }
+  MyClass(int x) : m_x(x)
+  {
+  }
+  int GetValue()
+  {
+    return m_x;
+  }
 };
 
 int main(int argc, char* argv[])
@@ -85,10 +95,10 @@ int main(int argc, char* argv[])
   std::cout << std::endl;
 
   auto lClass = make_lazy([]
-                         {
-                           std::cout << "Building" << std::endl;
-                           return MyClass(5);
-                         });
+                          {
+                            std::cout << "Building" << std::endl;
+                            return MyClass(5);
+                          });
 
   std::cout << lClass->GetValue() << std::endl;
   std::cout << lClass->GetValue() << std::endl;

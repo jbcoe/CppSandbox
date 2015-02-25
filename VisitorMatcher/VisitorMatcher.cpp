@@ -7,7 +7,9 @@ class IVisitable
 {
 public:
   virtual void Accept(IVisitor& v) const = 0;
-  virtual ~IVisitable() {}
+  virtual ~IVisitable()
+  {
+  }
 };
 
 class A;
@@ -20,17 +22,27 @@ public:
   virtual void Visit(const A& a) = 0;
   virtual void Visit(const B& b) = 0;
   virtual void Visit(const C& b) = 0;
-  ~IVisitor() {}
+  ~IVisitor()
+  {
+  }
 };
 
 class A : public IVisitable
 {
 public:
-  A(int i) : id_(i) {}
+  A(int i) : id_(i)
+  {
+  }
 
-  void Accept(IVisitor& v) const override { v.Visit(*this); }
+  void Accept(IVisitor& v) const override
+  {
+    v.Visit(*this);
+  }
 
-  int A_ID() const { return id_; }
+  int A_ID() const
+  {
+    return id_;
+  }
 
 private:
   int id_;
@@ -39,11 +51,19 @@ private:
 class B : public IVisitable
 {
 public:
-  B(int i) : id_(i) {}
+  B(int i) : id_(i)
+  {
+  }
 
-  void Accept(IVisitor& v) const override { v.Visit(*this); }
+  void Accept(IVisitor& v) const override
+  {
+    v.Visit(*this);
+  }
 
-  int B_ID() const { return id_; }
+  int B_ID() const
+  {
+    return id_;
+  }
 
 private:
   int id_;
@@ -52,11 +72,19 @@ private:
 class C : public IVisitable
 {
 public:
-  C(int i) : id_(i) {}
+  C(int i) : id_(i)
+  {
+  }
 
-  void Accept(IVisitor& v) const override { v.Visit(*this); }
+  void Accept(IVisitor& v) const override
+  {
+    v.Visit(*this);
+  }
 
-  int C_ID() const { return id_; }
+  int C_ID() const
+  {
+    return id_;
+  }
 
 private:
   int id_;
@@ -64,15 +92,23 @@ private:
 
 class NullVisitor : public IVisitor
 {
-  void Visit(const A& a) override {}
-  void Visit(const B& b) override {}
-  void Visit(const C& b) override {}
+  void Visit(const A& a) override
+  {
+  }
+  void Visit(const B& b) override
+  {
+  }
+  void Visit(const C& b) override
+  {
+  }
 };
 
 template <typename Matched_T, typename MatchFunctor_T>
 struct Matcher : public NullVisitor
 {
-  Matcher(MatchFunctor_T f) : f_(f) {}
+  Matcher(MatchFunctor_T f) : f_(f)
+  {
+  }
 
   const Matched_T* matched_ = nullptr;
   MatchFunctor_T f_;

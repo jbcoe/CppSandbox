@@ -13,7 +13,9 @@ public:
   {
   }
 
-  ScopedThread(ScopedThread&& s) : t_(std::move(s.t_)) {}
+  ScopedThread(ScopedThread&& s) : t_(std::move(s.t_))
+  {
+  }
   ScopedThread& operator=(ScopedThread&& s)
   {
     t_ = std::move(s.t_);

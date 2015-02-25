@@ -30,17 +30,18 @@ int main(int argc, char* argv[])
       Timer t("Build pointer vector");
       std::generate_n(std::back_inserter(vptrObjects), count, []()
                       {
-        return std::unique_ptr<MySimpleClass>(new MySimpleClass());
-      });
+                        return std::unique_ptr<MySimpleClass>(
+                            new MySimpleClass());
+                      });
     }
     {
       Timer t("Modify Pointer Vector");
       std::for_each(vptrObjects.begin(), vptrObjects.end(),
                     [](std::unique_ptr<MySimpleClass>& ptr)
                     {
-        ptr->m_x = 2.0;
-        ptr->m_y = 0.78 * ptr->m_x;
-      });
+                      ptr->m_x = 2.0;
+                      ptr->m_y = 0.78 * ptr->m_x;
+                    });
     }
     {
       Timer t("Delete Pointer Vector");
@@ -57,16 +58,16 @@ int main(int argc, char* argv[])
       Timer t("Build Object Vector");
       std::generate_n(std::back_inserter(objects), count, []()
                       {
-        return MySimpleClass();
-      });
+                        return MySimpleClass();
+                      });
     }
     {
       Timer t("Modify Object Vector");
       std::for_each(objects.begin(), objects.end(), [](MySimpleClass& m)
                     {
-        m.m_x = 2.0;
-        m.m_y = 0.78 * m.m_x;
-      });
+                      m.m_x = 2.0;
+                      m.m_y = 0.78 * m.m_x;
+                    });
     }
     {
       Timer t("Delete Object Vector");

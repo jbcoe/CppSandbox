@@ -4,11 +4,19 @@ template <typename T>
 class NonOwningPointer // Minimal implementation of n3840's observer_pointer
 {
 public:
-  NonOwningPointer(T* p_) : p(p_) {}
+  NonOwningPointer(T* p_) : p(p_)
+  {
+  }
 
-  T* operator->() { return p; }
+  T* operator->()
+  {
+    return p;
+  }
 
-  const T* operator->() const { return p; }
+  const T* operator->() const
+  {
+    return p;
+  }
 
 private:
   T* p;
@@ -17,7 +25,10 @@ private:
 
 struct Data
 {
-  void mutateMe() { x = true; }
+  void mutateMe()
+  {
+    x = true;
+  }
 
   bool x = false;
 };
@@ -25,9 +36,14 @@ struct Data
 
 struct DataObserver
 {
-  DataObserver(Data& d_) : d(&d_) {}
+  DataObserver(Data& d_) : d(&d_)
+  {
+  }
 
-  void ThreadSafeConstMethod() const { d->mutateMe(); }
+  void ThreadSafeConstMethod() const
+  {
+    d->mutateMe();
+  }
 
   NonOwningPointer<Data> d;
 };

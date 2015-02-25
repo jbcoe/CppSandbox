@@ -2,22 +2,34 @@
 
 struct A
 {
-  void f() { std::cout << "A::f" << std::endl; }
+  void f()
+  {
+    std::cout << "A::f" << std::endl;
+  }
 };
 
 struct B : A
 {
-  virtual void f() { std::cout << "B::f" << std::endl; }
+  virtual void f()
+  {
+    std::cout << "B::f" << std::endl;
+  }
 };
 
 struct C : B
 {
-  void f() override { std::cout << "C::f" << std::endl; }
+  void f() override
+  {
+    std::cout << "C::f" << std::endl;
+  }
 };
 
 struct D : C
 {
-  void f() override { std::cout << "D::f" << std::endl; }
+  void f() override
+  {
+    std::cout << "D::f" << std::endl;
+  }
 };
 
 int main(int argc, char* argv[])

@@ -13,8 +13,8 @@ struct Introspector
     std::for_each(std::begin(fPtrs), std::end(fPtrs),
                   [&](std::function<Member_t&(T*)> f)
                   {
-      theFunction(f(t));
-    });
+                    theFunction(f(t));
+                  });
   }
 };
 

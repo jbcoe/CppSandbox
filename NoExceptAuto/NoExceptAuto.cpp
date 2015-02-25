@@ -1,10 +1,19 @@
 #include <iostream>
 
-int f() { return 1; }
+int f()
+{
+  return 1;
+}
 
-int noexcept_f() noexcept { return 1; }
+int noexcept_f() noexcept
+{
+  return 1;
+}
 
-auto g() { return noexcept_f(); }
+auto g()
+{
+  return noexcept_f();
+}
 
 auto conditional_noexcept_g() noexcept(noexcept(noexcept_f()))
 {

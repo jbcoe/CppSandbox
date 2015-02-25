@@ -28,7 +28,10 @@ public:
       return *this;
     }
 
-    IteratorValue_T operator*() { return m_f(m_index); }
+    IteratorValue_T operator*()
+    {
+      return m_f(m_index);
+    }
 
     FakeIterator<IteratorValue_T>&
     operator=(const FakeIterator<IteratorValue_T>& it) = default;
@@ -53,11 +56,23 @@ public:
   typedef FakeIterator<Object_T> iterator;
   typedef FakeIterator<const Object_T> const_iterator;
 
-  auto begin() { return iterator(m_f, Count_T{0}); }
-  auto end() { return iterator(m_f, Count_T{m_size}); }
+  auto begin()
+  {
+    return iterator(m_f, Count_T{0});
+  }
+  auto end()
+  {
+    return iterator(m_f, Count_T{m_size});
+  }
 
-  auto begin() const { return const_iterator(m_f, Count_T{0}); }
-  auto end() const { return const_iterator(m_f, Count_T{m_size}); }
+  auto begin() const
+  {
+    return const_iterator(m_f, Count_T{0});
+  }
+  auto end() const
+  {
+    return const_iterator(m_f, Count_T{m_size});
+  }
 
 private:
   Get_F m_f;
@@ -82,7 +97,9 @@ public:
   virtual const Object_T* Get(size_t i) const = 0;
   virtual Object_T* GetEditable(size_t i) = 0;
   virtual size_t Count() const = 0;
-  virtual ~ICOMList() {}
+  virtual ~ICOMList()
+  {
+  }
 };
 
 template <typename Object_T>
@@ -95,9 +112,18 @@ public:
     return m_objects.back().get();
   }
 
-  const Object_T* Get(size_t i) const override { return m_objects[i].get(); }
-  Object_T* GetEditable(size_t i) override { return m_objects[i].get(); }
-  size_t Count() const override { return m_objects.size(); }
+  const Object_T* Get(size_t i) const override
+  {
+    return m_objects[i].get();
+  }
+  Object_T* GetEditable(size_t i) override
+  {
+    return m_objects[i].get();
+  }
+  size_t Count() const override
+  {
+    return m_objects.size();
+  }
 
 private:
   std::vector<std::unique_ptr<Object_T>> m_objects;

@@ -3,9 +3,17 @@
 class CMyClass
 {
 public:
-  CMyClass(int i) : data{i} {}
-  std::string ClassName() { return "MyClass"; }
-  int DataValue() { return data; }
+  CMyClass(int i) : data{i}
+  {
+  }
+  std::string ClassName()
+  {
+    return "MyClass";
+  }
+  int DataValue()
+  {
+    return data;
+  }
 
 private:
   int data = 1;

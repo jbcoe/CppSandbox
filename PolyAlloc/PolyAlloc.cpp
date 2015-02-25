@@ -14,7 +14,9 @@ class memory_resource
   static constexpr size_t max_align = alignof(max_align_t);
 
 public:
-  virtual ~memory_resource() {}
+  virtual ~memory_resource()
+  {
+  }
 
   void* allocate(size_t bytes, size_t alignment = max_align)
   {
@@ -46,7 +48,7 @@ public:
     m_allocator.deallocate(static_cast<char*>(p), bytes);
   }
 };
-                      
+
 new_and_delete_t new_and_delete;
 memory_resource* const default_resource = &new_and_delete;
 
@@ -56,27 +58,34 @@ class polymorphic_allocator
   memory_resource* m_resource;
 
 public:
-
   typedef Tp value_type;
 
-  polymorphic_allocator() : m_resource(default_resource) {}
+  polymorphic_allocator() : m_resource(default_resource)
+  {
+  }
 
   polymorphic_allocator(const polymorphic_allocator& a) = default;
-  
+
   polymorphic_allocator(polymorphic_allocator&& a) = default;
 
-  polymorphic_allocator(memory_resource* r) : m_resource(r ? r : default_resource) { }
-  
+  polymorphic_allocator(memory_resource* r)
+      : m_resource(r ? r : default_resource)
+  {
+  }
+
   polymorphic_allocator select_on_container_copy_construction() const
   {
     return polymorphic_allocator();
   }
 
-  memory_resource* resource() const { return m_resource; }
+  memory_resource* resource() const
+  {
+    return m_resource;
+  }
 
-  Tp* allocate(size_t n) 
-  { 
-    return (Tp*)m_resource->allocate(n * sizeof(Tp)); 
+  Tp* allocate(size_t n)
+  {
+    return (Tp*)m_resource->allocate(n * sizeof(Tp));
   }
 
   void deallocate(Tp* p, size_t n)
@@ -89,11 +98,10 @@ template <size_t N>
 class monotonic_buffer_resource : public memory_resource
 {
   size_t m_remaining = N;
-  std::array<char,N> m_buffer;  
+  std::array<char, N> m_buffer;
   void* m_next = nullptr;
 
 public:
-
   monotonic_buffer_resource()
   {
     m_next = m_buffer.data();
@@ -103,34 +111,41 @@ public:
 
   monotonic_buffer_resource(const monotonic_buffer_resource&) = delete;
 
-  monotonic_buffer_resource& operator = (const monotonic_buffer_resource&) = delete;
+  monotonic_buffer_resource&
+  operator=(const monotonic_buffer_resource&) = delete;
 
-  size_t remaining() const { return m_remaining; }
+  size_t remaining() const
+  {
+    return m_remaining;
+  }
 
   virtual void* do_allocate(std::size_t sz, std::size_t alignment) override
   {
-    std::cout << "Requested " << sz << " with alignment " << alignment << " with " << m_remaining << " remaining\n";
+    std::cout << "Requested " << sz << " with alignment " << alignment
+              << " with " << m_remaining << " remaining\n";
     auto initial_remaining = m_remaining;
     if (std::align(alignment, sz, m_next, m_remaining))
     {
-      if ( initial_remaining != m_remaining )
+      if (initial_remaining != m_remaining)
       {
-        std::cout << initial_remaining - m_remaining << " bytes used for alignment\n";
+        std::cout << initial_remaining - m_remaining
+                  << " bytes used for alignment\n";
       }
       m_remaining -= sz;
       std::cout << sz << " bytes used for data\n";
       std::cout << m_remaining << " bytes remaining\n";
       return m_next;
     }
-    else 
+    else
     {
       std::ostringstream ss;
-      ss << "ERROR: Requested " << sz << " with alignment " << alignment << " but only " << m_remaining << " remaining";
+      ss << "ERROR: Requested " << sz << " with alignment " << alignment
+         << " but only " << m_remaining << " remaining";
       throw std::runtime_error(ss.str());
     }
   }
-  
-  virtual void do_deallocate(void*, std::size_t, std::size_t) override 
+
+  virtual void do_deallocate(void*, std::size_t, std::size_t) override
   {
   }
 };
@@ -138,25 +153,27 @@ public:
 template <typename T>
 using Vector = std::vector<T, polymorphic_allocator<T>>;
 
-Vector<int> FastInts(memory_resource* mr=nullptr)
+Vector<int> FastInts(memory_resource* mr = nullptr)
 {
-    monotonic_buffer_resource<16> b;
-    Vector<int> ints(4,0,&b);
+  monotonic_buffer_resource<16> b;
+  Vector<int> ints(4, 0, &b);
 
-    std::cout << "Function monotonic buffer has " << b.remaining() << " bytes remaining\n";
+  std::cout << "Function monotonic buffer has " << b.remaining()
+            << " bytes remaining\n";
 
-    // Buffer is now fully used
-    return Vector<int>(ints, mr);
+  // Buffer is now fully used
+  return Vector<int>(ints, mr);
 }
 
 int main(int argc, char* argv[])
 {
 
-  try 
+  try
   {
     monotonic_buffer_resource<16> b;
     auto ints = FastInts(&b);
-    std::cout << "Main monotonic buffer has " << b.remaining() << " bytes remaining\n";
+    std::cout << "Main monotonic buffer has " << b.remaining()
+              << " bytes remaining\n";
   }
   catch (const std::exception& e)
   {
@@ -164,4 +181,3 @@ int main(int argc, char* argv[])
     return -1;
   }
 }
-

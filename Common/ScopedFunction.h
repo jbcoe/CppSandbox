@@ -9,8 +9,13 @@ class scoped_function
   F_t f;
 
 public:
-  scoped_function(F_t f_) : f(f_) {}
-  ~scoped_function() { f(); }
+  scoped_function(F_t f_) : f(f_)
+  {
+  }
+  ~scoped_function()
+  {
+    f();
+  }
 };
 
 template <typename F_t>

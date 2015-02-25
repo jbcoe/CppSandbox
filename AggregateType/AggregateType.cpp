@@ -6,9 +6,9 @@ class Aggregate
 {
 public:
   template <typename U>
-  Aggregate(std::shared_ptr<const U> u) 
+  Aggregate(std::shared_ptr<const U> u)
   {
-      impl_ = std::make_shared<const InnerImpl<U>>(std::move(u));
+    impl_ = std::make_shared<const InnerImpl<U>>(std::move(u));
   }
 
   template <typename V>
@@ -23,66 +23,114 @@ public:
     return static_cast<std::shared_ptr<const V>>(*impl_);
   }
 
-  operator const T1&() const { return *impl_; }
-  operator const T2&() const { return *impl_; }
-  operator const T3&() const { return *impl_; }
+  operator const T1&() const
+  {
+    return *impl_;
+  }
+  operator const T2&() const
+  {
+    return *impl_;
+  }
+  operator const T3&() const
+  {
+    return *impl_;
+  }
 
-  operator std::shared_ptr<const T1>() const { return impl_; }
-  operator std::shared_ptr<const T2>() const { return impl_; }
-  operator std::shared_ptr<const T3>() const { return impl_; }
+  operator std::shared_ptr<const T1>() const
+  {
+    return impl_;
+  }
+  operator std::shared_ptr<const T2>() const
+  {
+    return impl_;
+  }
+  operator std::shared_ptr<const T3>() const
+  {
+    return impl_;
+  }
 
 private:
-
   struct Inner
   {
-    virtual operator const T1& () const = 0;  
-    virtual operator const T2& () const = 0;  
-    virtual operator const T3& () const = 0;  
-    
-    virtual operator std::shared_ptr<const T1> () const = 0;
-    virtual operator std::shared_ptr<const T2> () const = 0;
-    virtual operator std::shared_ptr<const T3> () const = 0;
+    virtual operator const T1&() const = 0;
+    virtual operator const T2&() const = 0;
+    virtual operator const T3&() const = 0;
+
+    virtual operator std::shared_ptr<const T1>() const = 0;
+    virtual operator std::shared_ptr<const T2>() const = 0;
+    virtual operator std::shared_ptr<const T3>() const = 0;
   };
 
   std::shared_ptr<const Inner> impl_;
-  
+
   template <typename U>
   struct InnerImpl : Inner
   {
-    InnerImpl(std::shared_ptr<const U> u) : u_(std::move(u)) {}
+    InnerImpl(std::shared_ptr<const U> u) : u_(std::move(u))
+    {
+    }
 
-    operator const T1& () const override { return *u_; }   
-    operator const T2& () const override { return *u_; }  
-    operator const T3& () const override { return *u_; }  
-    
-    operator std::shared_ptr<const T1> () const override { return u_; }   
-    operator std::shared_ptr<const T2> () const override { return u_; }  
-    operator std::shared_ptr<const T3> () const override { return u_; }  
-    
+    operator const T1&() const override
+    {
+      return *u_;
+    }
+    operator const T2&() const override
+    {
+      return *u_;
+    }
+    operator const T3&() const override
+    {
+      return *u_;
+    }
+
+    operator std::shared_ptr<const T1>() const override
+    {
+      return u_;
+    }
+    operator std::shared_ptr<const T2>() const override
+    {
+      return u_;
+    }
+    operator std::shared_ptr<const T3>() const override
+    {
+      return u_;
+    }
+
     std::shared_ptr<const U> u_;
   };
 };
 
 struct Cat
 {
-  const char* MakeNoise() const { return "Meeow"; }
-}; 
+  const char* MakeNoise() const
+  {
+    return "Meeow";
+  }
+};
 
 struct Pig
 {
-  const char* MakeNoise() const { return "Oink"; }
-}; 
+  const char* MakeNoise() const
+  {
+    return "Oink";
+  }
+};
 
 struct Dog
 {
-  const char* MakeNoise() const { return "Woof"; }
+  const char* MakeNoise() const
+  {
+    return "Woof";
+  }
 };
 
-struct Chimera : Cat, Pig, Dog {};
+struct Chimera : Cat, Pig, Dog
+{
+};
 
 int main(int argc, char* argv[])
 {
-  Aggregate<Cat,Pig,Dog> agg(std::make_shared<const Chimera>());
+  Aggregate<Cat, Pig, Dog> agg(std::make_shared<const Chimera>());
   Pig p(agg);
   Cat c(agg);
   Dog d(agg);
@@ -91,4 +139,3 @@ int main(int argc, char* argv[])
   std::cout << agg.AsPtr<Pig>()->MakeNoise() << '\n';
   std::cout << agg.AsPtr<Dog>()->MakeNoise() << '\n';
 }
-

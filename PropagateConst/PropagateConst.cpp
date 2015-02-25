@@ -50,13 +50,25 @@ public:
     return *this;
   }
 
-  value_type* operator->() { return underlying_pointer(t); }
+  value_type* operator->()
+  {
+    return underlying_pointer(t);
+  }
 
-  const value_type* operator->() const { return underlying_pointer(t); }
+  const value_type* operator->() const
+  {
+    return underlying_pointer(t);
+  }
 
-  value_type* get() { return underlying_pointer(t); }
+  value_type* get()
+  {
+    return underlying_pointer(t);
+  }
 
-  const value_type* get() const { return underlying_pointer(t); }
+  const value_type* get() const
+  {
+    return underlying_pointer(t);
+  }
 
   template <typename Duplicate = T,
             typename Dummy = typename std::enable_if<
@@ -74,9 +86,15 @@ public:
     return underlying_pointer(t);
   }
 
-  value_type& operator*() { return *t; }
+  value_type& operator*()
+  {
+    return *t;
+  }
 
-  const value_type& operator*() const { return *t; }
+  const value_type& operator*() const
+  {
+    return *t;
+  }
 
   explicit operator bool() const noexcept(noexcept(bool(std::declval<T>())))
   {
@@ -111,13 +129,13 @@ private:
   }
 };
 
-template<typename T>
+template <typename T>
 static const auto& get_underlying(const propagate_const<T>& p)
 {
   return p.t;
 }
 
-template<typename T>
+template <typename T>
 static auto& get_underlying(propagate_const<T>& p)
 {
   return p.t;
@@ -233,13 +251,21 @@ bool operator>=(const T& pt, const propagate_const<U>& pu)
 
 struct A
 {
-  void bar() const { std::cout << "bar (const)" << std::endl; }
-  void bar() { std::cout << "bar (non-const)" << std::endl; }
+  void bar() const
+  {
+    std::cout << "bar (const)" << std::endl;
+  }
+  void bar()
+  {
+    std::cout << "bar (non-const)" << std::endl;
+  }
 };
 
 struct B
 {
-  B() : m_ptrA(std::make_unique<A>()) {}
+  B() : m_ptrA(std::make_unique<A>())
+  {
+  }
 
   void operator()()
   {

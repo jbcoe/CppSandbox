@@ -14,11 +14,15 @@ private:
   std::string s_;
 
 public:
-  A() : s_('a', 100) {}
+  A() : s_('a', 100)
+  {
+  }
 
   A(const A&) = default;
 
-  A(A&& a) noexcept(IS_NO_EXCEPT) : s_(std::move(a.s_)) {}
+  A(A&& a) noexcept(IS_NO_EXCEPT) : s_(std::move(a.s_))
+  {
+  }
 };
 
 template <bool B>

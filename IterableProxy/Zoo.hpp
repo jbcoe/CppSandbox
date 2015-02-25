@@ -4,30 +4,43 @@
 class IAnimal
 {
 public:
-  virtual ~IAnimal() {}
+  virtual ~IAnimal()
+  {
+  }
   virtual const char* makeNoise() const = 0;
 };
 
 class Tiger : public IAnimal
 {
 public:
-  const char* makeNoise() const override { return "Purr"; }
+  const char* makeNoise() const override
+  {
+    return "Purr";
+  }
 };
 class Bear : public IAnimal
 {
 public:
-  const char* makeNoise() const override { return "Growl"; }
+  const char* makeNoise() const override
+  {
+    return "Growl";
+  }
 };
 class Lion : public IAnimal
 {
 public:
-  const char* makeNoise() const override { return "Roar"; }
+  const char* makeNoise() const override
+  {
+    return "Roar";
+  }
 };
 
 class IZoo
 {
 public:
-  virtual ~IZoo() {}
+  virtual ~IZoo()
+  {
+  }
 
   virtual size_t BearCount() const = 0;
   virtual const Bear* GetBear(size_t index) const = 0;
@@ -46,23 +59,32 @@ public:
   {
     std::generate_n(std::back_inserter(m_lions), 10, []()
                     {
-      return std::unique_ptr<Lion>(new Lion());
-    });
+                      return std::unique_ptr<Lion>(new Lion());
+                    });
   }
 
-  size_t BearCount() const override { return m_bears.size(); }
+  size_t BearCount() const override
+  {
+    return m_bears.size();
+  }
   const Bear* GetBear(size_t index) const override
   {
     return m_bears[index].get();
   }
 
-  size_t TigerCount() const override { return m_tigers.size(); }
+  size_t TigerCount() const override
+  {
+    return m_tigers.size();
+  }
   const Tiger* GetTiger(size_t index) const override
   {
     return m_tigers[index].get();
   }
 
-  size_t LionCount() const override { return m_lions.size(); }
+  size_t LionCount() const override
+  {
+    return m_lions.size();
+  }
   const Lion* GetLion(size_t index) const override
   {
     return m_lions[index].get();

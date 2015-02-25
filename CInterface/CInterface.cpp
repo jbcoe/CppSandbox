@@ -6,7 +6,9 @@
 
 struct Shape
 {
-  virtual ~Shape() {}
+  virtual ~Shape()
+  {
+  }
   virtual double area() const = 0;
   virtual double perimeter() const = 0;
 };
@@ -18,11 +20,19 @@ class Circle : public Shape
   const double radius_;
 
 public:
-  double area() const override { return pi * radius_ * radius_; }
+  double area() const override
+  {
+    return pi * radius_ * radius_;
+  }
 
-  double perimeter() const override { return 2 * pi * radius_; }
+  double perimeter() const override
+  {
+    return 2 * pi * radius_;
+  }
 
-  Circle(double r) : radius_(r) {}
+  Circle(double r) : radius_(r)
+  {
+  }
 };
 
 //
@@ -30,11 +40,20 @@ public:
 
 extern "C" {
 
-void* Circle_new(double r) { return new (std::nothrow) Circle(r); }
+void* Circle_new(double r)
+{
+  return new (std::nothrow) Circle(r);
+}
 
-void Shape_delete(const void* shape) { delete ((const Shape*)shape); }
+void Shape_delete(const void* shape)
+{
+  delete ((const Shape*)shape);
+}
 
-double Shape_area(const void* shape) { return ((const Shape*)shape)->area(); }
+double Shape_area(const void* shape)
+{
+  return ((const Shape*)shape)->area();
+}
 
 double Shape_perimeter(const void* shape)
 {
@@ -50,7 +69,10 @@ class CircleHandle
   const void* c_;
 
 public:
-  ~CircleHandle() { Shape_delete(c_); }
+  ~CircleHandle()
+  {
+    Shape_delete(c_);
+  }
 
   CircleHandle(double r) : c_(Circle_new(r))
   {
@@ -59,9 +81,15 @@ public:
       throw std::runtime_error("Failed to build Circle");
     }
   }
-  double area() const { return Shape_area(c_); }
+  double area() const
+  {
+    return Shape_area(c_);
+  }
 
-  double perimiter() const { return Shape_perimeter(c_); }
+  double perimiter() const
+  {
+    return Shape_perimeter(c_);
+  }
 };
 
 int main(int argc, char* argv[])

@@ -20,14 +20,29 @@ public:
     return *this;
   }
 
-  bool operator==(const IteratorWithIndex& i) const { return m_it == i.m_it; }
+  bool operator==(const IteratorWithIndex& i) const
+  {
+    return m_it == i.m_it;
+  }
 
-  bool operator!=(const IteratorWithIndex& i) const { return m_it != i.m_it; }
+  bool operator!=(const IteratorWithIndex& i) const
+  {
+    return m_it != i.m_it;
+  }
 
-  auto index() const { return m_i; }
+  auto index() const
+  {
+    return m_i;
+  }
 
-  auto operator*() const { return std::make_pair(m_i, std::cref(*m_it)); }
-  auto operator*() { return std::make_pair(m_i, std::ref(*m_it)); }
+  auto operator*() const
+  {
+    return std::make_pair(m_i, std::cref(*m_it));
+  }
+  auto operator*()
+  {
+    return std::make_pair(m_i, std::ref(*m_it));
+  }
 };
 
 template <typename Iterator_T>
@@ -42,8 +57,14 @@ public:
   {
   }
 
-  auto begin() { return begin_; }
-  auto end() { return end_; }
+  auto begin()
+  {
+    return begin_;
+  }
+  auto end()
+  {
+    return end_;
+  }
 };
 
 template <typename T>

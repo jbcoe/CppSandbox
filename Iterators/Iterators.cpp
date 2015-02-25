@@ -44,10 +44,10 @@ int main(int argc, char* argv[])
 
   std::for_each(vrDoubles.begin(), vrDoubles.end(), [](double& rValue)
                 {
-    static double generatedValue = 1.0;
-    generatedValue *= 2.0;
-    rValue = generatedValue;
-  });
+                  static double generatedValue = 1.0;
+                  generatedValue *= 2.0;
+                  rValue = generatedValue;
+                });
 
   PrintCollection(vrDoubles);
 

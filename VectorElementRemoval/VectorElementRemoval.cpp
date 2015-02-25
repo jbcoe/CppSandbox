@@ -24,10 +24,11 @@ int main()
 
   int iOriginalSize = myValues.size();
 #ifdef REMOVE_VALUES
-  myValues.erase(std::remove_if(myValues.begin(), myValues.end(), [](int i)
+  myValues.erase(std::remove_if(myValues.begin(), myValues.end(),
+                                [](int i)
                                 {
-                   return i == 2;
-                 }),
+                                  return i == 2;
+                                }),
                  myValues.end());
 #endif
 

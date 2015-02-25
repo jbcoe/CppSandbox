@@ -7,7 +7,10 @@ thread_local int instanceCount = 0;
 class TaskCommon
 {
 public:
-  TaskCommon() { ++instanceCount; }
+  TaskCommon()
+  {
+    ++instanceCount;
+  }
 };
 
 int main(int argc, char* argv[])

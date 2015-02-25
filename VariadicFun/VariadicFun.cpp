@@ -11,10 +11,11 @@ void ApplyToEach(F f, Ts... ts)
 
 int main(int argc, char* argv[])
 {
-  ApplyToEach([](auto x)
-              {
-                std::cout << x << " ";
-              },
-              1, 2, 3, 4, 5);
+  ApplyToEach(
+      [](auto x)
+      {
+        std::cout << x << " ";
+      },
+      1, 2, 3, 4, 5);
   std::cout << std::endl;
 }

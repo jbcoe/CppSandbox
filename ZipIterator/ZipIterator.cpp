@@ -36,7 +36,9 @@ template <typename... Iterators>
 class ZipIterator
 {
 public:
-  ZipIterator(Iterators... iterators) : m_iterators(iterators...) {}
+  ZipIterator(Iterators... iterators) : m_iterators(iterators...)
+  {
+  }
 
   ZipIterator<Iterators...>& operator++()
   {
