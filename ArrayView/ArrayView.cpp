@@ -26,6 +26,9 @@ public:
     }
   }
 
+  // Allow array view to view a single stack item
+  ArrayView(T& t) : data_(&t), size_(1) {}
+
   bool empty() const
   {
     return size_ == 0;
