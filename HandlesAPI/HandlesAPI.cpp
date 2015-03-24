@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 #include <memory>
 #include <unordered_map>
 
@@ -82,6 +83,7 @@ struct TableEntry
 
   TableEntry& operator=(TableEntry&& t)
   {
+    assert(&t != this);
     swap(t.obj_, obj_);
     swap(t.del_, del_);
     t.~TableEntry();
