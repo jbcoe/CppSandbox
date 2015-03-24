@@ -8,7 +8,23 @@ using std::swap;
 //
 // The classes
 
-struct Shape
+struct CountInstances
+{
+  CountInstances() { ++instanceCount; std::cout << "Instances: " << instanceCount << "\n"; }
+  ~CountInstances() { --instanceCount; std::cout << "Instances: " << instanceCount << "\n"; }
+
+  CountInstances(const CountInstances&)=delete;
+  CountInstances(CountInstances&&)=delete;
+  
+  CountInstances& operator=(const CountInstances&)=delete;
+  CountInstances& operator=(CountInstances&&)=delete;
+  
+  static size_t instanceCount;
+};
+
+size_t CountInstances::instanceCount = 0;
+
+struct Shape : CountInstances
 {
   virtual ~Shape()
   {
@@ -86,7 +102,6 @@ struct TableEntry
     assert(&t != this);
     swap(t.obj_, obj_);
     swap(t.del_, del_);
-    t.~TableEntry();
     return *this;
   }
 
@@ -195,6 +210,7 @@ int main(int argc, char* argv[])
 {
   int rc;
   auto name = "myCircle";
+  
   CircleH_new(name, 10, &rc);
   if (rc != SUCCESS)
   {
@@ -202,6 +218,13 @@ int main(int argc, char* argv[])
     return -1;
   }
 
+  CircleH_new(name, 10, &rc);
+  if (rc != SUCCESS)
+  {
+    std::cerr << "Failed to construct circle\n";
+    return -1;
+  }
+  
   double area = ShapeH_area(name, &rc);
   if (rc != SUCCESS)
   {
