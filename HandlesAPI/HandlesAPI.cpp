@@ -69,7 +69,7 @@ double Shape_perimeter(const void* shape)
 
 using HANDLE = const char*;
 
-enum RC 
+enum RC
 {
   LOOKUP_FAIL = -999,
   SUCCESS = 0
@@ -78,67 +78,99 @@ enum RC
 struct TableEntry
 {
   void* obj_ = nullptr;
-  void (*del_)(void*) = nullptr;
+  void (*del_)(const void*) = nullptr;
 
-  TableEntry& operator = (TableEntry&& t)
+  TableEntry& operator=(TableEntry&& t)
   {
     swap(t.obj_, obj_);
     swap(t.del_, del_);
     t.~TableEntry();
+    return *this;
   }
 
   ~TableEntry()
   {
-    if ( del_ ) del_(obj_);
+    if (del_) del_(obj_);
   }
 };
 
-std::unordered_map<std::string, TableEntry> handle_table;
-
-struct LookupFailureException : public std::runtime_error
+class HandleTable // not thread-safe
 {
-  LookupFailureException(HANDLE handle) : std::runtime_error(handle) {}
-};
 
-void* Lookup(HANDLE handle)
-{
-  auto find_it = handle_table.find(handle);
-  if ( find_it != handle_table.end() )
+  std::unordered_map<std::string, TableEntry> handle_table;
+
+public:
+  struct LookupFailureException : public std::runtime_error
   {
-    return find_it->second.obj_;
+    LookupFailureException(HANDLE handle) : std::runtime_error(handle)
+    {
+    }
+  };
+
+  void InsertOrOverwrite(HANDLE handle, void* object,
+                         void (*deleter)(const void*))
+  {
+    TableEntry t;
+    t.obj_ = object;
+    t.del_ = deleter;
+    handle_table[handle] = std::move(t);
   }
-  throw LookupFailureException(handle);
-}
+
+  void* Lookup(HANDLE handle) const
+  {
+    auto find_it = handle_table.find(handle);
+    if (find_it != handle_table.end())
+    {
+      return find_it->second.obj_;
+    }
+    throw LookupFailureException(handle);
+  }
+
+  void* TryLookup(HANDLE handle) const
+  {
+    auto find_it = handle_table.find(handle);
+    if (find_it != handle_table.end())
+    {
+      return find_it->second.obj_;
+    }
+    return nullptr;
+  }
+};
+
+static HandleTable handle_table;
 
 extern "C" {
 
 void CircleH_new(HANDLE circle, double r, int* rc)
 {
+  handle_table.InsertOrOverwrite(circle, Circle_new(r), Shape_delete);
+  *rc = SUCCESS;
 }
 
 void ShapeH_delete(HANDLE shape, int* rc)
 {
   try
   {
-    Shape_delete(Lookup(shape));
+    *rc = SUCCESS;
+    Shape_delete(handle_table.Lookup(shape));
   }
-  catch(const LookupFailureException& e)
+  catch (const HandleTable::LookupFailureException& e)
   {
-    *rc=LOOKUP_FAIL;
+    *rc = LOOKUP_FAIL;
   }
 }
 
 double ShapeH_area(HANDLE shape, int* rc)
 {
   try
-  { 
+  {
     *rc = SUCCESS;
-    return Shape_area(Lookup(shape));
+    return Shape_area(handle_table.Lookup(shape));
   }
-  catch(const LookupFailureException& e)
-  {  
-    *rc=LOOKUP_FAIL;
-    return 0.0; 
+  catch (const HandleTable::LookupFailureException& e)
+  {
+    *rc = LOOKUP_FAIL;
+    return 0.0;
   }
 }
 
@@ -147,50 +179,41 @@ double ShapeH_perimeter(HANDLE shape, int* rc)
   try
   {
     *rc = SUCCESS;
-    return Shape_perimeter(Lookup(shape));
+    return Shape_perimeter(handle_table.Lookup(shape));
   }
-  catch(const LookupFailureException& e)
+  catch (const HandleTable::LookupFailureException& e)
   {
-    *rc=LOOKUP_FAIL;
+    *rc = LOOKUP_FAIL;
     return 0.0;
   }
 }
 }
 
-//
-// The other side
-
-class CircleHandle
-{
-  const void* c_;
-
-public:
-  ~CircleHandle()
-  {
-    Shape_delete(c_);
-  }
-
-  CircleHandle(double r) : c_(Circle_new(r))
-  {
-    if (!c_)
-    {
-      throw std::runtime_error("Failed to build Circle");
-    }
-  }
-  double area() const
-  {
-    return Shape_area(c_);
-  }
-
-  double perimiter() const
-  {
-    return Shape_perimeter(c_);
-  }
-};
-
 int main(int argc, char* argv[])
 {
-  auto c = CircleHandle(10);
-  std::cout << "Area=" << c.area() << "\n";
-  std::cout << "Perimiter=" << c.perimiter() << "\n";
+  int rc;
+  auto name = "myCircle";
+  CircleH_new(name, 10, &rc);
+  if (rc != SUCCESS)
+  {
+    std::cerr << "Failed to construct circle\n";
+    return -1;
+  }
+
+  double area = ShapeH_area(name, &rc);
+  if (rc != SUCCESS)
+  {
+    std::cerr << "Failed to get circle area\n";
+    return -1;
+  }
+  std::cout << "Area=" << area << "\n";
+
+  double perimeter = ShapeH_perimeter(name, &rc);
+  if (rc != SUCCESS)
+  {
+    std::cerr << "Failed to get circle perimeter\n";
+    return -1;
+  }
+  std::cout << "Perimeter=" << perimeter << "\n";
 }
+
