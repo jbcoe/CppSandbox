@@ -20,7 +20,7 @@ struct Decrementer : Stepper
   int Step(int i) const override { return i-1; }
 };
 
-enum class Step
+enum class EStep
 {
   Increment,
   Decrement
@@ -28,17 +28,19 @@ enum class Step
 
 struct NonVirtualStepper
 {
-  NonVirtualStepper(Step step) : step_(step) {}
+  NonVirtualStepper(EStep step) : step_(step) {}
   
-  Step step_ = Step::Increment;
+  EStep step_ = EStep::Increment;
   int Step(int i)
   {
     switch(step_)
     {
-      case Step::Increment:
+      case EStep::Increment:
         return i+1;
-      case Step::Decrement:
+      case EStep::Decrement:
         return i-1;  
+      default:
+        return i;
     }              
   }
 };
@@ -70,8 +72,8 @@ int main(int argc, char* argv[])
   }
 
   std::array<std::unique_ptr<NonVirtualStepper>,2> nv_steppers;
-  nv_steppers[0] = std::make_unique<NonVirtualStepper>(Step::Increment);
-  nv_steppers[1] = std::make_unique<NonVirtualStepper>(Step::Decrement);
+  nv_steppers[0] = std::make_unique<NonVirtualStepper>(EStep::Increment);
+  nv_steppers[1] = std::make_unique<NonVirtualStepper>(EStep::Decrement);
   
   int y=0;
   engine.seed(0);
