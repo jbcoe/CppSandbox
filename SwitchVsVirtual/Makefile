@@ -1,4 +1,4 @@
-include ../compilerSettings_gcc.mk
+include ../compilerSettings_clang3.6.mk
 
 OPT=3
 SOURCES=SwitchVsVirtual.cpp
