@@ -1,5 +1,4 @@
-#ifndef __USERS_JON_DEV_CPPSANDBOX_COMMON_TIMER_H
-#define __USERS_JON_DEV_CPPSANDBOX_COMMON_TIMER_H
+#pragma once
 
 #include <iostream>
 #include <chrono>
@@ -94,4 +93,3 @@ public:
   }
 };
 
-#endif

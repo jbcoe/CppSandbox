@@ -1,8 +1,6 @@
 #include <iostream>
 #include <random>
 #include <array>
-#include <vector>
-#include <memory>
 #include "Common/Timer.h"
 
 struct Stepper
@@ -57,9 +55,11 @@ int main(int argc, char* argv[])
   std::mt19937 engine;
   auto generator = [&]{ return distribution(engine); };
   
-  std::array<std::unique_ptr<Stepper>,2> steppers;
-  steppers[0] = std::make_unique<Incrementer>();
-  steppers[1] = std::make_unique<Decrementer>();
+  Incrementer incrementer;
+  Decrementer decrementer;
+  std::array<Stepper*,2> steppers;
+  steppers[0] = &incrementer;
+  steppers[1] = &decrementer;
   
   int x=0;
   engine.seed(0);
@@ -71,9 +71,11 @@ int main(int argc, char* argv[])
     }
   }
 
-  std::array<std::unique_ptr<NonVirtualStepper>,2> nv_steppers;
-  nv_steppers[0] = std::make_unique<NonVirtualStepper>(EStep::Increment);
-  nv_steppers[1] = std::make_unique<NonVirtualStepper>(EStep::Decrement);
+  NonVirtualStepper nvIncrementer(EStep::Increment);
+  NonVirtualStepper nvDecrementer(EStep::Decrement);
+  std::array<NonVirtualStepper*,2> nv_steppers;
+  nv_steppers[0] = &nvIncrementer;
+  nv_steppers[1] = &nvDecrementer;
   
   int y=0;
   engine.seed(0);
