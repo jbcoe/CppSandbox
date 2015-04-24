@@ -66,6 +66,8 @@ int main(int argc, char* argv[])
 {
   boost::variant<int,double,char> v;
 
+  /////////////////////////////////////////////////////////////
+  
   struct printer : boost::static_visitor<>
   {
     void operator()(const int i) const { std::cout << i << "\n"; }
@@ -81,6 +83,8 @@ int main(int argc, char* argv[])
   
   v = 'p';
   boost::apply_visitor(printer(), v);
+
+  /////////////////////////////////////////////////////////////
 
   auto inline_printer = begin_variant_visitor()
     .on<int>([](const int i) { std::cout << i << "\n";})
