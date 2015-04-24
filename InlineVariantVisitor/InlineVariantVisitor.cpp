@@ -13,7 +13,7 @@ struct ComposeVariantVisitor
   {
     Inner(ArgsT&& a) : BaseInner(std::move(a.second)), f_(std::move(a.first)) {}
 
-    void operator()(const T& t) const { f_(t); }
+    void operator()(T& t) const { f_(t); }
 
 private:
     
@@ -61,44 +61,47 @@ EmptyVariantVisitor begin_variant_visitor()
     return EmptyVariantVisitor();
 }
 
+class A{};
+class B{};
+class C{};
 
 int main(int argc, char* argv[])
 {
-  boost::variant<int,double,char> v;
+  boost::variant<A,B,C> v;
 
   /////////////////////////////////////////////////////////////
   
   struct printer : boost::static_visitor<>
   {
-    void operator()(const int i) const { std::cout << i << "\n"; }
-    void operator()(const double d) const { std::cout << d << "\n"; }
-    void operator()(const char c) const { std::cout << c << "\n"; }
+    void operator()(A&) const { std::cout << "A\n"; }
+    void operator()(B&) const { std::cout << "B\n"; }
+    void operator()(C&) const { std::cout << "C\n"; }
   };
 
-  v = 7;
+  v = A();
   boost::apply_visitor(printer(), v);
   
-  v = 3.14159;
+  v = B();
   boost::apply_visitor(printer(), v);
   
-  v = 'p';
+  v = C();
   boost::apply_visitor(printer(), v);
 
   /////////////////////////////////////////////////////////////
-
+  
   auto inline_printer = begin_variant_visitor()
-    .on<int>([](const int i) { std::cout << i << "\n";})
-    .on<double>([](const double d) { std::cout << d << "\n";})
-    .on<char>([](const char c) { std::cout << c << "\n";})
+    .on<A>([](A&) { std::cout << "A\n";})
+    .on<B>([](B&) { std::cout << "B\n";})
+    .on<C>([](C&) { std::cout << "C\n";})
     .end_variant_visitor();
 
-  v = 7;
+  v = A();
   boost::apply_visitor(inline_printer, v);
   
-  v = 3.14159;
+  v = B();
   boost::apply_visitor(inline_printer, v);
   
-  v = 'p';
+  v = C();
   boost::apply_visitor(inline_printer, v);
 }
 
