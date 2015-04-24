@@ -8,7 +8,7 @@ template <typename Value_T>
 class Lazy
 {
   mutable optional<Value_T> m_value;
-  mutable std::function<Value_T()> m_f;
+  std::function<Value_T()> m_f;
   std::unique_ptr<std::mutex> m_mutex;
 
 public:
