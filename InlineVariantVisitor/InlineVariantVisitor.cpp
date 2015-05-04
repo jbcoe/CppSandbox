@@ -18,7 +18,13 @@ struct ComposeVariantVisitor
 
     void operator()(T& t) const { f_(t); }
 
-private:
+    template<typename U>
+    void match(U& u)
+    {
+      boost::apply_visitor(*this, u);
+    }
+
+  private:
     
     F f_;
   };
@@ -105,12 +111,12 @@ int main(int argc, char* argv[])
     .end_visitor();
 
   v = A();
-  boost::apply_visitor(inline_printer, v);
+  inline_printer.match(v);
   
   v = B();
-  boost::apply_visitor(inline_printer, v);
+  inline_printer.match(v);
   
   v = C();
-  boost::apply_visitor(inline_printer, v);
+  inline_printer.match(v);
 }
 
