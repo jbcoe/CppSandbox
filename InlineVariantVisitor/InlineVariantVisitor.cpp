@@ -5,13 +5,14 @@ using std::nullptr_t;
 using std::pair;
 using std::make_pair;
 using std::move;
+using std::cout;
 
 template <typename T, typename F, typename BaseInner, typename ArgsT>
 struct ComposeVariantVisitor
 {
   struct Inner : BaseInner
   {
-    Inner(ArgsT&& a) : BaseInner(std::move(a.second)), f_(std::move(a.first)) {}
+    Inner(ArgsT&& a) : BaseInner(move(a.second)), f_(move(a.first)) {}
 
     using BaseInner::operator();
 
@@ -29,7 +30,7 @@ private:
   template<typename Tadd, typename Fadd>
   auto on(Fadd&& f)
   {
-    return ComposeVariantVisitor<Tadd, Fadd, Inner, std::pair<Fadd, ArgsT>>(
+    return ComposeVariantVisitor<Tadd, Fadd, Inner, pair<Fadd, ArgsT>>(
         make_pair(move(f), move(m_args)));
   }
   
@@ -79,9 +80,9 @@ int main(int argc, char* argv[])
   
   struct printer : boost::static_visitor<>
   {
-    void operator()(A&) const { std::cout << "A\n"; }
-    void operator()(B&) const { std::cout << "B\n"; }
-    void operator()(C&) const { std::cout << "C\n"; }
+    void operator()(A&) const { cout << "A\n"; }
+    void operator()(B&) const { cout << "B\n"; }
+    void operator()(C&) const { cout << "C\n"; }
   };
 
   v = A();
@@ -93,14 +94,14 @@ int main(int argc, char* argv[])
   v = C();
   boost::apply_visitor(printer(), v);
 
-  std::cout << "\n";
+  cout << "\n";
 
   /////////////////////////////////////////////////////////////
   
   auto inline_printer = begin_variant_visitor()
-    .on<A>([](A&) { std::cout << "A\n";})
-    .on<B>([](B&) { std::cout << "B\n";})
-    .on<C>([](C&) { std::cout << "C\n";})
+    .on<A>([](A&) { cout << "A\n";})
+    .on<B>([](B&) { cout << "B\n";})
+    .on<C>([](C&) { cout << "C\n";})
     .end_visitor();
 
   v = A();
