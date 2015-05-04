@@ -13,6 +13,8 @@ struct ComposeVariantVisitor
   {
     Inner(ArgsT&& a) : BaseInner(std::move(a.second)), f_(std::move(a.first)) {}
 
+    using BaseInner::operator();
+
     void operator()(T& t) const { f_(t); }
 
 private:
@@ -31,7 +33,7 @@ private:
         make_pair(move(f), move(m_args)));
   }
   
-  auto end_variant_visitor()
+  auto end_visitor()
   {
     return Inner(move(m_args));
   }
@@ -42,10 +44,14 @@ private:
 struct EmptyVariantVisitor
 {
   struct Inner : public boost::static_visitor<>
-  {
+  {                  
+    struct detail_t {};
+
     Inner(nullptr_t)
     {
     }
+
+    void operator()(detail_t&) const {}
   };
 
   template <typename Tadd, typename Fadd>
@@ -87,13 +93,15 @@ int main(int argc, char* argv[])
   v = C();
   boost::apply_visitor(printer(), v);
 
+  std::cout << "\n";
+
   /////////////////////////////////////////////////////////////
   
   auto inline_printer = begin_variant_visitor()
     .on<A>([](A&) { std::cout << "A\n";})
     .on<B>([](B&) { std::cout << "B\n";})
     .on<C>([](C&) { std::cout << "C\n";})
-    .end_variant_visitor();
+    .end_visitor();
 
   v = A();
   boost::apply_visitor(inline_printer, v);
