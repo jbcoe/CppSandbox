@@ -74,22 +74,58 @@ EmptyVariantVisitor begin_variant_visitor()
     return EmptyVariantVisitor();
 }
 
-class A{};
-class B{};
-class C{};
+struct A
+{
+  void Foo() const {}
+  void Bar() const {}
+};
+
+struct B
+{
+  void Foo() const {}
+};
+
+struct C
+{
+  void Bar() const {}
+};
+
+struct D
+{
+};
+
+template <typename T>
+concept bool HasFoo()
+{
+  return requires(const T& t)
+  {
+    t.Foo();
+  };
+}
+
+template <typename T>
+concept bool HasBar()
+{
+  return requires(const T& t)
+  {
+    t.Bar();
+  };
+}
+
+struct printer : boost::static_visitor<>
+  {
+    void operator()(A&) const { cout << "A\n"; }
+    void operator()(HasBar&) const { cout << "Something with a Bar\n"; }
+    void operator()(HasFoo&) const { cout << "Something with a Foo\n"; }
+    void operator()(auto&) const { cout << "Something completely different\n"; }
+  };
 
 int main(int argc, char* argv[])
 {
-  boost::variant<A,B,C> v;
+  boost::variant<A,B,C,D> v;
 
   /////////////////////////////////////////////////////////////
   
-  struct printer : boost::static_visitor<>
-  {
-    void operator()(A&) const { cout << "A\n"; }
-    void operator()(B&) const { cout << "B\n"; }
-    void operator()(C&) const { cout << "C\n"; }
-  };
 
   v = A();
   boost::apply_visitor(printer(), v);
@@ -100,10 +136,13 @@ int main(int argc, char* argv[])
   v = C();
   boost::apply_visitor(printer(), v);
 
+  v = D();
+  boost::apply_visitor(printer(), v);
+  
   cout << "\n";
 
   /////////////////////////////////////////////////////////////
-  
+  /*
   auto inline_printer = begin_variant_visitor()
     .on<A>([](A&) { cout << "A\n";})
     .on<B>([](B&) { cout << "B\n";})
@@ -118,5 +157,6 @@ int main(int argc, char* argv[])
   
   v = C();
   inline_printer.match(v);
+  */
 }
 
