@@ -4,3 +4,6 @@
 [submodule "externals/origin"]
 	path = externals/origin
 	url = https://github.com/asutton/origin.git
+[submodule "externals/eggs_variant"]
+	path = externals/eggs_variant
+	url = https://github.com/eggs-cpp/variant.git
