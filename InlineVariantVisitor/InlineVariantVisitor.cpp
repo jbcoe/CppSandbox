@@ -1,5 +1,8 @@
 #include <iostream>
-#include <boost/variant.hpp>
+#include <eggs/variant.hpp>
+
+template <typename ...Ts>
+using variant = eggs::variant<Ts...>;
 
 using std::nullptr_t;
 using std::pair;
@@ -21,7 +24,7 @@ struct ComposeVariantVisitor
     template<typename U>
     void match(U& u)
     {
-      boost::apply_visitor(*this, u);
+      eggs::variants::apply<void>(*this, u);
     }
 
   private:
@@ -50,7 +53,7 @@ struct ComposeVariantVisitor
 
 struct EmptyVariantVisitor
 {
-  struct Inner : public boost::static_visitor<>
+  struct Inner
   {                  
     struct detail_t {};
 
@@ -80,11 +83,11 @@ class C{};
 
 int main(int argc, char* argv[])
 {
-  boost::variant<A,B,C> v;
+  eggs::variant<A,B,C> v;
 
   /////////////////////////////////////////////////////////////
   
-  struct printer : boost::static_visitor<>
+  struct printer
   {
     void operator()(A&) const { cout << "A\n"; }
     void operator()(B&) const { cout << "B\n"; }
@@ -92,13 +95,13 @@ int main(int argc, char* argv[])
   };
 
   v = A();
-  boost::apply_visitor(printer(), v);
+  eggs::variants::apply<void>(printer(), v);
   
   v = B();
-  boost::apply_visitor(printer(), v);
+  eggs::variants::apply<void>(printer(), v);
   
   v = C();
-  boost::apply_visitor(printer(), v);
+  eggs::variants::apply<void>(printer(), v);
 
   cout << "\n";
 
