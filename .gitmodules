@@ -7,3 +7,6 @@
 [submodule "externals/eggs_variant"]
 	path = externals/eggs_variant
 	url = https://github.com/eggs-cpp/variant.git
+[submodule "externals/cereal"]
+	path = externals/cereal
+	url = https://github.com/USCiLab/cereal.git
