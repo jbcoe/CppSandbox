@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.5.mk
+include ../compilerSettings_clang3.6.mk
 
 SOURCES=RangesV3Demo_View.cpp
 EXECUTABLE=RangesV3Demo_View
