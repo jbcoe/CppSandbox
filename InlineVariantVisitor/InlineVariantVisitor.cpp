@@ -81,9 +81,29 @@ class A{};
 class B{};
 class C{};
 
+struct X{ X(int){} };
+struct Y{ Y(int){} };
+struct Z{ Z(int){} };
+
 int main(int argc, char* argv[])
 {
   eggs::variant<A,B,C> v;
+  eggs::variant<X,Y,Z> w;
+
+  struct printer2
+  {
+    void operator()(X&) const { cout << "X\n"; }
+    void operator()(Y&) const { cout << "Y\n"; }
+    void operator()(Z&) const { cout << "Z\n"; }
+  };
+
+  try{
+  eggs::variants::apply<void>(printer2(), w);
+  }
+  catch(const eggs::variants::bad_variant_access&)
+  {
+    std::cout << "Caught bad_variant_access\n";
+  }
 
   /////////////////////////////////////////////////////////////
   
@@ -118,7 +138,7 @@ int main(int argc, char* argv[])
   
   v = B();
   inline_printer.match(v);
-  
+
   v = C();
   inline_printer.match(v);
 }
