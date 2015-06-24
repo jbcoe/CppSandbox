@@ -87,11 +87,16 @@ class A{};
 class B{};
 class C{};
 
+template<typename T>
+concept bool A_like()
+{
+  return std::is_same<A,T>::value;
+}
+
 int main(int argc, char* argv[])
 {
-  
   auto inline_printer = begin_variant_visitor()
-    .add_handler([](const A&) { cout << "A\n";})
+    .add_handler([](const A_like&) { cout << "A\n";})
     .add_handler([](const B&) { cout << "B\n";})
     .add_handler([](const C&) { cout << "C\n";})
     .end_visitor();
@@ -102,6 +107,5 @@ int main(int argc, char* argv[])
   inline_printer(b);
   C c;
   inline_printer(c);
-  
 }
 
