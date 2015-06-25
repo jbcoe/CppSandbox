@@ -1,5 +1,5 @@
 #include <iostream>
-#include <boost/variant.hpp>
+#include <eggs/variant.hpp>
 
 using std::nullptr_t;
 using std::pair;
@@ -84,7 +84,7 @@ EmptyVariantVisitor begin_variant_visitor()
 }
 
 class A{};
-class B{};
+class B{ void foo()const{} };
 class C{};
 
 template<typename T>
@@ -93,19 +93,26 @@ concept bool A_like()
   return std::is_same<A,T>::value;
 }
 
+template<typename T>
+concept bool Fooer()
+{
+  return requires (const T& t)
+  {
+    { t.foo() } -> void
+  };
+}
+
+
 int main(int argc, char* argv[])
 {
   auto inline_printer = begin_variant_visitor()
-    .add_handler([](const A_like&) { cout << "A\n";})
+    .add_handler([](const A_like&) { cout << "A-like\n";})
+    //.add_handler([](const Fooer&) { cout << "B\n";})
     .add_handler([](const B&) { cout << "B\n";})
     .add_handler([](const C&) { cout << "C\n";})
     .end_visitor();
 
-  A a;
-  inline_printer(a);
-  B b;
-  inline_printer(b);
-  C c;
-  inline_printer(c);
+  eggs::variant<A,B,C> v = A();
+  eggs::variants::apply<void>(inline_printer, v);
 }
 
