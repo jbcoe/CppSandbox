@@ -37,7 +37,7 @@ namespace ranges
 
             template<typename A, typename B>
             using UnambiguouslyConvertibleType =
-                meta::eval<
+                meta::_t<
                     meta::if_c<
                         (bool)Same<A, B>(),
                         meta::id<A>,
@@ -109,11 +109,6 @@ namespace ranges
                 {
                     RANGES_ASSERT(!ForwardIterator<I>() || ranges::next(j.base(), n) == i);
                     return {i, j.count() - n};
-                }
-                CONCEPT_REQUIRES(RandomAccessIterator<I>())
-                friend counted_iterator<I, D> recounted(counted_iterator<I, D> const &j, I i)
-                {
-                    return {i, j.count() - (i - j.base())};
                 }
             public:
                 counted_cursor() = default;

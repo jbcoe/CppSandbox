@@ -24,7 +24,7 @@
 #include <range/v3/size.hpp>
 #include <range/v3/range_traits.hpp>
 #include <range/v3/range_concepts.hpp>
-#include <range/v3/range_adaptor.hpp>
+#include <range/v3/view_adaptor.hpp>
 #include <range/v3/utility/iterator.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/static_const.hpp>
@@ -38,7 +38,12 @@ namespace ranges
         /// @{
         template<typename Rng>
         struct intersperse_view
-          : range_adaptor<intersperse_view<Rng>, Rng>
+          : view_adaptor<
+                intersperse_view<Rng>,
+                Rng,
+                (range_cardinality<Rng>::value > 0) ?
+                    static_cast<cardinality>(range_cardinality<Rng>::value * 2 - 1) :
+                    range_cardinality<Rng>::value>
         {
         private:
             friend range_access;
@@ -121,7 +126,7 @@ namespace ranges
         public:
             intersperse_view() = default;
             intersperse_view(Rng rng, range_value_t<Rng> val)
-              : range_adaptor_t<intersperse_view>{std::move(rng)}, val_(std::move(val))
+              : view_adaptor_t<intersperse_view>{std::move(rng)}, val_(std::move(val))
             {}
             CONCEPT_REQUIRES(SizedRange<Rng>())
             range_size_t<Rng> size() const

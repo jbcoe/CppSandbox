@@ -14,11 +14,12 @@
 #ifndef RANGES_V3_VIEW_TAKE_HPP
 #define RANGES_V3_VIEW_TAKE_HPP
 
+#include <algorithm>
 #include <type_traits>
 #include <range/v3/range_fwd.hpp>
 #include <range/v3/range_traits.hpp>
 #include <range/v3/range_concepts.hpp>
-#include <range/v3/range_interface.hpp>
+#include <range/v3/view_interface.hpp>
 #include <range/v3/utility/static_const.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/view/take_exactly.hpp>
@@ -30,7 +31,7 @@ namespace ranges
     {
         template<typename Rng>
         struct take_view
-          : range_facade<take_view<Rng>, false>
+          : view_facade<take_view<Rng>, finite>
         {
         private:
             friend range_access;
@@ -147,7 +148,7 @@ namespace ranges
                 template<typename Rng, typename T, CONCEPT_REQUIRES_(!InputRange<Rng>())>
                 void operator()(Rng &&, T &&) const
                 {
-                    CONCEPT_ASSERT_MSG(InputRange<T>(),
+                    CONCEPT_ASSERT_MSG(InputRange<Rng>(),
                         "The object on which view::take operates must be a model of the InputRange "
                         "concept.");
                     CONCEPT_ASSERT_MSG(Integral<T>(),

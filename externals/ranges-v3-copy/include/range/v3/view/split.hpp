@@ -22,7 +22,7 @@
 #include <range/v3/range.hpp>
 #include <range/v3/range_traits.hpp>
 #include <range/v3/range_concepts.hpp>
-#include <range/v3/range_facade.hpp>
+#include <range/v3/view_facade.hpp>
 #include <range/v3/utility/functional.hpp>
 #include <range/v3/utility/semiregular.hpp>
 #include <range/v3/utility/static_const.hpp>
@@ -41,7 +41,9 @@ namespace ranges
         /// @{
         template<typename Rng, typename Fun>
         struct split_view
-          : range_facade<split_view<Rng, Fun>>
+          : view_facade<
+                split_view<Rng, Fun>,
+                is_finite<Rng>::value ? finite : range_cardinality<Rng>::value>
         {
         private:
             friend range_access;
@@ -72,11 +74,7 @@ namespace ranges
                     }
                 };
                 using reference_ =
-                    indirect_view<
-                        take_while_view<
-                            iota_view<range_iterator_t<Rng>>,
-                            search_pred,
-                            is_infinite<Rng>::value>>;
+                    indirect_view<take_while_view<iota_view<range_iterator_t<Rng>>, search_pred>>;
                 reference_ current() const
                 {
                     return reference_{{view::iota(cur_), {zero_, cur_, last_, fun_}}};

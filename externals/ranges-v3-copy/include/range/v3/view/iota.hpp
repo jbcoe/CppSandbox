@@ -21,7 +21,7 @@
 #include <meta/meta.hpp>
 #include <range/v3/range_fwd.hpp>
 #include <range/v3/range_concepts.hpp>
-#include <range/v3/range_facade.hpp>
+#include <range/v3/view_facade.hpp>
 #include <range/v3/utility/concepts.hpp>
 #include <range/v3/utility/static_const.hpp>
 #include <range/v3/view/take_exactly.hpp>
@@ -88,7 +88,7 @@ namespace ranges
                     concepts::WeaklyIncrementable>, T>;
 
         template<typename T>
-        using incrementable_concept_t = meta::eval<incrementable_concept<T>>;
+        using incrementable_concept_t = meta::_t<incrementable_concept<T>>;
 
         /// \cond
         namespace detail
@@ -109,7 +109,7 @@ namespace ranges
                 using type =
                     meta::if_<
                         meta::not_<std::is_same<Val, difference_t>>,
-                        meta::eval<std::make_signed<difference_t>>,
+                        meta::_t<std::make_signed<difference_t>>,
                         meta::if_c<
                             (bits < 8),
                             std::int_fast8_t,
@@ -128,7 +128,7 @@ namespace ranges
             {};
 
             template<typename Val>
-            using iota_difference_t = meta::eval<iota_difference<Val>>;
+            using iota_difference_t = meta::_t<iota_difference<Val>>;
 
             template<typename Val, CONCEPT_REQUIRES_(!Integral<Val>())>
             iota_difference_t<Val> iota_minus(Val const &v0, Val const &v1)
@@ -158,7 +158,7 @@ namespace ranges
         /// An iota view in a closed range with non-random access iota value type
         template<typename From, typename To /* = From */>
         struct closed_iota_view
-          : range_facade<closed_iota_view<From, To>>
+          : view_facade<closed_iota_view<From, To>, finite>
         {
         private:
             friend range_access;
@@ -213,7 +213,7 @@ namespace ranges
 
         template<typename From, typename To /* = void*/>
         struct iota_view
-          : range_facade<iota_view<From, To>>
+          : view_facade<iota_view<From, To>, finite>
         {
         private:
             friend range_access;
@@ -264,7 +264,7 @@ namespace ranges
 
         template<typename From>
         struct iota_view<From, void>
-          : range_facade<iota_view<From, void>, true>
+          : view_facade<iota_view<From, void>, infinite>
         {
         private:
             using incrementable_concept_t = ranges::incrementable_concept<From>;
@@ -442,11 +442,9 @@ namespace ranges
             }
 
             struct ints_fn
-              : private iota_view<int>
+              : iota_view<int>
             {
                 ints_fn() = default;
-                using iota_view<int>::begin;
-                using iota_view<int>::end;
 
                 template<typename Val,
                     CONCEPT_REQUIRES_(Integral<Val>())>

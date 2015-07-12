@@ -16,7 +16,7 @@
 #include <type_traits>
 #include <meta/meta.hpp>
 #include <range/v3/range_fwd.hpp>
-#include <range/v3/range_facade.hpp>
+#include <range/v3/view_facade.hpp>
 #include <range/v3/utility/concepts.hpp>
 #include <range/v3/utility/variant.hpp>
 
@@ -148,7 +148,7 @@ namespace ranges
         };
 
         template<typename Cur, typename S, typename TQual, typename UQual>
-        struct common_reference_base<basic_iterator<Cur, S>, basic_sentinel<S>, TQual, UQual>
+        struct basic_common_reference<basic_iterator<Cur, S>, basic_sentinel<S>, TQual, UQual>
         {
             using type =
                 common_iterator<
@@ -157,7 +157,7 @@ namespace ranges
         };
 
         template<typename Cur, typename S, typename TQual, typename UQual>
-        struct common_reference_base<basic_sentinel<S>, basic_iterator<Cur, S>, TQual, UQual>
+        struct basic_common_reference<basic_sentinel<S>, basic_iterator<Cur, S>, TQual, UQual>
         {
             using type =
                 common_iterator<

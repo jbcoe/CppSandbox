@@ -18,7 +18,6 @@
 #include <range/v3/range_fwd.hpp>
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/range_traits.hpp>
-#include <range/v3/utility/common_iterator.hpp>
 #include <range/v3/utility/static_const.hpp>
 #include <range/v3/action/concepts.hpp>
 
@@ -88,7 +87,6 @@ namespace ranges
                 {
                     static_assert(!is_infinite<Rng>::value,
                         "Attempt to convert an infinite range to a container.");
-
                     return impl(std::forward<Rng>(rng), ReserveConcept<Cont, Rng>());
                 }
             };

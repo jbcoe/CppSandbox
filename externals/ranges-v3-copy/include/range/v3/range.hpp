@@ -18,7 +18,7 @@
 #include <type_traits>
 #include <meta/meta.hpp>
 #include <range/v3/range_fwd.hpp>
-#include <range/v3/range_interface.hpp>
+#include <range/v3/view_interface.hpp>
 #include <range/v3/utility/concepts.hpp>
 #include <range/v3/utility/iterator.hpp>
 #include <range/v3/utility/compressed_pair.hpp>
@@ -32,7 +32,7 @@ namespace ranges
         /// \cond
         namespace detail
         {
-            template<typename T, typename U = meta::eval<std::remove_const<T>>>
+            template<typename T, typename U = meta::_t<std::remove_const<T>>>
             constexpr U && unsafe_move(T &t)
             {
                 return static_cast<U &&>(const_cast<U &>(t));
@@ -45,7 +45,7 @@ namespace ranges
         template<typename I, typename S /*= I*/>
         struct range
           : private compressed_pair<I, S>
-          , range_interface<range<I, S>>
+          , view_interface<range<I, S>>
         {
             using iterator = I;
             using sentinel = S;
@@ -105,7 +105,7 @@ namespace ranges
         template<typename I, typename S /* = I */>
         struct sized_range
           : private compressed_pair<I const, S const>
-          , range_interface<sized_range<I, S>>
+          , view_interface<sized_range<I, S>>
         {
         private:
             template<typename X, typename Y>
@@ -182,7 +182,7 @@ namespace ranges
                 return *this;
             }
             template<typename X, typename Y,
-                CONCEPT_REQUIRES_(Assignable<I &, X &&>() && Assignable<S &, Y &&>())>
+                CONCEPT_REQUIRES_(Assignable<I&, X &&>() && Assignable<S&, Y &&>())>
             sized_range &operator=(sized_range<X, Y> rng)
             {
                 const_cast<I &>(first) = rng.move_first();
@@ -352,7 +352,7 @@ namespace ranges
             return detail::move(p).second;
         }
 
-        // TODO add specialization of is_infinite for when we can determine the range is infinite
+        // TODO add specialization of range_cardinality for when we can determine the range is infinite
 
         /// @}
     }

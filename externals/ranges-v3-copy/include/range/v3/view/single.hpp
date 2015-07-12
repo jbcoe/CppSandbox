@@ -20,7 +20,7 @@
 #include <range/v3/begin_end.hpp>
 #include <range/v3/range_concepts.hpp>
 #include <range/v3/range_traits.hpp>
-#include <range/v3/range_facade.hpp>
+#include <range/v3/view_facade.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
 #include <range/v3/utility/static_const.hpp>
@@ -33,7 +33,7 @@ namespace ranges
         /// @{
         template<typename Val>
         struct single_view
-          : range_facade<single_view<Val>>
+          : view_facade<single_view<Val>, (cardinality)1>
         {
         private:
             friend struct range_access;
@@ -105,7 +105,7 @@ namespace ranges
                 }
             #ifndef RANGES_DOXYGEN_INVOKED
                 // For error reporting
-                template<typename Val, CONCEPT_REQUIRES_(!SemiRegular<Val>())>
+                template<typename Val, CONCEPT_REQUIRES_(!SemiRegular<uncvref_t<Val>>())>
                 void operator()(Val &&) const
                 {
                     CONCEPT_ASSERT_MSG(SemiRegular<Val>(),

@@ -264,14 +264,14 @@ namespace ranges
                 using type = typename RangeAdaptor::base_range_t const;
             };
             template<typename RangeFacade>
-            struct range_facade
+            struct view_facade
             {
-                using type = typename RangeFacade::range_facade_t;
+                using type = typename RangeFacade::view_facade_t;
             };
             template<typename RangeAdaptor>
-            struct range_adaptor
+            struct view_adaptor
             {
-                using type = typename RangeAdaptor::range_adaptor_t;
+                using type = typename RangeAdaptor::view_adaptor_t;
             };
             /// endcond
         };
@@ -310,7 +310,7 @@ namespace ranges
                         range_access::InputCursorConcept>, T>;
 
             template<typename T>
-            using cursor_concept_t = meta::eval<cursor_concept<T>>;
+            using cursor_concept_t = meta::_t<cursor_concept<T>>;
         }
         /// \endcond
     }

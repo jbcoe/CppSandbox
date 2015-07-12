@@ -10,14 +10,14 @@
 //
 // Project home: https://github.com/ericniebler/range-v3
 //
-#ifndef RANGES_V3_RANGE_ADAPTOR_HPP
-#define RANGES_V3_RANGE_ADAPTOR_HPP
+#ifndef RANGES_V3_VIEW_ADAPTOR_HPP
+#define RANGES_V3_VIEW_ADAPTOR_HPP
 
 #include <meta/meta.hpp>
 #include <range/v3/range_fwd.hpp>
 #include <range/v3/size.hpp>
 #include <range/v3/distance.hpp>
-#include <range/v3/range_facade.hpp>
+#include <range/v3/view_facade.hpp>
 #include <range/v3/range_traits.hpp>
 #include <range/v3/utility/concepts.hpp>
 #include <range/v3/utility/iterator_concepts.hpp>
@@ -79,10 +79,10 @@ namespace ranges
         /// \addtogroup group-core
         /// @{
         template<typename Derived>
-        using base_range_t = meta::eval<range_access::base_range<Derived>>;
+        using base_range_t = meta::_t<range_access::base_range<Derived>>;
 
         template<typename Derived>
-        using range_adaptor_t = meta::eval<range_access::range_adaptor<Derived>>;
+        using view_adaptor_t = meta::_t<range_access::view_adaptor<Derived>>;
 
         template<typename BaseIt, typename Adapt>
         struct adaptor_cursor;
@@ -232,7 +232,7 @@ namespace ranges
             template<typename A = Adapt,
                 typename R = decltype(std::declval<A>().current(first)),
                 typename X =
-                    meta::if_<std::is_reference<R>, meta::eval<std::remove_reference<R>> &&, R>>
+                    meta::if_<std::is_reference<R>, meta::_t<std::remove_reference<R>> &&, R>>
             X indirect_move_(detail::any) const
                 noexcept(noexcept(X(static_cast<X &&>(std::declval<R>()))))
             {
@@ -354,17 +354,17 @@ namespace ranges
                 adaptor_cursor<detail::adapted_iterator_t<D>, detail::begin_adaptor_t<D>>,
                 adaptor_sentinel<detail::adapted_sentinel_t<D>, detail::end_adaptor_t<D>>>;
 
-        template<typename Derived, typename BaseRng, bool Inf /*= is_infinite<BaseRng>::value*/>
-        struct range_adaptor
-          : range_facade<Derived, Inf>
+        template<typename Derived, typename BaseRng, cardinality Cardinality /*= range_cardinality<BaseRng>::value*/>
+        struct view_adaptor
+          : view_facade<Derived, Cardinality>
         {
         private:
             friend Derived;
             friend range_access;
             friend adaptor_base;
-            using range_adaptor_t = range_adaptor;
+            using view_adaptor_t = view_adaptor;
             using base_range_t = view::all_t<BaseRng>;
-            using range_facade<Derived, Inf>::derived;
+            using view_facade<Derived, Cardinality>::derived;
             // Mutable here. Const-correctness is enforced below by disabling
             // begin_cursor/end_cursor if "BaseRng const" does not model
             // the View concept.
@@ -399,7 +399,7 @@ namespace ranges
             }
             // Const-correctness is enforced here by only allowing these if the base range
             // has const begin/end accessors. That disables the const begin()/end() accessors
-            // in range_facade, meaning the derived range type only has mutable iterators.
+            // in view_facade, meaning the derived range type only has mutable iterators.
             template<typename D = Derived,
                 CONCEPT_REQUIRES_(Same<D, Derived>() && View<base_range_t const>())>
             adaptor_cursor_t<D const> begin_cursor() const
@@ -417,8 +417,8 @@ namespace ranges
                 return {std::move(pos), std::move(adapt)};
             }
         public:
-            range_adaptor() = default;
-            constexpr range_adaptor(BaseRng && rng)
+            view_adaptor() = default;
+            constexpr view_adaptor(BaseRng && rng)
               : rng_(view::all(detail::forward<BaseRng>(rng)))
             {}
             base_range_t & base()
