@@ -100,15 +100,13 @@ int main(int argc, char* argv[])
   std::vector<std::string> words = {"one", "two", "three", "four", "five"};
   std::vector<std::string> romans = {"I", "II", "III", "IV", "V"};
 
-  auto it_begin =
-      make_zip_iterator(ints.begin(), words.begin(), romans.begin());
+  enum { INTS, WORDS, ROMANS };
+  auto it_begin = make_zip_iterator(ints.begin(), words.begin(), romans.begin());
   auto it_end = make_zip_iterator(ints.end(), words.end(), romans.end());
-
-  std::cout << it_begin[3].Get<0>() << std::endl;
-
   for (; it_begin != it_end; ++it_begin)
   {
-    std::cout << it_begin.Get<0>() << " " << it_begin.Get<1>() << " "
-              << it_begin.Get<2>() << std::endl;
+    std::cout << it_begin.Get<INTS>() << " " << it_begin.Get<WORDS>() << " "
+              << it_begin.Get<ROMANS>() << std::endl;
   }
 }
+
