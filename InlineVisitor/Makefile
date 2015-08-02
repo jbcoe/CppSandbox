@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.5.mk
+include ../compilerSettings_clang3.6.mk
 
 SOURCES=InlineVisitor.cpp
 EXECUTABLE=InlineVisitor

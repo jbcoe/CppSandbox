@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.7.mk
+include ../compilerSettings_clang3.6.mk
 
 SOURCES=ZipIterator.cpp
 EXECUTABLE=ZipIterator
