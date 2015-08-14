@@ -10,6 +10,7 @@ class value;
 using array = std::vector<value>;
 using dict = std::map<std::string, value>;
 
+// Immutabale value-type representing a JSON fragment  
 class value : eggs::variant<std::string, double, int, bool, array, dict>
 {
   using variant_t = eggs::variant<std::string, double, int, bool, array, dict>;
