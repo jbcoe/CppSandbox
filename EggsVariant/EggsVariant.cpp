@@ -10,7 +10,7 @@ class value;
 using array = std::vector<value>;
 using dict = std::map<std::string, value>;
 
-class value : public eggs::variant<std::string, double, int, bool, array, dict>
+class value : eggs::variant<std::string, double, int, bool, array, dict>
 {
   using variant_t = eggs::variant<std::string, double, int, bool, array, dict>;
   using variant_t::variant;
