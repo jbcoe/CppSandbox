@@ -1,0 +1,6 @@
+000000000000007c short GCC_except_table0
+0000000000000000 T CircleArea(double)
+0000000000000170 S Shape::Shape()
+00000000000000d0 S Circle::Circle(double)
+0000000000000120 S Circle::Circle(double)
+0000000000000100 S ___clang_call_terminate
