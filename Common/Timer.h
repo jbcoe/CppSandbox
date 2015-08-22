@@ -11,21 +11,30 @@ class TTimer
   using clock = std::chrono::high_resolution_clock;
 
 public:
-  TTimer(F_t f_) : f(f_)
+  TTimer(F_t f) : f_(f)
   {
     start_ = clock::now();
   }
 
   ~TTimer()
   {
+    if ( !engaged_) { return; }
     auto end = clock::now();
-    f(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start_)
+    f_(std::chrono::duration_cast<std::chrono::nanoseconds>(end - start_)
           .count());
   }
+  
+  TTimer(TTimer&& t) : f_(std::move(t.f_)), start_(t.start_)
+  {
+    t.engaged_ = false;
+  }
+
+  TTimer(const TTimer&) = delete;
 
 private:
-  F_t f;
+  F_t f_;
   clock::time_point start_;
+  bool engaged_ = true;
 };
 
 template <typename T>
