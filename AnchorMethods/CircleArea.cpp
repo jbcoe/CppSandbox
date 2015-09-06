@@ -2,5 +2,6 @@
 
 double CircleArea(double radius)
 {
-  return Circle(radius).Area();
+  Circle c(0);
+  return 1.0;//Circle(radius).Area();
 }

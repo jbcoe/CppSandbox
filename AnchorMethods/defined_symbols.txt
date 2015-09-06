@@ -1,22 +1,22 @@
-000000000000007c short GCC_except_table0
-00000000000000e8 short GCC_except_table12
-00000000000000c8 short GCC_except_table8
 0000000000000000 T CircleArea(double)
-0000000000000200 S Shape::Shape()
-00000000000002d0 S Shape::~Shape()
-00000000000002b0 S Shape::~Shape()
-00000000000001a0 S Shape::~Shape()
-0000000000000110 S Circle::Circle(double)
-00000000000001b0 S Circle::Circle(double)
-0000000000000220 S Circle::~Circle()
-0000000000000140 S Circle::~Circle()
-0000000000000180 S Circle::~Circle()
-0000000000000270 S Circle::Area() const
-0000000000000290 S Circle::Perimeter() const
-0000000000000360 S typeinfo for Shape
-0000000000000370 S typeinfo for Circle
-00000000000003c8 S typeinfo name for Shape
-00000000000003c0 S typeinfo name for Circle
-0000000000000390 S vtable for Shape
-0000000000000330 S vtable for Circle
-0000000000000160 S ___clang_call_terminate
+00000000000000c0 S Shape::Shape()
+0000000000000140 S Shape::~Shape()
+0000000000000130 S Shape::~Shape()
+0000000000000070 S Shape::~Shape()
+0000000000000040 S Circle::Circle(double)
+0000000000000080 S Circle::Circle(double)
+00000000000000e0 S Circle::~Circle()
+0000000000000050 S Circle::~Circle()
+0000000000000060 S Circle::~Circle()
+00000000000000f0 S Circle::Area() const
+0000000000000110 S Circle::Perimeter() const
+0000000000000180 S typeinfo for Shape
+0000000000000190 S typeinfo for Circle
+00000000000001e8 S typeinfo name for Shape
+00000000000001e0 S typeinfo name for Circle
+00000000000001b0 S vtable for Shape
+0000000000000150 S vtable for Circle
+                 U vtable for __cxxabiv1::__class_type_info
+                 U vtable for __cxxabiv1::__si_class_type_info
+                 U operator delete(void*)
+                 U ___cxa_pure_virtual
