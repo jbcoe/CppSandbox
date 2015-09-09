@@ -1,5 +1,3 @@
-#include <iostream>
-
 int main(int argc, char* argv[])
 {
   double* n = new double[100];
