@@ -104,21 +104,13 @@ namespace detail
 } // end namespace detail
 
 template <bool b, typename T, typename U>
-struct if_type_else_type
-{
-};
+struct if_type_else_type { };
 
 template <typename T, typename U>
-struct if_type_else_type<true, T, U>
-{
-  typedef T type;
-};
+struct if_type_else_type<true, T, U> { typedef T type; };
 
 template <typename T, typename U>
-struct if_type_else_type<false, T, U>
-{
-  typedef U type;
-};
+struct if_type_else_type<false, T, U> { typedef U type; };
 
 template <bool b, typename T, typename U>
 using if_type_else_type_t = typename if_type_else_type<b, T, U>::type;
