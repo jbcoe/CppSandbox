@@ -81,25 +81,32 @@ public:
                   "Unexpected type must be no-throw movable or copyable");
   }
 
-  Expected(T&& t) noexcept try : hasData_(true),
-                                 data_(Expected_T{}, std::move(t))
+  Expected(T&& t) noexcept : hasData_(true)
+  {
+    try
+    {
+      ::new (std::addressof(data_.t_)) T(std::move(t));
+    }
+    catch (...)
+    {
+      hasData_ = false;
+      ::new (std::addressof(data_.e_)) std::exception_ptr{};
+      data_.e_ = std::current_exception();
+    }
+  }
 
+  Expected(const T& t) noexcept : hasData_(true)
   {
-  }
-  catch (...)
-  {
-    ::new (std::addressof(data_.e_)) std::exception_ptr{};
-    data_.e_ = std::current_exception();
-  }
-
-  Expected(const T& t) noexcept try : hasData_(true), data_(Expected_T{}, t)
-  {
-  }
-  catch (...)
-  {
-    hasData_ = false;
-    ::new (std::addressof(data_.e_)) std::exception_ptr{};
-    data_.e_ = std::current_exception();
+    try
+    {
+      ::new (std::addressof(data_.t_)) T(t);
+    }
+    catch (...)
+    {
+      hasData_ = false;
+      ::new (std::addressof(data_.e_)) std::exception_ptr{};
+      data_.e_ = std::current_exception();
+    }
   }
 
   Expected(const Expected<T>& x) noexcept : hasData_(x.hasData_)
@@ -145,7 +152,7 @@ public:
     }
   }
 
-  // TODO: if internal assignment throws, = can leave Expected in a bad state
+  // TODO: if internal assignment throws, operator = can leave Expected in a bad state
   Expected& operator=(const Expected&) = delete;
   Expected& operator=(Expected&&) = delete;
 
@@ -164,7 +171,7 @@ public:
     std::rethrow_exception(data_.e_);
   }
 
-  const T& operator*() const // exceptions can be thrown by *
+  const T& operator*() const
   {
     if (hasData_)
     {
