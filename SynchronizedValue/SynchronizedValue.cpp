@@ -61,6 +61,18 @@ public:
   {
   }
 
+  template<typename F>
+  void operator()(F&& f)
+  {
+    std::unique_lock<std::mutex> l(m_);
+    f(t_);
+  }
+
+  Guard operator->() const
+  {
+    return Guard(t_, m_);
+  }
+
   Guard Access() const
   {
     return Guard(t_, m_);
@@ -86,11 +98,7 @@ public:
 int main(int argc, char* argv[])
 {
   SynchronizedValue<MyClass> s;
-  {
-    auto g = s.Access();
-
-    g->Greet("Main thread");
-  }
+  s->Greet("Main thread");
 
   std::vector<std::thread> ts;
 
