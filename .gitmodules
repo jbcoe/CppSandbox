@@ -10,3 +10,6 @@
 [submodule "externals/cereal"]
 	path = externals/cereal
 	url = https://github.com/USCiLab/cereal.git
+[submodule "externals/ranges"]
+	path = externals/ranges
+	url = https://github.com/ericniebler/range-v3.git
