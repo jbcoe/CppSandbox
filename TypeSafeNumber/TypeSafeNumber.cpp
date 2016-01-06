@@ -1,6 +1,80 @@
 #include <iostream>
 
 template <typename Object_t, typename Underlying_t>
+struct StrongTypedef
+{
+  StrongTypedef() : t_()
+  {
+  }
+
+  explicit StrongTypedef(Underlying_t t) : t_(std::move(t))
+  {
+  }
+
+  const auto& raw_data() const
+  {
+    return t_;
+  }
+
+  auto& raw_data()
+  {
+    return t_;
+  }
+
+private:
+  Underlying_t t_;
+};
+
+#define STRICT_TYPES
+
+#ifdef STRICT_TYPES
+#define DEFINE_STRONG_TYPEDEF_OPERATOR(StrongTypedef_, operator_)              \
+  StrongTypedef_ operator operator_(const StrongTypedef_& s1,                  \
+                                    const StrongTypedef_& s2)                  \
+  {                                                                            \
+    return StrongTypedef_(s1.raw_data() operator_ s2.raw_data());              \
+  }
+
+#define DEFINE_STRONG_TYPEDEF_OPERATOR_RT(StrongTypedef_, RT, operator_)       \
+  RT operator operator_(const StrongTypedef_& s1, const StrongTypedef_& s2)    \
+  {                                                                            \
+    return RT(s1.raw_data() operator_ s2.raw_data());                          \
+  }
+
+#define DEFINE_NUMERIC_TYPE(Type, Underlying)                                  \
+  struct Type : StrongTypedef<Type, Underlying>                                \
+  {                                                                            \
+    using StrongTypedef<Type, Underlying>::StrongTypedef;                      \
+  }
+#else
+#define DEFINE_NUMERIC_TYPE(Type, Underlying) typedef Underlying Type;
+#define DEFINE_STRONG_TYPEDEF_OPERATOR(A,B)
+#define DEFINE_STRONG_TYPEDEF_OPERATOR_RT(A,B,C)
+#endif
+
+DEFINE_NUMERIC_TYPE(Volatility, double);
+DEFINE_STRONG_TYPEDEF_OPERATOR(Volatility, +);
+DEFINE_STRONG_TYPEDEF_OPERATOR_RT(Volatility, double, *);
+
+Volatility v1;
+
+Volatility v2;
+
+auto v3 = v1 + v2;
+
+DEFINE_NUMERIC_TYPE(Length, double);
+DEFINE_NUMERIC_TYPE(Area, double);
+DEFINE_STRONG_TYPEDEF_OPERATOR_RT(Length, Area, *)
+DEFINE_STRONG_TYPEDEF_OPERATOR(Length, +)
+
+
+auto X = Length(1) * Length(3);
+
+auto X2 = Length(1) + Length(3);
+
+auto X3 = X + X2;
+
+template <typename Object_t, typename Underlying_t>
 class Numerical
 {
 public:
@@ -13,17 +87,21 @@ public:
   Numerical() : m_value()
   {
   }
+  
   Numerical(const Numerical_t& n) : m_value(n.m_value)
   {
   }
+  
   Numerical_t& operator=(const Numerical_t& n)
   {
     m_value = n.m_value;
     return *this;
   }
+
   Numerical(Numerical_t&& n) : m_value(n.m_value)
   {
   }
+
   Numerical_t& operator=(Numerical_t&& n)
   {
     m_value = n.m_value;

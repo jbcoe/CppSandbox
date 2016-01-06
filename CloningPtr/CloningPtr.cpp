@@ -1,18 +1,15 @@
+#include <type_traits>
 #include <iostream>
-#include <array>
 #include <cassert>
 #include <iomanip>
 
 template <typename T>
 class deep_ptr
 {
-  using buffer_t = std::array<char, 2 * sizeof(void*)>;
-  buffer_t buffer_;
-  bool engaged_ = false;
 
   struct inner
   {
-    virtual void copy(buffer_t& buffer) const = 0;
+    virtual void copy(void* buffer) const = 0;
 
     virtual const T* get() const = 0;
 
@@ -31,10 +28,9 @@ class deep_ptr
     {
     }
 
-    void copy(buffer_t& buffer) const override
+    void copy(void* buffer) const override
     {
-      static_assert(sizeof(buffer_t) == sizeof(inner_impl), "size-mismatch");
-      new (buffer.data()) inner_impl(new U(*u_));
+      new (buffer) inner_impl(new U(*u_));
     }
 
     const T* get() const override
@@ -55,10 +51,12 @@ class deep_ptr
     U* u_;
   };
 
+  std::aligned_storage_t<sizeof(inner_impl<void>), alignof(inner_impl<void>)> buffer_;
+  bool engaged_ = false;
+
 public:
   deep_ptr()
   {
-    buffer_.fill(0);
   }
 
   deep_ptr(std::nullptr_t) : deep_ptr()
@@ -74,7 +72,7 @@ public:
       return;
     }
 
-    new (buffer_.data()) inner_impl<U>(u);
+    new (&buffer_) inner_impl<U>(u);
     engaged_ = true;
   }
 
@@ -82,14 +80,14 @@ public:
   {
     if (engaged_)
     {
-      reinterpret_cast<inner*>(buffer_.data())->~inner();
+      reinterpret_cast<inner*>(&buffer_)->~inner();
     }
   }
 
   deep_ptr(const deep_ptr& p)
   {
     if (!p.engaged_) return;
-    reinterpret_cast<const inner*>(p.buffer_.data())->copy(buffer_);
+    reinterpret_cast<const inner*>(&p.buffer_)->copy(&buffer_);
     engaged_ = true;
   }
 
@@ -99,13 +97,13 @@ public:
     {
       if (engaged_)
       {
-        reinterpret_cast<inner*>(buffer_.data())->~inner();
+        reinterpret_cast<inner*>(&buffer_)->~inner();
       }
       engaged_ = false;
     }
     else
     {
-      reinterpret_cast<inner*>(p.buffer_)->copy(buffer_.data());
+      reinterpret_cast<inner*>(&p.buffer_)->copy(&buffer_);
       engaged_ = true;
     }
   }
@@ -115,7 +113,6 @@ public:
     buffer_ = p.buffer_;
     engaged_ = true;
     p.engaged_ = false;
-    p.buffer_.fill(0);
   }
 
   deep_ptr& operator=(deep_ptr&& p)
@@ -126,7 +123,6 @@ public:
       buffer_ = p.buffer_;
     }
     p.engaged_ = false;
-    p.buffer.fill(0);
     return *this;
   }
 
@@ -141,7 +137,7 @@ public:
     {
       return nullptr;
     }
-    return reinterpret_cast<const inner*>(buffer_)->get();
+    return reinterpret_cast<const inner*>(&buffer_)->get();
   }
 
   const T& operator*() const
@@ -161,7 +157,7 @@ public:
     {
       return nullptr;
     }
-    return reinterpret_cast<inner*>(buffer_.data())->get();
+    return reinterpret_cast<inner*>(&buffer_)->get();
   }
 
   T& operator*()
