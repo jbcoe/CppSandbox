@@ -6,12 +6,13 @@
 template <typename T>
 class deep_ptr
 {
-  std::array<char,2*sizeof(void*)> buffer_;
+  using buffer_t = std::array<char, 2 * sizeof(void*)>;
+  buffer_t buffer_;
   bool engaged_ = false;
 
   struct inner
   {
-    virtual void copy(std::array<char,2*sizeof(void*)>& buffer) const = 0;
+    virtual void copy(buffer_t& buffer) const = 0;
 
     virtual const T* get() const = 0;
 
@@ -26,12 +27,14 @@ class deep_ptr
     inner_impl(const inner_impl&) = delete;
     inner_impl& operator=(const inner_impl&) = delete;
 
-    inner_impl(U* u) : u_(u) { }
-
-    void copy(std::array<char,2*sizeof(void*)>& buffer) const override
+    inner_impl(U* u) : u_(u)
     {
-      static_assert(sizeof(buffer)==sizeof(inner_impl), "size-mismatch");
-      new(buffer.data()) inner_impl(new U(*u_));
+    }
+
+    void copy(buffer_t& buffer) const override
+    {
+      static_assert(sizeof(buffer_t) == sizeof(inner_impl), "size-mismatch");
+      new (buffer.data()) inner_impl(new U(*u_));
     }
 
     const T* get() const override
@@ -44,7 +47,10 @@ class deep_ptr
       return u_;
     }
 
-    ~inner_impl() { delete u_; }
+    ~inner_impl()
+    {
+      delete u_;
+    }
 
     U* u_;
   };
@@ -74,7 +80,7 @@ public:
 
   ~deep_ptr()
   {
-    if(engaged_)
+    if (engaged_)
     {
       reinterpret_cast<inner*>(buffer_.data())->~inner();
     }
@@ -91,7 +97,7 @@ public:
   {
     if (!p.engaged_)
     {
-      if ( engaged_ )
+      if (engaged_)
       {
         reinterpret_cast<inner*>(buffer_.data())->~inner();
       }
@@ -115,7 +121,7 @@ public:
   deep_ptr& operator=(deep_ptr&& p)
   {
     engaged_ = p.engaged_;
-    if ( p.engaged_ )
+    if (p.engaged_)
     {
       buffer_ = p.buffer_;
     }
@@ -192,4 +198,5 @@ int main(int argc, char* argv[])
   auto pA_moved = std::move(pA);
   std::cout << std::hex << pA.get() << std::endl;
   std::cout << std::hex << pA_moved.get() << std::endl;
+  std::cout << std::endl;
 }
