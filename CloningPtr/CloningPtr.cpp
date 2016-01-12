@@ -1,4 +1,3 @@
-#include <type_traits>
 #include <iostream>
 #include <cassert>
 #include <iomanip>
@@ -6,144 +5,70 @@
 template <typename T>
 class deep_ptr
 {
-
-  struct inner
-  {
-    virtual void copy(void* buffer) const = 0;
-
-    virtual const T* get() const = 0;
-
-    virtual T* get() = 0;
-
-    virtual ~inner() = default;
-  };
-
-  template <typename U>
-  struct inner_impl : inner
-  {
-    inner_impl(const inner_impl&) = delete;
-    inner_impl& operator=(const inner_impl&) = delete;
-
-    inner_impl(U* u) : u_(u)
-    {
-    }
-
-    void copy(void* buffer) const override
-    {
-      new (buffer) inner_impl(new U(*u_));
-    }
-
-    const T* get() const override
-    {
-      return u_;
-    }
-
-    T* get() override
-    {
-      return u_;
-    }
-
-    ~inner_impl()
-    {
-      delete u_;
-    }
-
-    U* u_;
-  };
-
-  std::aligned_storage_t<sizeof(inner_impl<void>), alignof(inner_impl<void>)> buffer_;
-  bool engaged_ = false;
-
 public:
-  deep_ptr()
+  deep_ptr() : i_()
   {
   }
 
-  deep_ptr(std::nullptr_t) : deep_ptr()
+  deep_ptr(std::nullptr_t) : i_(nullptr)
   {
   }
 
   template <typename U>
   deep_ptr(U* u)
+      : i_(u ? new inner_impl<U>(*u) : nullptr)
   {
-    if (!u)
-    {
-      engaged_ = false;
-      return;
-    }
-
-    new (&buffer_) inner_impl<U>(u);
-    engaged_ = true;
   }
 
   ~deep_ptr()
   {
-    if (engaged_)
-    {
-      reinterpret_cast<inner*>(&buffer_)->~inner();
-    }
+    delete i_;
   }
 
-  deep_ptr(const deep_ptr& p)
+  deep_ptr(const deep_ptr& p) : i_(p.i_ ? p.i_->copy() : nullptr)
   {
-    if (!p.engaged_) return;
-    reinterpret_cast<const inner*>(&p.buffer_)->copy(&buffer_);
-    engaged_ = true;
   }
 
   deep_ptr& operator=(const deep_ptr& p)
   {
-    if (!p.engaged_)
+    if (!p.i_)
     {
-      if (engaged_)
-      {
-        reinterpret_cast<inner*>(&buffer_)->~inner();
-      }
-      engaged_ = false;
+      i_ = nullptr;
     }
     else
     {
-      reinterpret_cast<inner*>(&p.buffer_)->copy(&buffer_);
-      engaged_ = true;
+      i_ = p.i_->copy();
     }
   }
 
-  deep_ptr(deep_ptr&& p)
+  deep_ptr(deep_ptr&& p) : i_(p.i_)
   {
-    buffer_ = p.buffer_;
-    engaged_ = true;
-    p.engaged_ = false;
+    p.i_ = nullptr;
   }
 
   deep_ptr& operator=(deep_ptr&& p)
   {
-    engaged_ = p.engaged_;
-    if (p.engaged_)
-    {
-      buffer_ = p.buffer_;
-    }
-    p.engaged_ = false;
-    return *this;
+    i_ = p.i_;
+    p.i_ = nullptr;
   }
 
-  const T* operator->() const
+  T* operator->() const
   {
     return get();
   }
 
-  const T* get() const
+  T* get() const
   {
-    if (!engaged_)
+    if (i_)
     {
-      return nullptr;
+      return *i_;
     }
-    return reinterpret_cast<const inner*>(&buffer_)->get();
+    return nullptr;
   }
 
-  const T& operator*() const
+  T& operator*() const
   {
-    assert(engaged_);
-    return *get();
+    return *static_cast<T*>(*i_);
   }
 
   T* operator->()
@@ -153,18 +78,58 @@ public:
 
   T* get()
   {
-    if (!engaged_)
+    if (i_)
     {
-      return nullptr;
+      return *i_;
     }
-    return reinterpret_cast<inner*>(&buffer_)->get();
+    return nullptr;
   }
 
   T& operator*()
   {
-    assert(engaged_);
-    return *get();
+    return *static_cast<T*>(*i_);
   }
+
+private:
+  struct inner
+  {
+    virtual inner* copy() const = 0;
+
+    virtual operator const T*() const = 0;
+
+    virtual operator T*() = 0;
+
+    virtual ~inner()
+    {
+    }
+  };
+
+  inner* i_;
+
+  template <typename U>
+  struct inner_impl : inner
+  {
+    inner_impl(const U& u) : u_(u)
+    {
+    }
+
+    inner_impl* copy() const override
+    {
+      return new inner_impl(u_);
+    }
+
+    operator const T*() const override
+    {
+      return &u_;
+    }
+
+    operator T*() override
+    {
+      return &u_;
+    }
+
+    U u_;
+  };
 };
 
 struct IA
@@ -194,5 +159,4 @@ int main(int argc, char* argv[])
   auto pA_moved = std::move(pA);
   std::cout << std::hex << pA.get() << std::endl;
   std::cout << std::hex << pA_moved.get() << std::endl;
-  std::cout << std::endl;
 }
