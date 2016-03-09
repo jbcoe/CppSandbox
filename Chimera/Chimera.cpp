@@ -5,8 +5,13 @@ struct Chimera : Chimera<Ts...>
 {
   T* self_;
   template <typename U>
-  Chimera(U& u) : self_(&u), Chimera<Ts...>(&u) {}
-  explicit operator T* () { return self_; }
+  Chimera(U& u) : Chimera<Ts...>(u), self_(&static_cast<T&>(u))
+  {
+  }
+  explicit operator T&()
+  {
+    return *self_;
+  }
 };
 
 template <typename T>
@@ -14,14 +19,19 @@ struct Chimera <T>
 {
   T* self_;
   template <typename U>
-  Chimera(U &u) : self_(&u) {}
-  explicit operator T* () { return self_; }
+  Chimera(U& u) : self_(&static_cast<T&>(u))
+  {
+  }
+  explicit operator T&()
+  {
+    return *self_;
+  }
 };
 
 template <typename T, typename ...Ts>
 T& as(Chimera<Ts...>& c)
 {
-  return *static_cast<T*>(c);
+  return static_cast<T&>(c);
 }
 
 struct Cloneable
