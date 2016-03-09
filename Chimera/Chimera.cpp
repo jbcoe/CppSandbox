@@ -4,11 +4,14 @@ template <typename T, typename ...Ts>
 struct Chimera : Chimera<Ts...>
 {
   T* self_;
-  template <typename U>
+
+  template <typename U,
+            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
   Chimera(U& u) : Chimera<Ts...>(u), self_(&static_cast<T&>(u))
   {
   }
-  explicit operator T&()
+
+  operator T&()
   {
     return *self_;
   }
@@ -18,11 +21,14 @@ template <typename T>
 struct Chimera <T> 
 {
   T* self_;
-  template <typename U>
+
+  template <typename U,
+            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
   Chimera(U& u) : self_(&static_cast<T&>(u))
   {
   }
-  explicit operator T&()
+
+  operator T&()
   {
     return *self_;
   }
