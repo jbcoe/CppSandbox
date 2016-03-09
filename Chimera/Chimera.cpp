@@ -1,13 +1,23 @@
 #include <iostream>
+#include <cassert>
+#include <experimental/optional>
+
+using std::experimental::optional;
 
 template <typename T, typename ...Ts>
-struct Chimera : Chimera<Ts...>
+struct protocol : protocol<Ts...>
 {
   T* self_;
 
   template <typename U,
             typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
-  Chimera(U& u) : Chimera<Ts...>(u), self_(&static_cast<T&>(u))
+  protocol(U& u) : protocol<Ts...>(u), self_(&static_cast<T&>(u))
+  {
+  }
+
+  template <typename U,
+            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
+  protocol(U& u, protocol<Ts...> c) : protocol<Ts...>(c), self_(&static_cast<T&>(u))
   {
   }
 
@@ -15,16 +25,18 @@ struct Chimera : Chimera<Ts...>
   {
     return *self_;
   }
+
+  T* ptr() { return self_; }
 };
 
 template <typename T>
-struct Chimera <T> 
+struct protocol <T>
 {
   T* self_;
 
   template <typename U,
             typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
-  Chimera(U& u) : self_(&static_cast<T&>(u))
+  protocol(U& u) : self_(&static_cast<T&>(u))
   {
   }
 
@@ -35,9 +47,17 @@ struct Chimera <T>
 };
 
 template <typename T, typename ...Ts>
-T& as(Chimera<Ts...>& c)
+T& as(protocol<Ts...>& c)
 {
   return static_cast<T&>(c);
+}
+
+template <typename T, typename ...Ts>
+optional<protocol<T, Ts...>> try_as(protocol<Ts...>& c)
+{
+  auto p = dynamic_cast<T*>(c.ptr());
+  if ( !p ) return {};
+  return protocol<T, Ts...>(*p, c);
 }
 
 struct Cloneable
@@ -47,7 +67,7 @@ struct Cloneable
 };
 
 struct Serializeable
-{                              
+{
   virtual void Store() const = 0;
   virtual ~Serializeable() = default;
 };
@@ -58,13 +78,19 @@ struct Named
   virtual ~Named() = default;
 };
 
+struct PVAble
+{
+  virtual double PV() const = 0;
+  virtual ~PVAble() = default;
+};
+
 struct DooDad : Cloneable, Named, Serializeable {
   void Store() const override {}
   const char* Name() const override { return "Thingumy"; }
   std::unique_ptr<Cloneable> Clone() const override { return std::make_unique<DooDad>(*this); }
 };
 
-void serializeNamedClone(Chimera<Serializeable, Named, Cloneable> c)
+void serializeNamedClone(protocol<Serializeable, Named, Cloneable> c)
 {
   auto x = as<Cloneable>(c).Clone();
   const char* name = as<Named>(c).Name();
@@ -76,7 +102,10 @@ int main(int argc, char* argv[])
   DooDad d;
   serializeNamedClone(d);
 
-  Chimera<Named, Cloneable> nc(d);
-  Chimera<Cloneable, Named> cn(nc);
+  protocol<Named, Cloneable> nc(d);
+  protocol<Cloneable, Named> cn(nc);
+
+  assert(try_as<Serializeable>(nc));
+  assert(!try_as<PVAble>(nc));
 }
 
