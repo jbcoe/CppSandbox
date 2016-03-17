@@ -21,12 +21,15 @@ struct protocol : protocol<Ts...>
   {
   }
 
+  T* ptr()
+  {
+    return self_;
+  }
+
   operator T&()
   {
     return *self_;
   }
-
-  T* ptr() { return self_; }
 };
 
 template <typename T>
@@ -38,6 +41,11 @@ struct protocol <T>
             typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
   protocol(U& u) : self_(&static_cast<T&>(u))
   {
+  }
+
+  T* ptr()
+  {
+    return self_;
   }
 
   operator T&()
