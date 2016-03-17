@@ -4,8 +4,13 @@
 
 using std::experimental::optional;
 
-template <typename T, typename ...Ts>
-struct protocol : protocol<Ts...>
+template <typename ...Ts>
+struct protocol
+{
+};
+
+template <typename T, typename... Ts>
+struct protocol<T, Ts...> : protocol<Ts...>
 {
   T* self_;
 
@@ -32,27 +37,13 @@ struct protocol : protocol<Ts...>
   }
 };
 
-template <typename T>
-struct protocol <T>
+template <>
+struct protocol<>
 {
-  T* self_;
-
-  template <typename U,
-            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
-  protocol(U& u) : self_(&static_cast<T&>(u))
-  {
-  }
-
-  T* ptr()
-  {
-    return self_;
-  }
-
-  operator T&()
-  {
-    return *self_;
-  }
+  template<typename U>
+  protocol(U& u) {}
 };
+
 
 template <typename T, typename ...Ts>
 T& as(protocol<Ts...>& c)
