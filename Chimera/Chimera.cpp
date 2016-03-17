@@ -1,10 +1,10 @@
-#include <iostream>
 #include <cassert>
 #include <experimental/optional>
+#include <iostream>
 
 using std::experimental::optional;
 
-template <typename ...Ts>
+template <typename... Ts>
 struct protocol
 {
 };
@@ -14,15 +14,32 @@ struct protocol<T, Ts...> : protocol<Ts...>
 {
   T* self_;
 
-  template <typename U,
-            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
+  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
+                                             sizeof...(Ts),
+                                         bool> = true>
   protocol(U& u) : protocol<Ts...>(u), self_(&static_cast<T&>(u))
   {
   }
 
-  template <typename U,
-            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
-  protocol(U& u, protocol<Ts...> c) : protocol<Ts...>(c), self_(&static_cast<T&>(u))
+  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
+                                             sizeof...(Ts),
+                                         bool> = true>
+  protocol(U& u, protocol<Ts...> c)
+      : protocol<Ts...>(c), self_(&static_cast<T&>(u))
+  {
+  }
+
+  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
+                                             !sizeof...(Ts),
+                                         bool> = false>
+  protocol(U& u) : self_(&static_cast<T&>(u))
+  {
+  }
+
+  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
+                                             !sizeof...(Ts),
+                                         bool> = false>
+  protocol(U& u, protocol<Ts...> c) : self_(&static_cast<T&>(u))
   {
   }
 
@@ -37,25 +54,17 @@ struct protocol<T, Ts...> : protocol<Ts...>
   }
 };
 
-template <>
-struct protocol<>
-{
-  template<typename U>
-  protocol(U& u) {}
-};
-
-
-template <typename T, typename ...Ts>
+template <typename T, typename... Ts>
 T& as(protocol<Ts...>& c)
 {
   return static_cast<T&>(c);
 }
 
-template <typename T, typename ...Ts>
+template <typename T, typename... Ts>
 optional<protocol<T, Ts...>> try_as(protocol<Ts...>& c)
 {
   auto p = dynamic_cast<T*>(c.ptr());
-  if ( !p ) return {};
+  if (!p) return {};
   return protocol<T, Ts...>(*p, c);
 }
 
@@ -83,10 +92,19 @@ struct PVAble
   virtual ~PVAble() = default;
 };
 
-struct DooDad : Cloneable, Named, Serializeable {
-  void Store() const override {}
-  const char* Name() const override { return "Thingumy"; }
-  std::unique_ptr<Cloneable> Clone() const override { return std::make_unique<DooDad>(*this); }
+struct DooDad : Cloneable, Named, Serializeable
+{
+  void Store() const override
+  {
+  }
+  const char* Name() const override
+  {
+    return "Thingumy";
+  }
+  std::unique_ptr<Cloneable> Clone() const override
+  {
+    return std::make_unique<DooDad>(*this);
+  }
 };
 
 void serializeNamedClone(protocol<Serializeable, Named, Cloneable> c)
