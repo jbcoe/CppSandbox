@@ -17,7 +17,7 @@ public:
 template <typename T, typename... Ts>
 class protocol<T, Ts...> : public protocol<Ts...>
 {
-  T* self_;
+  T* const self_;
 
 public:
   template <typename U,
