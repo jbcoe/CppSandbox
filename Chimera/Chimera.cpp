@@ -5,52 +5,42 @@
 using std::experimental::optional;
 
 template <typename... Ts>
-struct protocol
+class protocol
 {
+public:
+  template <typename U>
+  protocol(U&)
+  {
+  }
 };
 
 template <typename T, typename... Ts>
-struct protocol<T, Ts...> : protocol<Ts...>
+class protocol<T, Ts...> : public protocol<Ts...>
 {
   T* self_;
 
-  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
-                                             sizeof...(Ts),
-                                         bool> = true>
+public:
+  template <typename U,
+            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
   protocol(U& u) : protocol<Ts...>(u), self_(&static_cast<T&>(u))
   {
   }
 
-  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
-                                             sizeof...(Ts),
-                                         bool> = true>
+  template <typename U,
+            typename = std::enable_if_t<std::is_convertible<U&, T&>::value>>
   protocol(U& u, protocol<Ts...> c)
       : protocol<Ts...>(c), self_(&static_cast<T&>(u))
   {
   }
 
-  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
-                                             !sizeof...(Ts),
-                                         bool> = false>
-  protocol(U& u) : self_(&static_cast<T&>(u))
-  {
-  }
-
-  template <typename U, std::enable_if_t<std::is_convertible<U&, T&>::value &&
-                                             !sizeof...(Ts),
-                                         bool> = false>
-  protocol(U& u, protocol<Ts...> c) : self_(&static_cast<T&>(u))
-  {
-  }
-
-  T* ptr()
-  {
-    return self_;
-  }
-
   operator T&()
   {
     return *self_;
+  }
+  
+  T* ptr()
+  {
+    return self_;
   }
 };
 
