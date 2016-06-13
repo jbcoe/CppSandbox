@@ -83,64 +83,6 @@ auto overload(Ts&&... ts)
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <size_t N, typename T>
-void get();
-
-template <typename T>
-struct elements
-{
-};
-
-template <size_t N, size_t MAX>
-struct apply_t
-{
-  template <typename F, typename V>
-  static auto do_apply(F&& f, const V& v)
-  {
-    if (v.which() == N)
-    {
-      return std::forward<F>(f)(v);
-    }
-    return apply_t<N + 1, MAX>::compare(std::forward<F>(f), get<N>(v));
-  }
-};
-
-template <size_t MAX>
-struct apply_t<MAX, MAX>
-{
-  template <typename F, typename V>
-  static auto do_apply(F&& f, const V& v)
-  {
-    throw std::runtime_error("Bad variant state");
-  }
-};
-
-template <typename F, typename V>
-auto apply(F&& f, const V& v)
-{
-  apply_t<0, elements<V>::value>::do_apply(std::move<V>(f), v);
-}
-
-////////////////////////////////////////////////////////////////////////////////
-
-template <typename T, typename... Ts>
-struct variant
-{
-  union data {
-    T t_;
-    typename variant<Ts...>::data other_;
-  } data_;
-
-  int which_ = -1;
-
-  int which() const
-  {
-    return which_;
-  }
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
 #include <iostream>
 
 void f(long l)
