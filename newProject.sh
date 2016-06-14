@@ -4,7 +4,7 @@ PROJECT_DIR=$1
 
 PROJECT_NAME=$(echo $PROJECT_DIR | sed s#.*/##)
 
-COMPILER_SETTINGS=${2:-clang3.6}
+COMPILER_SETTINGS=${2:-clang}
 
 if [ -e ${PROJECT_DIR} ] 
 then 

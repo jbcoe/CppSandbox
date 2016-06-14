@@ -1,4 +1,4 @@
-include ../compilerSettings_clang3.6.mk
+include ../compilerSettings_clang.mk
 
 SOURCES=SharedCString.cpp
 EXECUTABLE=SharedCString
