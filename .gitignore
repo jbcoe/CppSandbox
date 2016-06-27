@@ -177,3 +177,8 @@ SharedCString/SharedCString
 Overload/Overload
 TinyEmptyVector/TinyEmptyVector
 StackPacking/StackPacking
+PassByValue/PassByValue
+PassByValue/PassByValue.ref.O0.ll
+PassByValue/PassByValue.ref.O3.ll
+PassByValue/PassByValue.val.O0.ll
+PassByValue/PassByValue.val.O3.ll
