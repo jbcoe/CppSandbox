@@ -111,6 +111,7 @@ int main()
   
   auto h_char = [](char) { std::cout << "char" << '\n'; };
 
+  // check that all of the different sorts of function-like objects can be used
   auto o = overload(s, f, [](double) { std::cout << "double" << '\n'; }, h_char,
                     h_uint, [](auto) { std::cout << "other" << '\n'; },
                     [](auto, auto...) { std::cout << "others" << '\n'; });
