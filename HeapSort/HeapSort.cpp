@@ -18,5 +18,6 @@ int main(int argc, char* argv[])
   }
 
   std::copy(xs.begin(), xs.end(), std::ostream_iterator<int>(std::cout, " "));
+  std::cout << std::endl;
 }
 
