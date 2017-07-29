@@ -189,3 +189,4 @@ HeapSort/HeapSort
 DeleteRvalueOverloads/DeleteRvalueOverloads
 TailRecursion/TailRecursion
 ASANAlignment/ASANAlignment
+FoldExpressions/FoldExpressions
